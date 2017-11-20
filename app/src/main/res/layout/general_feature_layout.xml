@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="8dp"
+    android:paddingTop="8dp"
+    android:paddingRight="8dp"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:padding="12dp"
+        android:background="@drawable/card_bg"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:text="基本功能"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <RelativeLayout
+            android:id="@+id/rl_corner_enable_layout"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/settings_item_bg"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <ImageView
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/feature_enable_img"
+                android:src="@drawable/ic_corner_enable"
+                android:tint="#ff6200"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+            <TextView
+                android:gravity="center"
+                android:text="开启圆角"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/feature_enable_img"/>
+            <Switch
+                android:id="@+id/sw_corner_enable"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_notify_enable_layout"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/settings_item_bg"
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+            <ImageView
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:id="@+id/feature_notify_img"
+                android:src="@drawable/ic_notify_enable"
+                android:tint="#009dff"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+            <TextView
+                android:gravity="center"
+                android:text="开启通知"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@id/feature_notify_img"/>
+            <Switch
+                android:id="@+id/sw_notify_enable"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

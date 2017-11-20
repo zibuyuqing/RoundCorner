@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#ff4148</color>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
+    <color name="window_bg_gray">#e9ffffff</color>
+    <color name="divide_gray">#22161515</color>
+    <color name="text_gray">#7c1b1b1b</color>
+    <color name="item_pressed_gray">#e4e4e4</color>
+    <color name="transparent">#00000000</color>
+    <color name="action_bar_bg_color">#ff4148</color>
+    <color name="position_selected_color">#21d629</color>
+</resources>

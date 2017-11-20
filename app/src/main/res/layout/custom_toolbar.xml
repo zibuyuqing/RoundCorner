@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/app_bar_layout"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorAccent"
+    app:elevation="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- #endif -->
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+            <TextView
+                android:text="圆角屏幕"
+                android:layout_marginStart="18dp"
+                android:id="@+id/title"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/white"
+                android:gravity="center_vertical"
+                android:textSize="18dp"
+                android:textAlignment="center"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
+    <ImageView
+        android:id="@+id/iv_action"
+        android:tint="@color/white"
+        android:src="@drawable/ic_share"
+        android:layout_marginRight="18dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
+</RelativeLayout>
