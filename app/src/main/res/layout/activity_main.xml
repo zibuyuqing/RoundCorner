@@ -18,10 +18,10 @@
             <include layout="@layout/custom_settings_layout"></include>
             <include layout="@layout/others_layout"></include>
             <TextView
-                android:padding="16dp"
+                android:padding="@dimen/dimen_16_dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="祝您生活愉快"
+                android:text="@string/best_wishes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>

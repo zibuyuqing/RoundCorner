@@ -8,6 +8,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.os.Binder;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -32,6 +33,9 @@ public class Utilities {
 
     public static boolean isCanUseToastType() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
+    }
+    public static boolean isCanUseApplicationOverlayType() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
     public static boolean checkFloatWindowPermission(Context context) {
         final int version = Build.VERSION.SDK_INT;
@@ -60,7 +64,7 @@ public class Utilities {
     }
 
 
-    public static Notification buildAlarmNotification(Context context){
+    public static Notification buildNotification(Context context){
         Notification notification;
         // bigView.setOnClickPendingIntent() etc..
         Notification.Builder notifyBuilder = new Notification.Builder(context);
@@ -69,8 +73,8 @@ public class Utilities {
         notifyBuilder.setContentIntent(pendingIntent);
         notification = notifyBuilder.setSmallIcon(R.drawable.ic_change_number)
                 .setAutoCancel(false)
-                .setContentTitle("屏幕圆角")
-                .setContentText("点击设置圆角，使你的设备更圆滑")
+                .setContentTitle(context.getString(R.string.app_name))
+                .setContentText(context.getString(R.string.click_to_set_corner))
                 .setOngoing(true)
                 .setAutoCancel(false)
                 .setDefaults(NotificationCompat.DEFAULT_LIGHTS)

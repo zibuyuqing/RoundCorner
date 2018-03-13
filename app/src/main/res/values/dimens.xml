@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="corner_size">10dp</dimen>
+    <dimen name="toolbar_height">54dp</dimen>
     <integer name="corner_opacity">255</integer>
+
+    <!-- font size -->
+    <dimen name="font_size_large_24dp">24dp</dimen>
+    <dimen name="font_size_large_18dp">18dp</dimen>
+    <dimen name="font_size_normal_16dp">16dp</dimen>
+    <dimen name="font_size_normal_15dp">15dp</dimen>
+
+    <dimen name="font_size_small_14dp">14dp</dimen>
+    <dimen name="font_size_small_12dp">12dp</dimen>
+
+    <dimen name="dimen_72_dp">72dp</dimen>
+    <dimen name="dimen_64_dp">64dp</dimen>
+    <dimen name="dimen_48_dp">48dp</dimen>
+    <dimen name="dimen_24_dp">24dp</dimen>
+    <dimen name="dimen_18_dp">18dp</dimen>
+    <dimen name="dimen_16_dp">16dp</dimen>
+    <dimen name="dimen_12_dp">12dp</dimen>
+    <dimen name="dimen_10_dp">10dp</dimen>
+    <dimen name="dimen_8_dp">8dp</dimen>
+    <dimen name="dimen_4_dp">4dp</dimen>
 </resources>

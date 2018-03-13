@@ -27,12 +27,11 @@ public class ViewUtil {
         Point point = new Point();
         manager.getDefaultDisplay().getRealSize(point);
         Log.e(TAG,"getScreenSize =:" + getNavigationBarHeight(context));
-        point.set(point.x,point.y + getNavigationBarHeight(context));
         return point;
     }
     // #ifdef LAVA_EDIT
     // wangxijun. 2016/10/11, NavigationBar
-    private static int getNavigationBarHeight(Context context) {
+    public static int getNavigationBarHeight(Context context) {
         int height = 0;
         boolean hasNavigationBar = false;
         Resources rs = context.getResources();

@@ -146,12 +146,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
 
     @OnClick(R.id.iv_corner_left_top)
     void showOrHideLeftTopCorner() {
-        Log.e(TAG,"showOrHideLeftTopCorner :: leftTopEnable =:" + leftTopEnable);
-        if(leftTopEnable){
-            leftTopEnable = false;
-        } else {
-            leftTopEnable = true;
-        }
+        leftTopEnable = !leftTopEnable;
         updateLocationFlag(ivCornerLeftTop,leftTopEnable);
         SettingsDataKeeper.writteSettingsBoolean(this,
                 SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE,leftTopEnable);
@@ -160,11 +155,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
 
     @OnClick(R.id.iv_corner_right_top)
     void showOrHideRightTopCorner() {
-        if(rightTopEnable){
-            rightTopEnable = false;
-        } else {
-            rightTopEnable = true;
-        }
+        rightTopEnable = !rightTopEnable;
         updateLocationFlag(ivCornerRightTop,rightTopEnable);
         SettingsDataKeeper.writteSettingsBoolean(this,
                 SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE,rightTopEnable);
@@ -173,11 +164,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
 
     @OnClick(R.id.iv_corner_left_bottom)
     void showOrHideLeftBottomCorner() {
-        if(leftBottomEnable){
-            leftBottomEnable = false;
-        } else {
-            leftBottomEnable = true;
-        }
+        leftBottomEnable = !leftBottomEnable;
         updateLocationFlag(ivCornerLeftBottom,leftBottomEnable);
         SettingsDataKeeper.writteSettingsBoolean(this,
                 SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE,leftBottomEnable);
@@ -186,11 +173,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
 
     @OnClick(R.id.iv_corner_right_bottom)
     void showOrHideRightBottomCorner() {
-        if(rightBottomEnable){
-            rightBottomEnable = false;
-        } else {
-            rightBottomEnable = true;
-        }
+        rightBottomEnable = !rightBottomEnable;
         updateLocationFlag(ivCornerRightBottom,rightBottomEnable);
         SettingsDataKeeper.writteSettingsBoolean(this,
                 SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE,rightBottomEnable);
@@ -201,7 +184,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     void share() {
         Intent textIntent = new Intent(Intent.ACTION_SEND);
         textIntent.setType("text/plain");
-        textIntent.putExtra(Intent.EXTRA_TEXT, "这是一段分享的文字");
+        textIntent.putExtra(Intent.EXTRA_TEXT, "我发现了一个好玩的应用，点击下载：https://pan.baidu.com/s/1-Ruu88ThKaUdeMtQiu1ROA");
         startActivity(Intent.createChooser(textIntent, "分享"));
     }
 
@@ -209,18 +192,18 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         AlertDialog.Builder colorPickDialog = new AlertDialog.Builder(this);
         View colorPickLayout = View.inflate(this,R.layout.choose_color_layout,null);
         colorPickDialog.setView(colorPickLayout);
-        final ColorPicker picker = (ColorPicker) colorPickLayout.findViewById(R.id.cp_colors_panel);
-        ValueBar valueBar = (ValueBar) colorPickLayout.findViewById(R.id.cp_color_value);
-        OpacityBar opacityBar = (OpacityBar) colorPickLayout.findViewById(R.id.cp_color_opacity);
+        final ColorPicker picker = colorPickLayout.findViewById(R.id.cp_colors_panel);
+        ValueBar valueBar = colorPickLayout.findViewById(R.id.cp_color_value);
+        OpacityBar opacityBar = colorPickLayout.findViewById(R.id.cp_color_opacity);
         picker.addValueBar(valueBar);
         picker.addOpacityBar(opacityBar);
         picker.setColor(currentColor);
-        colorPickDialog.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        colorPickDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
             }
-        }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        }).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 currentColor = picker.getColor();
@@ -231,13 +214,17 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         colorPickDialog.show();
     }
     @OnClick(R.id.favorite) void favorite(){
-        showTips("感谢支持");
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        Uri content_url = Uri.parse("https://www.jianshu.com/p/67b5b2072c15");
+        intent.setData(content_url);
+        startActivity(intent);
     }
     @OnClick(R.id.about_me) void aboutMe(){
         AboutMeActivity.toAboutMe(this);
     }
     private void initViews() {
-        title.setText("圆角屏幕");
+        title.setText(getString(R.string.app_name));
         ivAction.setImageResource(R.drawable.ic_share);
         swCornerEnable.setChecked(cornerEnable);
         swNotifyEnable.setChecked(notifyEnable);
@@ -289,11 +276,6 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         }
     }
     private void confirmNotifyEnable(boolean checked) {
-        if (checked) {
-            showTips("显示通知");
-        } else {
-            showTips("取消通知");
-        }
         SettingsDataKeeper.writteSettingsBoolean(this,
                 SettingsDataKeeper.NOTIFICATION_ENABLE,checked);
         updateCornersWithBool(SettingsDataKeeper.NOTIFICATION_ENABLE,checked);
@@ -306,7 +288,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
                 SettingsDataKeeper.writteSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE, true);
             } else {
                 requestPermission();
-                showTips("请允许显示悬浮窗");
+                showTips(getString(R.string.permission_required));
                 return;
             }
         } else {

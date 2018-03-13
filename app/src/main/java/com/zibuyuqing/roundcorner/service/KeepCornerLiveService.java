@@ -5,19 +5,15 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
-import android.widget.ImageView;
 
-import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
@@ -72,7 +68,7 @@ public class KeepCornerLiveService extends Service{
         //API 18以下，直接发送Notification并将其置为前台
         Log.e(TAG,"showOrHideNotify ::show = ：" + show);
         if(show) {
-            Notification notification = Utilities.buildAlarmNotification(this);
+            Notification notification = Utilities.buildNotification(this);
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
                 startForeground(NOTIFICATION_ID, notification);
             } else {
@@ -114,8 +110,10 @@ public class KeepCornerLiveService extends Service{
         // 系统提示类型,重要
         if (Utilities.isCanUseToastType()) {
             params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        } else if(Utilities.isCanUseApplicationOverlayType()){
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
-            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+            params.type = WindowManager.LayoutParams.TYPE_PHONE;
         }
         params.format = 1;
         params.flags = WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -125,10 +123,9 @@ public class KeepCornerLiveService extends Service{
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         params.alpha = 1.0f;
-        params.x = 0;
-        params.y = 0;
         params.width = ViewUtil.getScreenSize(this).x;
         params.height = ViewUtil.getScreenSize(this).y;
+        Log.e(TAG,"init :: params.width =:" + params.width +",params.height =:" + params.height);
     }
 
     @Override
@@ -245,18 +242,24 @@ public class KeepCornerLiveService extends Service{
         switch (position) {
             case LEFT_TOP:
                 enable = leftTopEnable;
+                params.x = params.y = 0;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
                 break;
             case RIGHT_TOP:
                 enable = rightTopEnable;
+                params.x = params.y = 0;
                 params.gravity = Gravity.TOP | Gravity.RIGHT;
                 break;
             case LEFT_BOTTOM:
                 enable = leftBottomEnable;
+                params.x = 0;
+                params.y = - ViewUtil.getNavigationBarHeight(this);
                 params.gravity = Gravity.BOTTOM | Gravity.LEFT;
                 break;
             case RIGHT_BOTTOM:
                 enable = rightBottomEnable;
+                params.x = 0;
+                params.y = - ViewUtil.getNavigationBarHeight(this);
                 params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
                 break;
         }
@@ -264,7 +267,7 @@ public class KeepCornerLiveService extends Service{
         if(!corners.containsValue(corner)) {
             corners.put(position, corner);
             manager.addView(corner, params);
-            Log.e(TAG,"manager =: add view");
+            Log.e(TAG,"manager =: add view position =:" + position +",params =:" + params.x +",y =:" + params.y);
         }
     }
     public void hideCornerByTag(String position) {
@@ -332,7 +335,7 @@ public class KeepCornerLiveService extends Service{
         public void onCreate() {
             super.onCreate();
             //发送与KeepLiveService中ID相同的Notification，然后将其取消并取消自己的前台显示
-            Notification notification = Utilities.buildAlarmNotification(this);
+            Notification notification = Utilities.buildNotification(this);
             startForeground(NOTIFICATION_ID, notification);
             new Handler().postDelayed(new Runnable() {
                 @Override

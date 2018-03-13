@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">RoundCorner</string>
+    <string name="app_name">屏幕圆角</string>
+    <string name="click_to_set_corner">点击设置圆角，使你的设备更圆滑</string>
+    <string name="about_me_description">小的android攻城狮一枚，欢迎加我好友哟，我们一起学习探讨android开发技术，等你！</string>
+    <string name="best_wishes">祝您生活愉快</string>
+    <string name="base_feature_settings">基本功能</string>
+    <string name="show_corner">开启圆角</string>
+    <string name="show_notification">开启通知</string>
+    <string name="show_notification_summary">提供便捷操作，延长圆角寿命哟</string>
+    <string name="custom_settings">自定义</string>
+    <string name="corner_color">圆角颜色</string>
+    <string name="corner_location">圆角显示位置</string>
+    <string name="corner_size">圆角大小</string>
+    <string name="corner_opacity">圆角透明度</string>
+    <string name="others">其他</string>
+    <string name="praise">求赞</string>
+    <string name="about_me">关于我</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+    <string name="permission_required">请允许显示悬浮窗</string>
 </resources>

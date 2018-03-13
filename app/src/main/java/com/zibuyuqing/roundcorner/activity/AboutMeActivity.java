@@ -29,7 +29,7 @@ public class AboutMeActivity extends BaseActivity {
             R.drawable.qq,
             R.drawable.weibo
     };
-    private static final String MY_GITHUB_URL = "https://github.com/zibuyuqing/master";
+    private static final String MY_GITHUB_URL = "https://github.com/zibuyuqing/RoundCorner";
     private List<View> imageList = new ArrayList<>();
     @BindView(R.id.vp_me_info)
     ViewPager vpMeInfo;
@@ -46,7 +46,7 @@ public class AboutMeActivity extends BaseActivity {
     }
     @Override
     protected void init() {
-        title.setText("关于我");
+        title.setText(getString(R.string.about_me));
         ivAction.setImageResource(R.drawable.github);
         for(int resId : INFO_IMGS){
             View imagePage = View.inflate(this,R.layout.me_info_item_layout,null);
