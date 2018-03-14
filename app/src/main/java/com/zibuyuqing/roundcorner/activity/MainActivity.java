@@ -18,14 +18,11 @@ import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 import com.zibuyuqing.roundcorner.service.KeepCornerLiveService;
+import com.zibuyuqing.roundcorner.service.RemoteService;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
-import com.zibuyuqing.roundcorner.widget.CornerView;
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnCheckedChanged;
@@ -114,6 +111,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         rightBottomEnable = SettingsDataKeeper.
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
         initViews();
+        startService(new Intent(this, RemoteService.class));
     }
 
     @OnCheckedChanged(R.id.sw_corner_enable)
@@ -296,7 +294,22 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         }
         updateCornersWithBool(SettingsDataKeeper.CORNER_ENABLE,checked);
     }
-    private void updateCornersWithBool(String key,boolean value){
+
+    @Override
+    protected void onDestroy() {
+        RemoteService.start(this);
+        KeepCornerLiveService.tryToAddCorner(this);
+        super.onDestroy();
+        Log.e(TAG, "MainActivity killed--------");
+    }
+
+    @Override
+    protected void onStop() {
+        Log.e(TAG,"onStop  ********************");
+        super.onStop();
+    }
+
+    private void updateCornersWithBool(String key, boolean value){
         Intent intent = new Intent(this, KeepCornerLiveService.class);
         intent.putExtra(key,value);
         intent.setAction(key);
