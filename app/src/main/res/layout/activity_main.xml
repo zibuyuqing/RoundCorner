@@ -14,9 +14,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/general_feature_layout"></include>
-            <include layout="@layout/custom_settings_layout"></include>
-            <include layout="@layout/others_layout"></include>
+            <include layout="@layout/layout_general_feature"></include>
+            <include layout="@layout/layout_custom_settings"></include>
+            <include layout="@layout/layout_advanced_settings"></include>
+            <include layout="@layout/layout_others"></include>
             <TextView
                 android:padding="@dimen/dimen_16_dp"
                 android:layout_gravity="center"

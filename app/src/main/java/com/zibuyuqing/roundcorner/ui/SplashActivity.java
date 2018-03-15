@@ -1,4 +1,4 @@
-package com.zibuyuqing.roundcorner.activity;
+package com.zibuyuqing.roundcorner.ui;
 
 import android.os.Handler;
 

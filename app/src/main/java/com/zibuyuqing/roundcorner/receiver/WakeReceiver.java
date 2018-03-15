@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.zibuyuqing.roundcorner.service.KeepCornerLiveService;
+import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.service.RemoteService;
 
 /**
@@ -24,6 +24,6 @@ public class WakeReceiver extends BroadcastReceiver{
         String action = intent.getAction();
         Log.e(TAG,"action =:" + action);
         RemoteService.start(context);
-        KeepCornerLiveService.tryToAddCorner(context);
+        LocalControllerService.tryToAddCorners(context);
     }
 }

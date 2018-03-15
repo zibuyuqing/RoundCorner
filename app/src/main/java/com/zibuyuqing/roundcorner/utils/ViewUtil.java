@@ -29,6 +29,12 @@ public class ViewUtil {
         Log.e(TAG,"getScreenSize =:" + getNavigationBarHeight(context));
         return point;
     }
+    public static int getScreenWidth(Context context){
+        return getScreenSize(context).x;
+    }
+    public static int getScreenHeight(Context context){
+        return getScreenSize(context).y;
+    }
     // #ifdef LAVA_EDIT
     // wangxijun. 2016/10/11, NavigationBar
     public static int getNavigationBarHeight(Context context) {

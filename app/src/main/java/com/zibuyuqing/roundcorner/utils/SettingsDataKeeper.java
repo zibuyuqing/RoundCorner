@@ -21,19 +21,19 @@ public class SettingsDataKeeper {
     public static final String CORNER_SIZE = "corner_size";
     public static final String CORNER_OPACITY = "corner_opacity";
 
-    public static void writteSettingsInt(Context context,String key,int value){
+    public static void writeSettingsInt(Context context, String key, int value){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt(key,value);
         editor.commit();
     }
-    public static void writteSettingsBoolean(Context context,String key,boolean value){
+    public static void writeSettingsBoolean(Context context, String key, boolean value){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(key,value);
         editor.commit();
     }
-    public static int getSettingsInt(Context context,String key){
+    public static synchronized int getSettingsInt(Context context,String key){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
         switch (key){
             case CORNER_COLOR:
@@ -48,7 +48,7 @@ public class SettingsDataKeeper {
         }
         return 0;
     }
-    public static boolean getSettingsBoolean(Context context,String key){
+    public static synchronized boolean getSettingsBoolean(Context context,String key){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
         switch (key){
             case CORNER_ENABLE :

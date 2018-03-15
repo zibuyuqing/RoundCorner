@@ -18,4 +18,13 @@
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
     <string name="permission_required">请允许显示悬浮窗</string>
+
+
+    <string name="advanced_feature_settings">高级设置</string>
+    <string name="start_when_boot_complete">自启动</string>
+    <string name="start_when_boot_complete_summary">请点击允许应用自启动</string>
+    <string name="start_when_boot_complete_tip">重启手机并进入桌面后，圆角将自动显示</string>
+    <string name="require_boot_complete_permission">请允许开机自启动权限</string>
+    <string name="enhance_notification">增强通知</string>
+    <string name="enhance_notification_summary">来通知时屏幕边缘亮起</string>
 </resources>

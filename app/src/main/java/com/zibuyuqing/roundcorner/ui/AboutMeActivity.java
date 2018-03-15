@@ -1,4 +1,4 @@
-package com.zibuyuqing.roundcorner.activity;
+package com.zibuyuqing.roundcorner.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -49,7 +49,7 @@ public class AboutMeActivity extends BaseActivity {
         title.setText(getString(R.string.about_me));
         ivAction.setImageResource(R.drawable.github);
         for(int resId : INFO_IMGS){
-            View imagePage = View.inflate(this,R.layout.me_info_item_layout,null);
+            View imagePage = View.inflate(this,R.layout.layout_me_info_item,null);
             ((ImageView) imagePage.findViewById(R.id.iv_me_info)).setImageResource(resId);
             imageList.add(imagePage);
         }

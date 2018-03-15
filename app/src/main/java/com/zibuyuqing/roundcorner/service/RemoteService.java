@@ -14,7 +14,7 @@ import android.util.Log;
 import com.zibuyuqing.roundcorner.IProcessService;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 
-import static com.zibuyuqing.roundcorner.service.KeepCornerLiveService.NOTIFICATION_ID;
+import static com.zibuyuqing.roundcorner.service.LocalControllerService.NOTIFICATION_ID;
 
 /**
  * Created by lingy on 2018-03-14.
@@ -34,15 +34,13 @@ public class RemoteService extends Service {
         if(mConnection == null){
             mConnection = new RemoteConn();
         }
-        Notification notification = Utilities.buildNotification(this);
-        startForeground(NOTIFICATION_ID, notification);
-        KeepCornerLiveService.tryToAddCorner(this);
+        LocalControllerService.tryToAddCorners(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.e(TAG,"remote service onStartCommand");
-        bindService(new Intent(this,KeepCornerLiveService.class),
+        bindService(new Intent(this,LocalControllerService.class),
                 mConnection,Context.BIND_IMPORTANT);
         return START_STICKY;
     }
@@ -68,14 +66,13 @@ public class RemoteService extends Service {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             Log.e(TAG,"Local service 连接成功");
-            stopForeground(true);
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
             Log.e(TAG,"Local service 断开连接");
-            startService(new Intent(RemoteService.this,KeepCornerLiveService.class));
-            bindService(new Intent(RemoteService.this,KeepCornerLiveService.class),
+            startService(new Intent(RemoteService.this,LocalControllerService.class));
+            bindService(new Intent(RemoteService.this,LocalControllerService.class),
                     mConnection,
                     Context.BIND_IMPORTANT);
         }

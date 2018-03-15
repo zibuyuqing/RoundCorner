@@ -14,7 +14,7 @@
         android:persistent="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -22,13 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".ui.SplashActivity">
 
         </activity>
-        <activity android:name=".activity.AboutMeActivity"></activity>
+        <activity android:name=".ui.AboutMeActivity"></activity>
 
         <service
-            android:name=".service.KeepCornerLiveService"></service>
+            android:name=".service.LocalControllerService"></service>
         <service
             android:name=".service.RemoteService"
             android:process=".remoteService"></service>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/dimen_8_dp"
+    android:paddingRight="@dimen/dimen_8_dp"
+    android:paddingTop="@dimen/dimen_8_dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_12_dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/dimen_8_dp"
+            android:paddingTop="@dimen/dimen_8_dp"
+            android:text="@string/advanced_feature_settings"
+            android:textSize="@dimen/font_size_normal_16dp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_auto_start_enable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_marginTop="@dimen/dimen_8_dp"
+            android:background="@drawable/settings_item_bg">
+
+            <ImageView
+                android:id="@+id/auto_start_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_boot_complete" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/auto_start_img"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginStart="@dimen/dimen_10_dp"
+                    android:gravity="center"
+                    android:text="@string/start_when_boot_complete"
+                    android:textSize="@dimen/font_size_normal_15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginStart="@dimen/dimen_10_dp"
+                    android:gravity="center"
+                    android:text="@string/start_when_boot_complete_summary"
+                    android:textSize="@dimen/font_size_small_12dp" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_enhance_notification_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_marginTop="@dimen/dimen_8_dp"
+            android:visibility="gone"
+            android:background="@drawable/settings_item_bg">
+
+            <ImageView
+                android:id="@+id/enhance_notification_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_notification" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/enhance_notification_img"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginStart="@dimen/dimen_10_dp"
+                    android:gravity="center"
+                    android:text="@string/enhance_notification"
+                    android:textSize="@dimen/font_size_normal_15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginStart="@dimen/dimen_10_dp"
+                    android:gravity="center"
+                    android:text="@string/enhance_notification_summary"
+                    android:textSize="@dimen/font_size_small_12dp" />
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/sw_enhance_notification_enable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
+    </LinearLayout>
+</LinearLayout>

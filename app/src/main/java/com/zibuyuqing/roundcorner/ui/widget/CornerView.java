@@ -1,16 +1,13 @@
-package com.zibuyuqing.roundcorner.widget;
+package com.zibuyuqing.roundcorner.ui.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.RelativeLayout;
 
 import com.zibuyuqing.roundcorner.R;
 

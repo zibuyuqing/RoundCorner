@@ -1,5 +1,4 @@
-package com.zibuyuqing.roundcorner.activity;
-
+package com.zibuyuqing.roundcorner.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -17,8 +16,9 @@ import android.widget.TextView;
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.ValueBar;
-import com.zibuyuqing.roundcorner.service.KeepCornerLiveService;
+import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.service.RemoteService;
+import com.zibuyuqing.roundcorner.utils.MobileInfoUtils;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.R;
@@ -35,54 +35,57 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     private static final String RIGHT_TOP = "right_top";
     private static final String RIGHT_BOTTOM = "right_bottom";
     private static final int SYSTEM_ALERT_WINDOW_REQUEST_CODE = 2222;
+    private static final int AUTO_START_REQUEST_CODE = 3333;
+    public static final String ME_PACKAGE_NAME = "com.zibuyuqing.roundcorner";
     private static final String[] POSITION_TAGS = {
             LEFT_TOP,LEFT_BOTTOM,RIGHT_TOP,RIGHT_BOTTOM
     };
     @BindView(R.id.title)
-    TextView title;
+    TextView mTVTitle;
     @BindView(R.id.iv_action)
-    ImageView ivAction;
+    ImageView mIvAction;
     @BindView(R.id.rl_corner_enable_layout)
-    RelativeLayout rlCornerEnable;
+    RelativeLayout mRlCornerEnable;
     @BindView(R.id.sw_corner_enable)
-    Switch swCornerEnable;
+    Switch mSwCornerEnable;
     @BindView(R.id.rl_notify_enable_layout)
-    RelativeLayout rlNotifyEnable;
+    RelativeLayout mRlNotifyEnable;
     @BindView(R.id.sw_notify_enable)
-    Switch swNotifyEnable;
+    Switch mSwNotifyEnable;
 
     @BindView(R.id.sb_change_corner_size)
-    SeekBar sbChangeCornerSize;
+    SeekBar mSbChangeCornerSize;
     @BindView(R.id.sb_change_opacity)
-    SeekBar sbChangeOpacity;
+    SeekBar mSbChangeOpacity;
 
     @BindView(R.id.tv_corner_size)
-    TextView tvCornerSize;
+    TextView mTvCornerSize;
     @BindView(R.id.tv_opacity)
-    TextView tvOpacity;
+    TextView mTvOpacity;
     @BindView(R.id.iv_current_color)
-    ImageView ivCurrentColor;
+    ImageView mIvCurrentColor;
 
     @BindView(R.id.iv_corner_left_top)
-    ImageView ivCornerLeftTop;
+    ImageView mIvCornerLeftTop;
 
     @BindView(R.id.iv_corner_left_bottom)
-    ImageView ivCornerLeftBottom;
+    ImageView mIvCornerLeftBottom;
 
     @BindView(R.id.iv_corner_right_top)
-    ImageView ivCornerRightTop;
+    ImageView mIvCornerRightTop;
 
     @BindView(R.id.iv_corner_right_bottom)
-    ImageView ivCornerRightBottom;
-    private boolean cornerEnable;
-    private boolean notifyEnable;
-    private int currentOpacity;
-    private int currentCornerSize;
-    private int currentColor;
-    private boolean leftTopEnable;
-    private boolean leftBottomEnable;
-    private boolean rightTopEnable;
-    private boolean rightBottomEnable;
+    ImageView mIvCornerRightBottom;
+
+    private boolean isCornerEnable;
+    private boolean isNotifyEnable;
+    private int mCurrentOpacity;
+    private int mCurrentCornerSize;
+    private int mCurrentColor;
+    private boolean isLeftTopEnable;
+    private boolean isLeftBottomEnable;
+    private boolean isRightTopEnable;
+    private boolean isRightBottomEnable;
     @Override
     protected int providedLayoutId() {
         return R.layout.activity_main;
@@ -91,91 +94,105 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     @Override
     protected void init() {
         // settings data
-        cornerEnable = SettingsDataKeeper.
+        isCornerEnable = SettingsDataKeeper.
                 getSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE);
-        notifyEnable = SettingsDataKeeper.
+        isNotifyEnable = SettingsDataKeeper.
                 getSettingsBoolean(this, SettingsDataKeeper.NOTIFICATION_ENABLE);
-        currentCornerSize = SettingsDataKeeper.
+        mCurrentCornerSize = SettingsDataKeeper.
                 getSettingsInt(this, SettingsDataKeeper.CORNER_SIZE);
-        currentOpacity = SettingsDataKeeper.
+        mCurrentOpacity = SettingsDataKeeper.
                 getSettingsInt(this, SettingsDataKeeper.CORNER_OPACITY);
-        currentColor =  SettingsDataKeeper.
+        mCurrentColor =  SettingsDataKeeper.
                 getSettingsInt(this, SettingsDataKeeper.CORNER_COLOR);
 
-        leftTopEnable = SettingsDataKeeper.
+        isLeftTopEnable = SettingsDataKeeper.
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE);
-        leftBottomEnable = SettingsDataKeeper.
+        isLeftBottomEnable = SettingsDataKeeper.
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE);
-        rightTopEnable = SettingsDataKeeper.
+        isRightTopEnable = SettingsDataKeeper.
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE);
-        rightBottomEnable = SettingsDataKeeper.
+        isRightBottomEnable = SettingsDataKeeper.
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
         initViews();
-        startService(new Intent(this, RemoteService.class));
+        startServices();
     }
-
+    private void startServices(){
+        RemoteService.start(this);
+        LocalControllerService.tryToAddCorners(this);
+    }
     @OnCheckedChanged(R.id.sw_corner_enable)
     void onCornerEnableChanged() {
-        confirmCornerEnable(swCornerEnable.isChecked());
+        Log.e(TAG,"onCornerEnableChanged ;;;");
+        confirmCornerEnable(mSwCornerEnable.isChecked());
     }
 
     @OnCheckedChanged(R.id.sw_notify_enable)
     void onNotifyEnableChanged() {
-        confirmNotifyEnable(swNotifyEnable.isChecked());
+        confirmNotifyEnable(mSwNotifyEnable.isChecked());
     }
 
     @OnClick(R.id.rl_corner_enable_layout)
     void onClickCornerLayout() {
-        if (cornerEnable) {
-            swCornerEnable.setChecked(false);
+        if (isCornerEnable) {
+            mSwCornerEnable.setChecked(false);
+            isCornerEnable = false;
         } else {
-            swCornerEnable.setChecked(true);
+            mSwCornerEnable.setChecked(true);
+            isCornerEnable = true;
         }
     }
 
     @OnClick(R.id.rl_notify_enable_layout)
     void onClickNotifyLayout() {
-        if (notifyEnable) {
-            swNotifyEnable.setChecked(false);
+        if (isNotifyEnable) {
+            mSwNotifyEnable.setChecked(false);
+            isNotifyEnable = false;
         } else {
-            swNotifyEnable.setChecked(true);
+            mSwNotifyEnable.setChecked(true);
+            isNotifyEnable = true;
         }
     }
 
+    @OnClick(R.id.rl_auto_start_enable_layout)
+    void onClickAutoStartLayout(){
+        requestAutoStartPermission();
+    }
+
+
     @OnClick(R.id.iv_corner_left_top)
     void showOrHideLeftTopCorner() {
-        leftTopEnable = !leftTopEnable;
-        updateLocationFlag(ivCornerLeftTop,leftTopEnable);
-        SettingsDataKeeper.writteSettingsBoolean(this,
-                SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE,leftTopEnable);
-        updateCornersWithBool(SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE,leftTopEnable);
+        isLeftTopEnable = !isLeftTopEnable;
+        updateLocationFlag(mIvCornerLeftTop, isLeftTopEnable);
+        SettingsDataKeeper.writeSettingsBoolean(this,
+                SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE, isLeftTopEnable);
+        updateCornersWithBool(SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE);
     }
 
     @OnClick(R.id.iv_corner_right_top)
     void showOrHideRightTopCorner() {
-        rightTopEnable = !rightTopEnable;
-        updateLocationFlag(ivCornerRightTop,rightTopEnable);
-        SettingsDataKeeper.writteSettingsBoolean(this,
-                SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE,rightTopEnable);
-        updateCornersWithBool(SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE,rightTopEnable);
+        isRightTopEnable = !isRightTopEnable;
+        updateLocationFlag(mIvCornerRightTop, isRightTopEnable);
+        SettingsDataKeeper.writeSettingsBoolean(this,
+                SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE, isRightTopEnable);
+        updateCornersWithBool(SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE);
     }
 
     @OnClick(R.id.iv_corner_left_bottom)
     void showOrHideLeftBottomCorner() {
-        leftBottomEnable = !leftBottomEnable;
-        updateLocationFlag(ivCornerLeftBottom,leftBottomEnable);
-        SettingsDataKeeper.writteSettingsBoolean(this,
-                SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE,leftBottomEnable);
-        updateCornersWithBool(SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE,leftBottomEnable);
+        isLeftBottomEnable = !isLeftBottomEnable;
+        updateLocationFlag(mIvCornerLeftBottom, isLeftBottomEnable);
+        SettingsDataKeeper.writeSettingsBoolean(this,
+                SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE, isLeftBottomEnable);
+        updateCornersWithBool(SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE);
     }
 
     @OnClick(R.id.iv_corner_right_bottom)
     void showOrHideRightBottomCorner() {
-        rightBottomEnable = !rightBottomEnable;
-        updateLocationFlag(ivCornerRightBottom,rightBottomEnable);
-        SettingsDataKeeper.writteSettingsBoolean(this,
-                SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE,rightBottomEnable);
-        updateCornersWithBool(SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE,rightBottomEnable);
+        isRightBottomEnable = !isRightBottomEnable;
+        updateLocationFlag(mIvCornerRightBottom, isRightBottomEnable);
+        SettingsDataKeeper.writeSettingsBoolean(this,
+                SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE, isRightBottomEnable);
+        updateCornersWithBool(SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
     }
 
     @OnClick(R.id.iv_action)
@@ -188,14 +205,14 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
 
     @OnClick(R.id.change_color_layout) void chooseColor(){
         AlertDialog.Builder colorPickDialog = new AlertDialog.Builder(this);
-        View colorPickLayout = View.inflate(this,R.layout.choose_color_layout,null);
+        View colorPickLayout = View.inflate(this,R.layout.layout_choose_color,null);
         colorPickDialog.setView(colorPickLayout);
         final ColorPicker picker = colorPickLayout.findViewById(R.id.cp_colors_panel);
         ValueBar valueBar = colorPickLayout.findViewById(R.id.cp_color_value);
         OpacityBar opacityBar = colorPickLayout.findViewById(R.id.cp_color_opacity);
         picker.addValueBar(valueBar);
         picker.addOpacityBar(opacityBar);
-        picker.setColor(currentColor);
+        picker.setColor(mCurrentColor);
         colorPickDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -204,13 +221,18 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         }).setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                currentColor = picker.getColor();
-                changeCornerColor(currentColor);
+                mCurrentColor = picker.getColor();
+                changeCornerColor();
             }
         });
         colorPickDialog.create();
         colorPickDialog.show();
     }
+
+    @OnClick(R.id.rl_enhance_notification_layout) void enhanceNotification(){
+        LocalControllerService.tryToAddNotificationLine(this);
+    }
+
     @OnClick(R.id.favorite) void favorite(){
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
@@ -221,32 +243,38 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     @OnClick(R.id.about_me) void aboutMe(){
         AboutMeActivity.toAboutMe(this);
     }
+    private void requestAutoStartPermission(){
+        MobileInfoUtils.jumpStartInterface(this);
+    }
     private void initViews() {
-        title.setText(getString(R.string.app_name));
-        ivAction.setImageResource(R.drawable.ic_share);
-        swCornerEnable.setChecked(cornerEnable);
-        swNotifyEnable.setChecked(notifyEnable);
-        sbChangeCornerSize.setProgress(currentCornerSize);
-        sbChangeCornerSize.setMax(100);
-        sbChangeCornerSize.setOnSeekBarChangeListener(this);
+        mTVTitle.setText(getString(R.string.app_name));
+        mIvAction.setImageResource(R.drawable.ic_share);
+        mSwCornerEnable.setChecked(isCornerEnable);
+        mSwNotifyEnable.setChecked(isNotifyEnable);
+        mSbChangeCornerSize.setProgress(mCurrentCornerSize);
+        mSbChangeCornerSize.setMax(100);
+        mSbChangeCornerSize.setOnSeekBarChangeListener(this);
 
-        sbChangeOpacity.setMax(255);
-        sbChangeOpacity.setProgress(currentOpacity);
-        sbChangeOpacity.setOnSeekBarChangeListener(this);
-        tvCornerSize.setText(currentCornerSize + "");
-        tvOpacity.setText(getOpacity(currentOpacity));
-        updateColorFlower(currentColor);
-        updateLocationFlag(ivCornerLeftTop,leftTopEnable);
-        updateLocationFlag(ivCornerLeftBottom,leftBottomEnable);
-        updateLocationFlag(ivCornerRightTop,rightTopEnable);
-        updateLocationFlag(ivCornerRightBottom,rightBottomEnable);
+        mSbChangeOpacity.setMax(255);
+        mSbChangeOpacity.setProgress(mCurrentOpacity);
+        mSbChangeOpacity.setOnSeekBarChangeListener(this);
+        mTvCornerSize.setText(mCurrentCornerSize + "");
+        mTvOpacity.setText(getOpacity(mCurrentOpacity));
+        updateColorFlower(mCurrentColor);
+        updateLocationFlag(mIvCornerLeftTop, isLeftTopEnable);
+        updateLocationFlag(mIvCornerLeftBottom, isLeftBottomEnable);
+        updateLocationFlag(mIvCornerRightTop, isRightTopEnable);
+        updateLocationFlag(mIvCornerRightBottom, isRightBottomEnable);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        cornerEnable = checkPermission();
-        swCornerEnable.setChecked(cornerEnable);
+        boolean hasPermission = checkPermission();
+        if(!hasPermission){
+            isCornerEnable = hasPermission;
+        }
+        mSwCornerEnable.setChecked(isCornerEnable);
     }
     private void updateLocationFlag(ImageView imageView,boolean enable){
         Drawable drawable = imageView.getDrawable();
@@ -259,7 +287,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         return Utilities.checkFloatWindowPermission(this);
     }
 
-    private void requestPermission() {
+    private void requestOverlayPermission() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
         intent.setData(Uri.parse("package:" + getPackageName()));
         startActivityForResult(intent, SYSTEM_ALERT_WINDOW_REQUEST_CODE);
@@ -269,36 +297,41 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SYSTEM_ALERT_WINDOW_REQUEST_CODE) {
             if (Settings.canDrawOverlays(this)) {
-                updateCornersWithBool(SettingsDataKeeper.CORNER_ENABLE,true);
+                SettingsDataKeeper.writeSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE, true);
+                updateCornersWithBool(SettingsDataKeeper.CORNER_ENABLE);
+            }
+        } else if(requestCode == AUTO_START_REQUEST_CODE){
+            if(resultCode == RESULT_OK){
+                showTips(R.string.start_when_boot_complete_tip);
             }
         }
     }
     private void confirmNotifyEnable(boolean checked) {
-        SettingsDataKeeper.writteSettingsBoolean(this,
+        SettingsDataKeeper.writeSettingsBoolean(this,
                 SettingsDataKeeper.NOTIFICATION_ENABLE,checked);
-        updateCornersWithBool(SettingsDataKeeper.NOTIFICATION_ENABLE,checked);
+        updateCornersWithBool(SettingsDataKeeper.NOTIFICATION_ENABLE);
     }
 
     private void confirmCornerEnable(boolean checked) {
         Log.e(TAG,"confirmCornerEnable :: checked =:" + checked);
         if (checked) {
             if (checkPermission()) {
-                SettingsDataKeeper.writteSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE, true);
+                SettingsDataKeeper.writeSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE, true);
             } else {
-                requestPermission();
+                requestOverlayPermission();
                 showTips(getString(R.string.permission_required));
                 return;
             }
         } else {
-            SettingsDataKeeper.writteSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE, false);
+            SettingsDataKeeper.writeSettingsBoolean(this, SettingsDataKeeper.CORNER_ENABLE, false);
         }
-        updateCornersWithBool(SettingsDataKeeper.CORNER_ENABLE,checked);
+        updateCornersWithBool(SettingsDataKeeper.CORNER_ENABLE);
     }
 
     @Override
     protected void onDestroy() {
         RemoteService.start(this);
-        KeepCornerLiveService.tryToAddCorner(this);
+        LocalControllerService.tryToAddCorners(this);
         super.onDestroy();
         Log.e(TAG, "MainActivity killed--------");
     }
@@ -309,40 +342,38 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         super.onStop();
     }
 
-    private void updateCornersWithBool(String key, boolean value){
-        Intent intent = new Intent(this, KeepCornerLiveService.class);
-        intent.putExtra(key,value);
+    private void updateCornersWithBool(String key){
+        Intent intent = new Intent(this, LocalControllerService.class);
         intent.setAction(key);
         startService(intent);
-    }
-    private void updateCornersWithInteger(String key,int value){
-        Intent intent = new Intent(this, KeepCornerLiveService.class);
-        intent.setAction(key);
-        intent.putExtra(key,value);
-        startService(intent);
-    }
-    private void changeOpacity(int opacity) {
-        Log.e(TAG, "changeOpacity :: opacity =:" + opacity);
-        updateCornersWithInteger(SettingsDataKeeper.CORNER_OPACITY,opacity);
-        SettingsDataKeeper.writteSettingsInt(
-                MainActivity.this,SettingsDataKeeper.CORNER_OPACITY,currentOpacity);
     }
 
-    private void changeCornerSize(int cornerSize) {
-        Log.e(TAG, "changeCornerSize :: cornerSize =:" + cornerSize);
-        updateCornersWithInteger(SettingsDataKeeper.CORNER_SIZE,cornerSize);
-        SettingsDataKeeper.writteSettingsInt(
-                MainActivity.this,SettingsDataKeeper.CORNER_SIZE,currentCornerSize);
+    private void updateCornersWithInteger(String key){
+        Intent intent = new Intent(this, LocalControllerService.class);
+        intent.setAction(key);
+        startService(intent);
     }
-    private void changeCornerColor(int color) {
-        updateColorFlower(color);
-        updateCornersWithInteger(SettingsDataKeeper.CORNER_COLOR,color);
-        SettingsDataKeeper.writteSettingsInt(MainActivity.this,SettingsDataKeeper.CORNER_COLOR,currentColor);
+    private void changeOpacity() {
+        SettingsDataKeeper.writeSettingsInt(
+                MainActivity.this,SettingsDataKeeper.CORNER_OPACITY, mCurrentOpacity);
+        updateCornersWithInteger(SettingsDataKeeper.CORNER_OPACITY);
+    }
+
+    private void changeCornerSize() {
+        SettingsDataKeeper.writeSettingsInt(
+                MainActivity.this,SettingsDataKeeper.CORNER_SIZE, mCurrentCornerSize);
+        Log.e(TAG,"changeCornerSize ;;;; mCurrentCornerSize =:" + mCurrentCornerSize);
+        updateCornersWithInteger(SettingsDataKeeper.CORNER_SIZE);
+    }
+    private void changeCornerColor() {
+        updateColorFlower(mCurrentColor);
+        SettingsDataKeeper.writeSettingsInt(MainActivity.this,SettingsDataKeeper.CORNER_COLOR, mCurrentColor);
+        updateCornersWithInteger(SettingsDataKeeper.CORNER_COLOR);
     }
     private void updateColorFlower(int color){
         Drawable drawable = getDrawable(R.drawable.ic_color_selected);
         drawable.setTint(color);
-        ivCurrentColor.setImageDrawable(drawable);
+        mIvCurrentColor.setImageDrawable(drawable);
     }
 
     private String getOpacity(float opacity) {
@@ -353,12 +384,13 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
         switch (seekBar.getId()) {
             case R.id.sb_change_opacity:
-                currentOpacity = i;
-                tvOpacity.setText(getOpacity(currentOpacity));
+                mCurrentOpacity = i;
+                mTvOpacity.setText(getOpacity(mCurrentOpacity));
                 break;
             case R.id.sb_change_corner_size:
-                currentCornerSize = i;
-                tvCornerSize.setText(currentCornerSize + "");
+                mCurrentCornerSize = i;
+                mTvCornerSize.setText(mCurrentCornerSize + "");
+                break;
         }
     }
 
@@ -372,10 +404,10 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     public void onStopTrackingTouch(SeekBar seekBar) {
         switch (seekBar.getId()) {
             case R.id.sb_change_opacity:
-                changeOpacity(currentOpacity);
+                changeOpacity();
                 break;
             case R.id.sb_change_corner_size:
-                changeCornerSize(currentCornerSize);
+                changeCornerSize();
         }
     }
 }
