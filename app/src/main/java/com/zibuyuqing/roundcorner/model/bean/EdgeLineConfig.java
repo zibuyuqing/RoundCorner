@@ -13,10 +13,20 @@ import java.util.ArrayList;
  */
 public class EdgeLineConfig {
     private int primaryColor;
-    private ArrayList<Integer> mixedColorList;
+    private int[] mixedColorArr;
     private int strokeSize;
     private int cornerSize;
     private int duration;
+    private int style;
+    private boolean isCornersShown;
+
+    public int getStyle() {
+        return style;
+    }
+
+    public void setStyle(int style) {
+        this.style = style;
+    }
 
     public int getPrimaryColor() {
         return primaryColor;
@@ -26,12 +36,12 @@ public class EdgeLineConfig {
         this.primaryColor = primaryColor;
     }
 
-    public ArrayList<Integer> getMixedColorList() {
-        return mixedColorList;
+    public int[] getMixedColorArr() {
+        return mixedColorArr;
     }
 
-    public void setMixedColorList(ArrayList<Integer> mixedColorList) {
-        this.mixedColorList = mixedColorList;
+    public void setMixedColorArr(int[] mixedColorArr) {
+        this.mixedColorArr = mixedColorArr;
     }
 
     public int getStrokeSize() {
@@ -56,5 +66,13 @@ public class EdgeLineConfig {
 
     public void setDuration(int duration) {
         this.duration = duration;
+    }
+
+    public boolean isCornersShown() {
+        return isCornersShown;
+    }
+
+    public void setCornersShown(boolean cornersShown) {
+        isCornersShown = cornersShown;
     }
 }

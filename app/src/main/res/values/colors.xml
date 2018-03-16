@@ -12,4 +12,8 @@
     <color name="transparent">#00000000</color>
     <color name="action_bar_bg_color">#ff4148</color>
     <color name="position_selected_color">#21d629</color>
+    <color name="default_notification_primary_color">#7dfff2</color>
+    <color name="color_purple">#ff03ee</color>
+    <color name="color_cyan_light">#00f7ff</color>
+    <color name="color_red">#ff0000</color>
 </resources>

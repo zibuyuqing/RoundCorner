@@ -3,6 +3,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.preference.SwitchPreference;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -77,6 +78,9 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     @BindView(R.id.iv_corner_right_bottom)
     ImageView mIvCornerRightBottom;
 
+    @BindView(R.id.sw_enhance_notification_enable)
+    Switch mSwEnhanceNotificationEnable;
+
     private boolean isCornerEnable;
     private boolean isNotifyEnable;
     private int mCurrentOpacity;
@@ -86,6 +90,7 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     private boolean isLeftBottomEnable;
     private boolean isRightTopEnable;
     private boolean isRightBottomEnable;
+    private boolean isEnhanceNotificationEnable;
     @Override
     protected int providedLayoutId() {
         return R.layout.activity_main;
@@ -113,6 +118,9 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE);
         isRightBottomEnable = SettingsDataKeeper.
                 getSettingsBoolean(this,SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
+        isEnhanceNotificationEnable = SettingsDataKeeper.
+                getSettingsBoolean(this,SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
+
         initViews();
         startServices();
     }
@@ -130,6 +138,13 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
     void onNotifyEnableChanged() {
         confirmNotifyEnable(mSwNotifyEnable.isChecked());
     }
+
+    @OnCheckedChanged(R.id.sw_enhance_notification_enable)
+    void onEnhanceNotificationChanged(){
+        confirmEnhanceNotificationEnable(mSwEnhanceNotificationEnable.isChecked());
+    }
+
+
 
     @OnClick(R.id.rl_corner_enable_layout)
     void onClickCornerLayout() {
@@ -229,8 +244,16 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
         colorPickDialog.show();
     }
 
-    @OnClick(R.id.rl_enhance_notification_layout) void enhanceNotification(){
-        LocalControllerService.tryToAddNotificationLine(this);
+    @OnClick(R.id.rl_enhance_notification_layout)
+    void enhanceNotification(){
+        if(isEnhanceNotificationEnable){
+            isEnhanceNotificationEnable = false;
+            mSwEnhanceNotificationEnable.setChecked(false);
+        } else {
+            isEnhanceNotificationEnable = true;
+            mSwEnhanceNotificationEnable.setChecked(true);
+        }
+
     }
 
     @OnClick(R.id.favorite) void favorite(){
@@ -306,6 +329,13 @@ public class MainActivity extends BaseActivity implements SeekBar.OnSeekBarChang
             }
         }
     }
+
+    private void confirmEnhanceNotificationEnable(boolean checked) {
+        SettingsDataKeeper.writeSettingsBoolean(this,
+                SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE,checked);
+        updateCornersWithBool(SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
+    }
+
     private void confirmNotifyEnable(boolean checked) {
         SettingsDataKeeper.writeSettingsBoolean(this,
                 SettingsDataKeeper.NOTIFICATION_ENABLE,checked);

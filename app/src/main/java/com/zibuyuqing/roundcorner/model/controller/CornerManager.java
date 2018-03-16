@@ -36,7 +36,6 @@ public class CornerManager {
     private Map<String,CornerView> mCornersMap = new HashMap<>();
     private WindowManager mWindowManager;
     private boolean isCornerAdded;
-    private boolean isCornerEnable;
     private int mCurrentOpacity;
     private int mCurrentCornerSize;
     private int mCurrentColor;
@@ -110,8 +109,6 @@ public class CornerManager {
     }
     private void refreshSettings(){
         // settings data
-        isCornerEnable = SettingsDataKeeper.
-                getSettingsBoolean(mContext, SettingsDataKeeper.CORNER_ENABLE);
 
         mCurrentCornerSize = SettingsDataKeeper.
                 getSettingsInt(mContext, SettingsDataKeeper.CORNER_SIZE);
@@ -232,9 +229,7 @@ public class CornerManager {
         }
     }
     public void showOrHideCorners(){
-        boolean cornerEnable = SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_ENABLE);
-        Log.e(TAG,"cornerEnable =:" + cornerEnable + ",cornerAdded = ：" + isCornerAdded);
-        if(cornerEnable){
+        if(isCornerEnable()){
             if(!isCornerAdded) {
                 addCorners();
             }
@@ -244,9 +239,21 @@ public class CornerManager {
             }
         }
     }
+    public boolean isCornerShown(){
+        return isCornerAdded && ! mCornersMap.isEmpty();
+    }
+    private boolean isCornerEnable(){
+        return SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_ENABLE);
+    }
+    public void reAddCorners(){
+        if(isCornerEnable()){
+            removeCorners();
+            addCorners();
+        }
+    }
     public void tryToAddCorners(){
         Log.e(TAG,"tryToAddCorners :: isCornerAdded =:" + isCornerAdded);
-        if(SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_ENABLE)) {
+        if(isCornerEnable()) {
             try {
                 if (mCornersMap.isEmpty()) {
                     addCorners();

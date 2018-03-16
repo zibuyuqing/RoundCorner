@@ -21,6 +21,8 @@ public class SettingsDataKeeper {
     public static final String CORNER_SIZE = "corner_size";
     public static final String CORNER_OPACITY = "corner_opacity";
 
+    public static final String ENHANCE_NOTIFICATION_ENABLE = "enhance_notification_enable";
+
     public static void writeSettingsInt(Context context, String key, int value){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -63,6 +65,8 @@ public class SettingsDataKeeper {
                 return preferences.getBoolean(CORNER_LEFT_BOTTOM_ENABLE,true);
             case CORNER_RIGHT_BOTTOM_ENABLE :
                 return preferences.getBoolean(CORNER_RIGHT_BOTTOM_ENABLE,true);
+            case ENHANCE_NOTIFICATION_ENABLE :
+                return preferences.getBoolean(ENHANCE_NOTIFICATION_ENABLE,false);
         }
         return true;
     }

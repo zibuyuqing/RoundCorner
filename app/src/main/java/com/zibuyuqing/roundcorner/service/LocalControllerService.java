@@ -14,13 +14,14 @@ import android.util.Log;
 import com.zibuyuqing.roundcorner.IProcessService;
 import com.zibuyuqing.roundcorner.model.controller.CornerManager;
 import com.zibuyuqing.roundcorner.model.controller.NotificationLineManager;
+import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 /**
  * Created by Xijun.Wang on 2017/11/7.
  */
 
-public class LocalControllerService extends Service{
+public class LocalControllerService extends Service implements EdgeLineView.AnimationStateListener {
     private static final String TAG = LocalControllerService.class.getSimpleName();
 
     public static final int NOTIFICATION_ID = 0x11;
@@ -64,6 +65,7 @@ public class LocalControllerService extends Service{
         }
         if(mLineManager == null){
             mLineManager = NotificationLineManager.getInstance(this);
+            mLineManager.registerAnimationStateListener(this);
         }
         tryToAddCorners(this);
     }
@@ -135,12 +137,22 @@ public class LocalControllerService extends Service{
                 showOrHideNotify();
                 break;
             case ACTION_TRY_TO_ADD_NOTICATION_LINE:
-                mLineManager.showEdgeLine("");
+                showEdgeLine();
+                break;
+            case SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE:
+                startOrStopListenNotification();
                 break;
         }
     }
 
+    private void startOrStopListenNotification() {
+        mLineManager.showOrHideEdgeLine();
+    }
 
+    private void showEdgeLine(){
+        mLineManager.showEdgeLine("");
+       // mCornerManager.reAddCorners();
+    }
     @Override
     public void onDestroy() {
         Log.e(TAG, "keep corner service killed--------");
@@ -150,6 +162,22 @@ public class LocalControllerService extends Service{
         startService(intent);
         super.onDestroy();
     }
+
+    @Override
+    public void onAnimationStart() {
+
+    }
+
+    @Override
+    public void onAnimationRunning(float progress) {
+
+    }
+
+    @Override
+    public void onAnimationEnd() {
+        mLineManager.removeEdgeLine();
+    }
+
     private class LocalBinder extends IProcessService.Stub{
 
         @Override

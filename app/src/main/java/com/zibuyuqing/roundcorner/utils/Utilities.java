@@ -14,8 +14,10 @@ import android.util.Log;
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
 import com.zibuyuqing.roundcorner.ui.MainActivity;
+import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Created by Xijun.Wang on 2017/11/3.
@@ -25,12 +27,15 @@ public class Utilities {
 
     private static final int NOTIFY_ID = 1111;
     private static EdgeLineConfig sDefaultLineConfig;
+
     public static boolean isCanUseToastType() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
     }
+
     public static boolean isCanUseApplicationOverlayType() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
+
     public static boolean checkFloatWindowPermission(Context context) {
         final int version = Build.VERSION.SDK_INT;
         if (version >= 19) {
@@ -47,7 +52,7 @@ public class Utilities {
             try {
                 Class clazz = AppOpsManager.class;
                 Method method = clazz.getDeclaredMethod("checkOp", int.class, int.class, String.class);
-                return AppOpsManager.MODE_ALLOWED == (int)method.invoke(manager, op, Binder.getCallingUid(), context.getPackageName());
+                return AppOpsManager.MODE_ALLOWED == (int) method.invoke(manager, op, Binder.getCallingUid(), context.getPackageName());
             } catch (Exception e) {
                 Log.e("", Log.getStackTraceString(e));
             }
@@ -58,12 +63,12 @@ public class Utilities {
     }
 
 
-    public static Notification buildNotification(Context context){
+    public static Notification buildNotification(Context context) {
         Notification notification;
         // bigView.setOnClickPendingIntent() etc..
         Notification.Builder notifyBuilder = new Notification.Builder(context);
         PendingIntent pendingIntent = PendingIntent.getActivity(
-                context,0,new Intent(context, MainActivity.class),PendingIntent.FLAG_UPDATE_CURRENT);
+                context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notifyBuilder.setContentIntent(pendingIntent);
         notification = notifyBuilder.setSmallIcon(R.drawable.ic_change_number)
                 .setContentTitle(context.getString(R.string.app_name))
@@ -74,14 +79,16 @@ public class Utilities {
         return notification;
     }
 
-    public static EdgeLineConfig getDefaultEdgeLineConfig(Context context){
-        if(sDefaultLineConfig == null){
+    public static EdgeLineConfig getDefaultEdgeLineConfig(Context context) {
+        if (sDefaultLineConfig == null) {
             sDefaultLineConfig = new EdgeLineConfig();
-            sDefaultLineConfig.setCornerSize(SettingsDataKeeper.getSettingsInt(context,SettingsDataKeeper.CORNER_SIZE));
-            sDefaultLineConfig.setDuration(5000);
-            sDefaultLineConfig.setPrimaryColor(context.getColor(R.color.colorAccent));
+            sDefaultLineConfig.setStyle(EdgeLineView.STYLE_WIND);
+            sDefaultLineConfig.setCornerSize(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.CORNER_SIZE));
+            sDefaultLineConfig.setDuration(4000);
+            sDefaultLineConfig.setPrimaryColor(context.getColor(R.color.default_notification_primary_color));
             sDefaultLineConfig.setStrokeSize(12);
-            sDefaultLineConfig.setMixedColorList(null);
+            sDefaultLineConfig.setMixedColorArr(context.getResources().getIntArray(R.array.default_mixed_colors));
+            sDefaultLineConfig.setCornersShown(SettingsDataKeeper.getSettingsBoolean(context, SettingsDataKeeper.CORNER_ENABLE));
         }
         return sDefaultLineConfig;
     }

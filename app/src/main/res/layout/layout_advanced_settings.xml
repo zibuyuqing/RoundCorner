@@ -70,7 +70,6 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dimen_48_dp"
             android:layout_marginTop="@dimen/dimen_8_dp"
-            android:visibility="gone"
             android:background="@drawable/settings_item_bg">
 
             <ImageView
