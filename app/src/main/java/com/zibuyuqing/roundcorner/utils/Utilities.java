@@ -86,9 +86,8 @@ public class Utilities {
             sDefaultLineConfig.setCornerSize(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.CORNER_SIZE));
             sDefaultLineConfig.setDuration(4000);
             sDefaultLineConfig.setPrimaryColor(context.getColor(R.color.default_notification_primary_color));
-            sDefaultLineConfig.setStrokeSize(12);
+            sDefaultLineConfig.setStrokeSize(4);
             sDefaultLineConfig.setMixedColorArr(context.getResources().getIntArray(R.array.default_mixed_colors));
-            sDefaultLineConfig.setCornersShown(SettingsDataKeeper.getSettingsBoolean(context, SettingsDataKeeper.CORNER_ENABLE));
         }
         return sDefaultLineConfig;
     }

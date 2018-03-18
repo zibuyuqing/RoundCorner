@@ -26,7 +26,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
 
     public static final int NOTIFICATION_ID = 0x11;
     public static final String ACTION_TRY_TO_ADD_CORNERS = "try_to_add_corners";
-    public static final String ACTION_TRY_TO_ADD_NOTICATION_LINE = "try_to_add_notification_line";
+    public static final String ACTION_TRY_TO_ADD_NOTIFICATION_LINE = "try_to_add_notification_line";
     private LocalBinder mBinder;
     private LocalConn mConnection;
     private CornerManager mCornerManager;
@@ -96,7 +96,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
 
     public static void tryToAddNotificationLine(Context context){
         Intent intent = new Intent(context,LocalControllerService.class);
-        intent.setAction(ACTION_TRY_TO_ADD_NOTICATION_LINE);
+        intent.setAction(ACTION_TRY_TO_ADD_NOTIFICATION_LINE);
         context.startService(intent);
     }
     public static void start(Context context) {
@@ -136,7 +136,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             case SettingsDataKeeper.NOTIFICATION_ENABLE:
                 showOrHideNotify();
                 break;
-            case ACTION_TRY_TO_ADD_NOTICATION_LINE:
+            case ACTION_TRY_TO_ADD_NOTIFICATION_LINE:
                 showEdgeLine();
                 break;
             case SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE:

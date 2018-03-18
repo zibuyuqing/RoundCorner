@@ -18,7 +18,6 @@ public class EdgeLineConfig {
     private int cornerSize;
     private int duration;
     private int style;
-    private boolean isCornersShown;
 
     public int getStyle() {
         return style;
@@ -68,11 +67,4 @@ public class EdgeLineConfig {
         this.duration = duration;
     }
 
-    public boolean isCornersShown() {
-        return isCornersShown;
-    }
-
-    public void setCornersShown(boolean cornersShown) {
-        isCornersShown = cornersShown;
-    }
 }
