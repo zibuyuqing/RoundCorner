@@ -86,14 +86,6 @@
                     android:gravity="center"
                     android:textSize="@dimen/font_size_normal_15dp"
                     android:text="@string/show_notification" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimen_10_dp"
-                    android:layout_marginStart="@dimen/dimen_10_dp"
-                    android:textSize="@dimen/font_size_small_12dp"
-                    android:gravity="center"
-                    android:text="@string/show_notification_summary" />
             </LinearLayout>
 
             <Switch

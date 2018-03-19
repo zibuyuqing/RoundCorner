@@ -9,15 +9,16 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
-import com.zibuyuqing.roundcorner.ui.MainActivity;
+import com.zibuyuqing.roundcorner.ui.activity.MainActivity;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * Created by Xijun.Wang on 2017/11/3.
@@ -34,6 +35,14 @@ public class Utilities {
 
     public static boolean isCanUseApplicationOverlayType() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
+
+    public static boolean checkNotificationListenPermission(Context context){
+        Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(context);
+        if (packageNames.contains(context.getPackageName())) {
+            return true;
+        }
+        return false;
     }
 
     public static boolean checkFloatWindowPermission(Context context) {
@@ -82,7 +91,7 @@ public class Utilities {
     public static EdgeLineConfig getDefaultEdgeLineConfig(Context context) {
         if (sDefaultLineConfig == null) {
             sDefaultLineConfig = new EdgeLineConfig();
-            sDefaultLineConfig.setStyle(EdgeLineView.STYLE_WIND);
+            sDefaultLineConfig.setStyle(EdgeLineView.STYLE_FADE_IN_OUT);
             sDefaultLineConfig.setCornerSize(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.CORNER_SIZE));
             sDefaultLineConfig.setDuration(4000);
             sDefaultLineConfig.setPrimaryColor(context.getColor(R.color.default_notification_primary_color));

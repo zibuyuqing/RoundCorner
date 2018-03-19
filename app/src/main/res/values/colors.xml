@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff4148</color>
+    <color name="colorAccent">#447fff</color>
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="window_bg_gray">#e9ffffff</color>
@@ -10,10 +10,13 @@
     <color name="text_gray">#7c1b1b1b</color>
     <color name="item_pressed_gray">#e4e4e4</color>
     <color name="transparent">#00000000</color>
-    <color name="action_bar_bg_color">#ff4148</color>
+    <color name="action_bar_bg_color">#439cfa</color>
     <color name="position_selected_color">#21d629</color>
     <color name="default_notification_primary_color">#7dfff2</color>
     <color name="color_purple">#ff03ee</color>
+    <color name="color_red">#ff3434</color>
+    <color name="color_yellow_light">#ffeb34</color>
+    <color name="color_orange_light">#ff4f34</color>
     <color name="color_cyan_light">#00f7ff</color>
-    <color name="color_red">#ff0000</color>
+    <color name="color_gray_light">#717171</color>
 </resources>

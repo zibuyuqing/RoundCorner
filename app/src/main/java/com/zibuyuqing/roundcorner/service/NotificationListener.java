@@ -1,7 +1,11 @@
 package com.zibuyuqing.roundcorner.service;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
+import android.util.Log;
 
 /**
  * <pre>
@@ -21,6 +25,7 @@ public class NotificationListener extends NotificationListenerService{
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.e(TAG,"oncreate");
         isCreated = true;
     }
 
@@ -33,18 +38,38 @@ public class NotificationListener extends NotificationListenerService{
     @Override
     public void onListenerConnected() {
         super.onListenerConnected();
+        Log.e(TAG,"onListenerConnected");
         isConnected = true;
     }
 
     @Override
     public void onListenerDisconnected() {
         super.onListenerDisconnected();
+        Log.e(TAG,"onListenerDisconnected");
         isConnected = false;
     }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         super.onNotificationPosted(sbn);
+
         who = sbn.getPackageName();
+        Log.e(TAG,"onNotificationPosted who =:" + who);
+        LocalControllerService.tryToAddNotificationLine(this,who);
     }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        Log.e(TAG,"onRebind =:" + intent);
+        toggleNotificationListenerService();
+    }
+    private void toggleNotificationListenerService() {
+        PackageManager pm = getPackageManager();
+        pm.setComponentEnabledSetting(new ComponentName(this, com.zibuyuqing.roundcorner.service.NotificationListener.class),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+        pm.setComponentEnabledSetting(new ComponentName(this, com.zibuyuqing.roundcorner.service.NotificationListener.class),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
+
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="default_mixed_colors">
+
         <item>@color/color_purple</item>
+        <item>@color/color_yellow_light</item>
         <item>@color/color_cyan_light</item>
-        <item>@color/color_red</item>
+
     </array>
 </resources>

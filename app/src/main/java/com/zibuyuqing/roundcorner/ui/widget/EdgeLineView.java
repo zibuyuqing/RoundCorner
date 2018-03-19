@@ -41,21 +41,21 @@ public class EdgeLineView extends View {
     public static final int STYLE_WIND = 3;// 绕圈
     public static final int STYLE_FADE_IN_OUT = 4; //渐隐渐显
     public static final int STYLE_LATTICE = 5;//点阵
-    public static final int DEFAULT_REPEAT_COUNT = 4;
-    private int[] mMixedColorArr;
+    public static final int DEFAULT_REPEAT_COUNT = 4; // 动画重复次数
+    private int[] mMixedColorArr; // 混合颜色
     private Context mContext;
-    private Path mPath;
-    private Paint mPrimaryPaint;
-    private Paint mMixedPaint;
-    private int mCornerSize;
-    private float mStrokeWidth;
-    private int mPrimaryColor;
-    private int mDuration;
-    private int mStyle;
-    private float mProgress;
+    private Path mPath; // 屏幕边缘
+    private Paint mPrimaryPaint; // 主画笔，用于画单个色调
+    private Paint mMixedPaint; // 混合颜色画笔
+    private int mCornerSize; // 屏幕圆角尺寸
+    private float mStrokeWidth; // path 的线宽
+    private int mPrimaryColor; // 主色调
+    private int mDuration; // 动画时间
+    private int mStyle; // 动画风格
+    private float mProgress; // 动画执行进度
     private int mScreenHeight;
     private int mScreenWidth;
-    private EdgeLineConfig mConfig;
+    private EdgeLineConfig mConfig; // 配置项
     private RectF mScreenRectF;
     private boolean needReverse = true;//是否需要倒放 用户自己打开吧
     private ValueAnimator.AnimatorUpdateListener mValueUpdateListener;
@@ -65,13 +65,13 @@ public class EdgeLineView extends View {
     private float mPathLength;
     private boolean isAnimatorRunning = false;
     private AnimationStateListener mStateListener;
-    private LinearGradient mColorShader;
+    private LinearGradient mColorShader; // 渐变色shader
     private Matrix mGradientMatrix;
-    private float mTranslationX;
+    private float mTranslationX; // 混合颜色不同颜色的比例
     private float mTranslationY;
     private boolean needChangeAlpha = false;
-    private Path mDst;
-    private DashPathEffect mPathEffect;
+    private Path mDst; // 画动画路径
+    private DashPathEffect mPathEffect; // 用来话虚线
     private int mPhase = 0;
     private float[] mPathIntervals;
     private int mCurrentRepeatCount = 0;
@@ -92,6 +92,7 @@ public class EdgeLineView extends View {
     private void init() {
         mScreenWidth = ViewUtil.getScreenWidth(mContext);
         mScreenHeight = ViewUtil.getScreenHeight(mContext);
+        Log.e(TAG,"init ;; mScreenHeight =：" + mScreenHeight);
         mPath = new Path();
         mDst = new Path();
         mPathMeasure = new PathMeasure();
@@ -194,7 +195,7 @@ public class EdgeLineView extends View {
         int mixedColorNum = mMixedColorArr.length;
         if(mixedColorNum > 0) {
             int duration = mDuration / DEFAULT_REPEAT_COUNT;
-            mValueAnimator.setRepeatCount(ValueAnimator.INFINITE);
+            mValueAnimator.setRepeatCount(DEFAULT_REPEAT_COUNT);
             mValueAnimator.setDuration(duration);
         }
 

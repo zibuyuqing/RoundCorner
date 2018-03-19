@@ -5,7 +5,7 @@
     <string name="best_wishes">祝您生活愉快</string>
     <string name="base_feature_settings">基本功能</string>
     <string name="show_corner">开启圆角</string>
-    <string name="show_notification">开启通知</string>
+    <string name="show_notification">开启通知快捷操作</string>
     <string name="show_notification_summary">提供便捷操作，延长圆角寿命哟</string>
     <string name="custom_settings">自定义</string>
     <string name="corner_color">圆角颜色</string>
@@ -17,14 +17,26 @@
     <string name="about_me">关于我</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
-    <string name="permission_required">请允许显示悬浮窗</string>
-
+    <string name="alert_window_permission_required">请允许显示悬浮窗</string>
+    <string name="notification_listen_permission_required">请允许监听通知</string>
 
     <string name="advanced_feature_settings">高级设置</string>
     <string name="start_when_boot_complete">自启动</string>
     <string name="start_when_boot_complete_summary">请点击允许应用自启动</string>
     <string name="start_when_boot_complete_tip">重启手机并进入桌面后，圆角将自动显示</string>
     <string name="require_boot_complete_permission">请允许开机自启动权限</string>
-    <string name="enhance_notification">增强通知</string>
-    <string name="enhance_notification_summary">来通知时屏幕边缘亮起</string>
+
+
+    <string name="general_feature_settings">常规操作</string>
+    <string name="enhance_notification">开启增强通知</string>
+    <string name="notification_show_when">显示配置</string>
+    <string name="notification_apps_manager">应用监听管理</string>
+    <string name="notification_apps_manager_summary">配置监听的应用，绑定颜色</string>
+    <string name="notification_always_on">动画一直炫，逼格一直在</string>
+    <string name="notification_show_when_notify">来通知时才显示动画</string>
+    <string name="notification_mixed_colors">使用混合色</string>
+    <string name="notification_line_size">通知线粗细</string>
+    <string name="notification_animation_duration">通知动画时长</string>
+    <string name="notification_animation_style">通知动画风格</string>
+
 </resources>

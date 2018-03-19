@@ -1,4 +1,4 @@
-package com.zibuyuqing.roundcorner.ui;
+package com.zibuyuqing.roundcorner.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;

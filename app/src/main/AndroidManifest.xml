@@ -14,7 +14,7 @@
         android:persistent="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.activity.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -22,11 +22,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SplashActivity">
+        <activity android:name=".ui.activity.SplashActivity">
 
         </activity>
-        <activity android:name=".ui.AboutMeActivity"></activity>
-
+        <activity android:name=".ui.activity.AboutMeActivity"></activity>
+        <service android:name=".service.NotificationListener"
+            android:label="@string/enhance_notification"
+            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
+            <intent-filter>
+                <action android:name="android.service.notification.NotificationListenerService" />
+            </intent-filter>
+        </service>
         <service
             android:name=".service.LocalControllerService"></service>
         <service

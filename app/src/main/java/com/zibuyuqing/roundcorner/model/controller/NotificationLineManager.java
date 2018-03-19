@@ -2,6 +2,7 @@ package com.zibuyuqing.roundcorner.model.controller;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
@@ -22,6 +23,7 @@ import java.util.Map;
  * </pre>
  */
 public class NotificationLineManager {
+    private static final String TAG = NotificationLineManager.class.getSimpleName();
     private static NotificationLineManager sInstance;
     private Map<String, EdgeLineConfig> mNotificationsMap;
     private EdgeLineView mLineView;
@@ -54,7 +56,7 @@ public class NotificationLineManager {
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
             mWindowParams.alpha = 1;
             mWindowParams.x = 0;
-            mWindowParams.y = 1;
+
             mWindowParams.type = ensureWindowType();
             mWindowParams.screenBrightness = 1.0f;
             mWindowParams.buttonBrightness = 1.0f;
@@ -65,6 +67,11 @@ public class NotificationLineManager {
 
     private int ensureWindowType() {
         boolean hasNav = ViewUtil.getNavigationBarHeight(mContext) > 0;
+        if(hasNav){
+            mWindowParams.y = ViewUtil.getNavigationBarHeight(mContext) / 2;
+        } else {
+            mWindowParams.y = 0;
+        }
         if (Utilities.isCanUseToastType()) {
             return WindowManager.LayoutParams.TYPE_TOAST;
         } else if (Utilities.isCanUseApplicationOverlayType()) {
@@ -90,6 +97,7 @@ public class NotificationLineManager {
     }
 
     public void showEdgeLine(String who) {
+        Log.e(TAG,"who =:" + who);
         if (!isNotificationLineAdded) {
             mLineView.setConfig(Utilities.getDefaultEdgeLineConfig(mContext));
             mLineView.startAnimator();
