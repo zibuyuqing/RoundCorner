@@ -7,4 +7,16 @@
         <item>@color/color_cyan_light</item>
 
     </array>
+
+    <array name="display_config">
+        <item>@string/notification_show_when_notify</item>
+        <item>@string/notification_always_on</item>
+    </array>
+    <array name="notification_animation_style">
+        <item>@string/animation_style_fade_in_out</item>
+        <item>@string/animation_style_middle_out</item>
+        <item>@string/animation_style_wind</item>
+        <item>@string/animation_style_lattice</item>
+        <item>@string/animation_style_bottom_to_top</item>
+    </array>
 </resources>

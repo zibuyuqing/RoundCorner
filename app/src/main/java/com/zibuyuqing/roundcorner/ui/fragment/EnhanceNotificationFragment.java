@@ -1,6 +1,7 @@
 package com.zibuyuqing.roundcorner.ui.fragment;
 
 import android.content.Intent;
+import android.widget.ImageView;
 import android.widget.Switch;
 
 import com.zibuyuqing.roundcorner.R;
@@ -25,12 +26,39 @@ public class EnhanceNotificationFragment extends BaseFragment{
     private static final String TAG = EnhanceNotificationFragment.class.getSimpleName();
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     private boolean isEnhanceNotificationEnable;
+    private int mCurrentDisplayConfig;
+    private boolean isUseMixedColorsEnable;
+    private int[] mMixedColorsArray = new int[3];
+    private int mCurrentNotificationLineSize;
+    private int mCurrenNotificationAnimationDuration;
+    private int mCurrentNotificationAnimationStyle;
+    @BindView(R.id.iv_mixed_colors_preview)
+    ImageView mIvMixedColorsPreview;
+
     @BindView(R.id.sw_enhance_notification_enable)
     Switch mSwEnhanceNotificationEnable;
+
     @Override
     protected void initData() {
         isEnhanceNotificationEnable = SettingsDataKeeper.
                 getSettingsBoolean(mActivity,SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
+        mCurrentDisplayConfig = SettingsDataKeeper.
+                getSettingsInt(mActivity, SettingsDataKeeper.NOTIFICATION_DISPLAY_CONFIG);
+        isUseMixedColorsEnable = SettingsDataKeeper.
+                getSettingsBoolean(mActivity, SettingsDataKeeper.USE_MIXED_COLORS_ENABLE);
+        mMixedColorsArray[0] = SettingsDataKeeper.
+                getSettingsInt(mActivity, SettingsDataKeeper.MIXED_COLOR_ONE);
+        mMixedColorsArray[1] = SettingsDataKeeper.
+                getSettingsInt(mActivity, SettingsDataKeeper.MIXED_COLOR_TWO);
+        mMixedColorsArray[2] = SettingsDataKeeper.
+                getSettingsInt(mActivity, SettingsDataKeeper.MIXED_COLOR_THREE);
+
+        mCurrentNotificationLineSize = SettingsDataKeeper.
+                getSettingsInt(mActivity,SettingsDataKeeper.NOTIFICATION_LINE_SIZE);
+        mCurrenNotificationAnimationDuration = SettingsDataKeeper.
+                getSettingsInt(mActivity,SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION);
+        mCurrentNotificationAnimationStyle = SettingsDataKeeper.
+                getSettingsInt(mActivity,SettingsDataKeeper.NOTIFICATION_ANIMATION_STYLE);
     }
 
     @Override

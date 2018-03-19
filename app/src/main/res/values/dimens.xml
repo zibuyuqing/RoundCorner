@@ -3,6 +3,8 @@
     <dimen name="corner_size">10dp</dimen>
     <dimen name="toolbar_height">54dp</dimen>
     <integer name="corner_opacity">255</integer>
+    <integer name="notification_line_size">6</integer>
+    <integer name="notification_animation_duration">4000</integer>
 
     <!-- font size -->
     <dimen name="font_size_large_24dp">24dp</dimen>
