@@ -15,9 +15,18 @@ public class EdgeLineConfig {
     private int primaryColor;
     private int[] mixedColorArr;
     private int strokeSize;
-    private int cornerSize;
     private int duration;
     private int style;
+    private boolean isAlwaysOnAble;
+    public void setAlwaysOnAble(boolean alwaysOnAble) {
+        isAlwaysOnAble = alwaysOnAble;
+    }
+
+    public boolean isAlwaysOnAble() {
+        return isAlwaysOnAble;
+    }
+
+
 
     public int getStyle() {
         return style;
@@ -49,14 +58,6 @@ public class EdgeLineConfig {
 
     public void setStrokeSize(int strokeSize) {
         this.strokeSize = strokeSize;
-    }
-
-    public int getCornerSize() {
-        return cornerSize;
-    }
-
-    public void setCornerSize(int cornerSize) {
-        this.cornerSize = cornerSize;
     }
 
     public int getDuration() {

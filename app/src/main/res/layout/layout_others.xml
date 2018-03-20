@@ -9,7 +9,7 @@
     android:layout_height="wrap_content">
     <LinearLayout
         android:padding="@dimen/dimen_12_dp"
-        android:background="@drawable/card_bg"
+        android:background="@drawable/card_bg_light"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

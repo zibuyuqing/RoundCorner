@@ -22,7 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(providedLayoutId());
         ButterKnife.bind(this);
-        getWindow().setStatusBarColor(getResources().getColor(R.color.colorAccent,null));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.colorPrimary,null));
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION );
         init();
     }

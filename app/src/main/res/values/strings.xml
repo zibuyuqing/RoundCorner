@@ -29,6 +29,7 @@
 
     <string name="general_feature_settings">常规操作</string>
     <string name="enhance_notification">开启增强通知</string>
+    <string name="light_screen_when_notify">来通知时增大屏幕亮度</string>
     <string name="notification_show_when">显示配置</string>
 
     <string name="notification_always_on">动画一直炫，逼格一直在</string>

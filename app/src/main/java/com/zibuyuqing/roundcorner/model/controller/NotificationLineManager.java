@@ -2,15 +2,18 @@ package com.zibuyuqing.roundcorner.model.controller;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.WindowManager;
 
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
+import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
+import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 
 /**
@@ -56,7 +59,6 @@ public class NotificationLineManager {
                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
             mWindowParams.alpha = 1;
             mWindowParams.x = 0;
-
             mWindowParams.type = ensureWindowType();
             mWindowParams.screenBrightness = 1.0f;
             mWindowParams.buttonBrightness = 1.0f;
@@ -67,7 +69,7 @@ public class NotificationLineManager {
 
     private int ensureWindowType() {
         boolean hasNav = ViewUtil.getNavigationBarHeight(mContext) > 0;
-        if(hasNav){
+        if (hasNav) {
             mWindowParams.y = ViewUtil.getNavigationBarHeight(mContext) / 2;
         } else {
             mWindowParams.y = 0;
@@ -96,21 +98,66 @@ public class NotificationLineManager {
         return sInstance;
     }
 
-    public void showEdgeLine(String who) {
-        Log.e(TAG,"who =:" + who);
-        if (!isNotificationLineAdded) {
-            mLineView.setConfig(Utilities.getDefaultEdgeLineConfig(mContext));
+    public void showEdgeLineByConfigChanged() {
+        try {
+            if (!isEnhanceNotificationEnable()) {
+                return;
+            }
+            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow());
+
+            if (isBrightenScreenEnable()) {
+                mWindowParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+                mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+            } else {
+                mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+                mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+            }
+            if(mLineView.isAnimatorRunning()){
+                mLineView.cancelAnimator();
+            }
+            if (! mLineView.isAttachedToWindow()) {
+                mWindowManager.addView(mLineView, mWindowParams);
+            }
+            mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
             mLineView.startAnimator();
-            mWindowManager.addView(mLineView, mWindowParams);
-            isNotificationLineAdded = true;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+    }
+
+    public void showEdgeLine(String who) {
+        try {
+            if (!isEnhanceNotificationEnable()) {
+                return;
+            }
+            Log.e(TAG, "who =:" + who);
+            if (!isNotificationLineAdded) {
+                mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
+                mLineView.startAnimator();
+                mWindowManager.addView(mLineView, mWindowParams);
+                isNotificationLineAdded = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showEdgeLineAlways() {
+
     }
 
     public void removeEdgeLine() {
         if (isNotificationLineAdded) {
+            if (mLineView.isAnimatorRunning()) {
+                mLineView.cancelAnimator();
+            }
             mWindowManager.removeView(mLineView);
             isNotificationLineAdded = false;
         }
+    }
+
+    private boolean isBrightenScreenEnable() {
+        return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE);
     }
 
     private boolean isEnhanceNotificationEnable() {
@@ -125,7 +172,7 @@ public class NotificationLineManager {
 
     public void showOrHideEdgeLine() {
         if (isEnhanceNotificationEnable()) {
-            showEdgeLine("");
+            showEdgeLine(LocalControllerService.ME);
         } else {
             removeEdgeLine();
         }

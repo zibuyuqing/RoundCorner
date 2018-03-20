@@ -54,7 +54,6 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     private boolean isLeftBottomEnable;
     private boolean isRightTopEnable;
     private boolean isRightBottomEnable;
-
     @BindView(R.id.rl_corner_enable_layout)
     RelativeLayout mRlCornerEnable;
     @BindView(R.id.sw_corner_enable)
@@ -135,8 +134,10 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     public void onResume() {
         super.onResume();
         boolean hasAlertWindowPermission = checkAlertWindowPermission();
-        isCornerEnable = hasAlertWindowPermission;
-        mSwCornerEnable.setChecked(isCornerEnable);
+        if(!hasAlertWindowPermission) {
+            isCornerEnable = hasAlertWindowPermission;
+            mSwCornerEnable.setChecked(isCornerEnable);
+        }
     }
 
     private void updateLocationFlag(ImageView imageView,boolean enable){
@@ -222,6 +223,7 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     @OnClick(R.id.change_color_layout) void chooseColor(){
         AlertDialog.Builder colorPickDialog = new AlertDialog.Builder(mActivity);
         View colorPickLayout = View.inflate(mActivity,R.layout.layout_choose_color,null);
+        colorPickLayout.setBackgroundColor(mActivity.getColor(R.color.window_bg_light));
         colorPickDialog.setView(colorPickLayout);
         final ColorPicker picker = colorPickLayout.findViewById(R.id.cp_colors_panel);
         ValueBar valueBar = colorPickLayout.findViewById(R.id.cp_color_value);

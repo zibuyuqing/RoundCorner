@@ -28,6 +28,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
     public static final String ACTION_TRY_TO_ADD_CORNERS = "try_to_add_corners";
     public static final String ACTION_TRY_TO_ADD_NOTIFICATION_LINE = "try_to_add_notification_line";
     public static final String NOTIFICATION_IDENTIFY = "notification_identify";
+    public static final String ME = "com.zibuyuqing.roundcorner";
     private LocalBinder mBinder;
     private LocalConn mConnection;
     private CornerManager mCornerManager;
@@ -69,6 +70,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             mLineManager.registerAnimationStateListener(this);
         }
         tryToAddCorners(this);
+        tryToAddNotificationLine(this,ME);
     }
 
     @Override
@@ -101,6 +103,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         intent.putExtra(NOTIFICATION_IDENTIFY,who);
         context.startService(intent);
     }
+
     public static void start(Context context) {
         Intent starter = new Intent(context, LocalControllerService.class);
         context.startService(starter);
@@ -141,8 +144,20 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             case ACTION_TRY_TO_ADD_NOTIFICATION_LINE:
                 showEdgeLine(intent);
                 break;
+
             case SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE:
                 startOrStopListenNotification();
+                break;
+            case SettingsDataKeeper.NOTIFICATION_DISPLAY_CONFIG:
+            case SettingsDataKeeper.NOTIFICATION_ANIMATION_STYLE:
+            case SettingsDataKeeper.NOTIFICATION_LINE_SIZE:
+            case SettingsDataKeeper.BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE:
+            case SettingsDataKeeper.MIXED_COLOR_ONE:
+            case SettingsDataKeeper.MIXED_COLOR_TWO:
+            case SettingsDataKeeper.MIXED_COLOR_THREE:
+            case SettingsDataKeeper.USE_MIXED_COLORS_ENABLE:
+            case SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION:
+                showEdgeLineForPreview();
                 break;
         }
     }
@@ -151,10 +166,12 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         mLineManager.showOrHideEdgeLine();
     }
 
+    private void showEdgeLineForPreview(){
+        mLineManager.showEdgeLineByConfigChanged();
+    }
     private void showEdgeLine(Intent intent){
         String who = intent.getStringExtra(NOTIFICATION_IDENTIFY);
         mLineManager.showEdgeLine(who);
-       // mCornerManager.reAddCorners();
     }
     @Override
     public void onDestroy() {

@@ -27,6 +27,7 @@ import butterknife.ButterKnife;
 public abstract class BaseFragment extends Fragment{
     protected Activity mActivity;
     protected View mContains;
+    protected boolean isResumed = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -47,15 +48,32 @@ public abstract class BaseFragment extends Fragment{
         initData();
         initViews();
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        isResumed = true;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isResumed = false;
+    }
+
     public void updateSettingsWithInteger(String key){
-        Intent intent = new Intent(mActivity, LocalControllerService.class);
-        intent.setAction(key);
-        mActivity.startService(intent);
+        if(isResumed) {
+            Intent intent = new Intent(mActivity, LocalControllerService.class);
+            intent.setAction(key);
+            mActivity.startService(intent);
+        }
     }
     public void updateSettingsWithBool(String key){
-        Intent intent = new Intent(mActivity, LocalControllerService.class);
-        intent.setAction(key);
-        mActivity.startService(intent);
+        if(isResumed) {
+            Intent intent = new Intent(mActivity, LocalControllerService.class);
+            intent.setAction(key);
+            mActivity.startService(intent);
+        }
     }
 
     protected abstract void initData();

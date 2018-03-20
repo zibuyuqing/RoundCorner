@@ -27,7 +27,6 @@ import java.util.Set;
 public class Utilities {
 
     private static final int NOTIFY_ID = 1111;
-    private static EdgeLineConfig sDefaultLineConfig;
 
     public static boolean isCanUseToastType() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
@@ -37,7 +36,7 @@ public class Utilities {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
-    public static boolean checkNotificationListenPermission(Context context){
+    public static boolean checkNotificationListenPermission(Context context) {
         Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(context);
         if (packageNames.contains(context.getPackageName())) {
             return true;
@@ -50,7 +49,7 @@ public class Utilities {
         if (version >= 19) {
             return checkOp(context, 24); //OP_SYSTEM_ALERT_WINDOW = 24;
         }
-        return true;
+        return false;
     }
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -88,16 +87,19 @@ public class Utilities {
         return notification;
     }
 
-    public static EdgeLineConfig getDefaultEdgeLineConfig(Context context) {
-        if (sDefaultLineConfig == null) {
-            sDefaultLineConfig = new EdgeLineConfig();
-            sDefaultLineConfig.setStyle(EdgeLineView.STYLE_FADE_IN_OUT);
-            sDefaultLineConfig.setCornerSize(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.CORNER_SIZE));
-            sDefaultLineConfig.setDuration(4000);
-            sDefaultLineConfig.setPrimaryColor(context.getColor(R.color.default_notification_primary_color));
-            sDefaultLineConfig.setStrokeSize(4);
-            sDefaultLineConfig.setMixedColorArr(context.getResources().getIntArray(R.array.default_mixed_colors));
-        }
-        return sDefaultLineConfig;
+    public static EdgeLineConfig getEdgeLineConfig(Context context) {
+        EdgeLineConfig config = new EdgeLineConfig();
+        config.setStyle(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.NOTIFICATION_ANIMATION_STYLE));
+        config.setAlwaysOnAble(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.NOTIFICATION_DISPLAY_CONFIG) == 1);
+        int animationDuration = SettingsDataKeeper.
+                getSettingsInt(context, SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION) * 1000;
+        config.setDuration(animationDuration);
+        config.setStrokeSize(SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.NOTIFICATION_LINE_SIZE));
+        config.setMixedColorArr(new int[]{
+                SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.MIXED_COLOR_ONE),
+                SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.MIXED_COLOR_TWO),
+                SettingsDataKeeper.getSettingsInt(context, SettingsDataKeeper.MIXED_COLOR_THREE)
+        });
+        return config;
     }
 }
