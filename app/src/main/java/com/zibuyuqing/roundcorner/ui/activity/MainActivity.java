@@ -80,6 +80,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 } else {
                     transaction.show(mCornerFragment);
                 }
+                mTVTitle.setText(getString(R.string.app_name));
             } else if(index == INDEX_FRAGMENT_NOTIFICATION){
                 if(mNotificationFragment == null){
                     mNotificationFragment = new EnhanceNotificationFragment();
@@ -87,6 +88,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 } else {
                     transaction.show(mNotificationFragment);
                 }
+                mTVTitle.setText(getString(R.string.fragment_enhance_notification_title));
             }
             mCurrentFragment = index;
             transaction.commit();

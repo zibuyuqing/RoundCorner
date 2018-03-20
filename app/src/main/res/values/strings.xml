@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">屏幕圆角</string>
+    <string name="fragment_enhance_notification_title">增强通知</string>
     <string name="click_to_set_corner">点击设置圆角，使你的设备更圆滑</string>
     <string name="about_me_description">小的android攻城狮一枚，欢迎加我好友哟，我们一起学习探讨android开发技术，等你！</string>
     <string name="best_wishes">祝您生活愉快</string>
