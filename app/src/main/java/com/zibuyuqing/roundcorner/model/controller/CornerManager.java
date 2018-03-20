@@ -264,6 +264,9 @@ public class CornerManager {
         }
     }
     public void showOrHideLeftTopCorner() {
+        if(!isCornerEnable()){
+            return;
+        }
         boolean leftTopEnable = SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE);
         Log.e(TAG,"showOrHideLeftTopCorner :: leftTopEnable =:" + leftTopEnable);
         if(!leftTopEnable){
@@ -274,6 +277,9 @@ public class CornerManager {
     }
 
     public void showOrHideLeftBottomCorner() {
+        if(!isCornerEnable()){
+            return;
+        }
         boolean leftBottomEnable = SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_LEFT_BOTTOM_ENABLE);
         if(!leftBottomEnable){
             hideCornerByPosition(LEFT_BOTTOM);
@@ -283,6 +289,9 @@ public class CornerManager {
     }
 
     public void showOrHideRightTopCorner() {
+        if(!isCornerEnable()){
+            return;
+        }
         boolean rightTopEnable = SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_RIGHT_TOP_ENABLE);
         if(!rightTopEnable){
             hideCornerByPosition(RIGHT_TOP);
@@ -292,6 +301,9 @@ public class CornerManager {
     }
 
     public void showOrHideRightBottomCorner() {
+        if(!isCornerEnable()){
+            return;
+        }
         boolean rightBottomEnable = SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE);
         if(!rightBottomEnable){
             hideCornerByPosition(RIGHT_BOTTOM);

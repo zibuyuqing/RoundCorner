@@ -106,7 +106,9 @@ public class EdgeLineView extends View {
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-                animateHide();
+                Log.e(TAG,"onAnimationCancel ---------------- ");
+                hide(true);
+                mCurrentRepeatCount = 0;
             }
 
             @Override
@@ -118,7 +120,7 @@ public class EdgeLineView extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                animateHide();
+                hide(false);
                 mCurrentRepeatCount = 0;
             }
 
@@ -360,6 +362,8 @@ public class EdgeLineView extends View {
     }
 
     private void configPath() {
+        mPath.reset();
+        mDst.reset();
         float offset = 2 * mStrokeWidth / 5;
         mScreenRectF = new RectF(offset, offset, mScreenWidth - offset, mScreenHeight - offset);
         Log.e(TAG, "config : " + isCornersShown() + "mCornerSize =:" + mCornerSize);
@@ -450,15 +454,29 @@ public class EdgeLineView extends View {
         });
         animator.start();
     }
-
+    private void hide(boolean immediately){
+        Log.e(TAG,"hide immediately = :"  + immediately + ",isAnimatorRunning =:" + isAnimatorRunning);
+        if(!isAnimatorRunning){
+            return;
+        }
+        if(immediately){
+            isAnimatorRunning = false;
+            if (mStateListener != null && !isAlwaysOnAble) {
+                mStateListener.onAnimationEnd();
+            }
+        } else {
+            animateHide();
+        }
+    }
     private void animateHide() {
+
         ObjectAnimator animator = ObjectAnimator.ofFloat(this, "alpha", 1.0f, 0.0f);
         animator.setDuration(300);
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 isAnimatorRunning = false;
-                if (mStateListener != null) {
+                if (mStateListener != null && !isAlwaysOnAble) {
                     mStateListener.onAnimationEnd();
                 }
             }

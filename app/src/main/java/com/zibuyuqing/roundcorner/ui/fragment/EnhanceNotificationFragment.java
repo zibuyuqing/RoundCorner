@@ -139,7 +139,9 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         boolean hasNotificationListenPermission = checkNotificationListenPermission();
         isEnhanceNotificationEnable = hasAlertWindowPermission && hasNotificationListenPermission;
         Log.e(TAG,"onResume isEnhanceNotificationEnable =：" + isEnhanceNotificationEnable);
-        mSwEnhanceNotificationEnable.setChecked(isEnhanceNotificationEnable);
+        if(!isEnhanceNotificationEnable) {
+            mSwEnhanceNotificationEnable.setChecked(isEnhanceNotificationEnable);
+        }
     }
 
     private boolean checkAlertWindowPermission() {

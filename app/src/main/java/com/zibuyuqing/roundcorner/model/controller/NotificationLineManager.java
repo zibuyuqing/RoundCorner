@@ -33,7 +33,6 @@ public class NotificationLineManager {
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowParams;
     private Context mContext;
-    private boolean isNotificationLineAdded = false;
 
     private NotificationLineManager(Context context) {
         mContext = context;
@@ -112,10 +111,8 @@ public class NotificationLineManager {
                 mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
                 mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
             }
-            if(mLineView.isAnimatorRunning()){
-                mLineView.cancelAnimator();
-            }
-            if (! mLineView.isAttachedToWindow()) {
+            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAnimatorRunning() +",mLineView.isAttachedToWindow() =:" + mLineView.isAttachedToWindow());
+            if (!mLineView.isAttachedToWindow()) {
                 mWindowManager.addView(mLineView, mWindowParams);
             }
             mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
@@ -131,28 +128,23 @@ public class NotificationLineManager {
                 return;
             }
             Log.e(TAG, "who =:" + who);
-            if (!isNotificationLineAdded) {
+            if (!mLineView.isAttachedToWindow()) {
                 mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
                 mLineView.startAnimator();
                 mWindowManager.addView(mLineView, mWindowParams);
-                isNotificationLineAdded = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void showEdgeLineAlways() {
-
-    }
-
     public void removeEdgeLine() {
-        if (isNotificationLineAdded) {
+        Log.e(TAG,"removeEdgeLine isNotificationLineAdded =:" + mLineView.isAttachedToWindow());
+        if (mLineView != null && mLineView.isAttachedToWindow()) {
             if (mLineView.isAnimatorRunning()) {
                 mLineView.cancelAnimator();
             }
             mWindowManager.removeView(mLineView);
-            isNotificationLineAdded = false;
         }
     }
 

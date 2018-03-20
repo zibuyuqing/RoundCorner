@@ -1,6 +1,7 @@
 package com.zibuyuqing.roundcorner.service;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.service.notification.NotificationListenerService;
@@ -18,15 +19,17 @@ import android.util.Log;
  */
 public class NotificationListener extends NotificationListenerService{
     private static final String TAG = "NotificationListener" ;
+    private static final String SYSTEM_UI = "com.android.systemui";
     private String who;
     private boolean isConnected;
     private boolean isCreated;
-
+    private static NotificationListener sInstance;
     @Override
     public void onCreate() {
         super.onCreate();
         Log.e(TAG,"oncreate");
         isCreated = true;
+        sInstance = this;
     }
 
     @Override
@@ -41,7 +44,13 @@ public class NotificationListener extends NotificationListenerService{
         Log.e(TAG,"onListenerConnected");
         isConnected = true;
     }
-
+    public static void start(Context context) {
+        Intent starter = new Intent(context, NotificationListener.class);
+        context.startActivity(starter);
+    }
+    public void stop(){
+        NotificationListener.this.stopSelf();
+    }
     @Override
     public void onListenerDisconnected() {
         super.onListenerDisconnected();
@@ -54,6 +63,9 @@ public class NotificationListener extends NotificationListenerService{
         super.onNotificationPosted(sbn);
 
         who = sbn.getPackageName();
+        if(who.equals(SYSTEM_UI)){
+            return;
+        }
         Log.e(TAG,"onNotificationPosted who =:" + who);
         LocalControllerService.tryToAddNotificationLine(this,who);
     }
