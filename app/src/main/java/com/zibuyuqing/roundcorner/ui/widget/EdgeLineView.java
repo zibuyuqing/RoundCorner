@@ -316,7 +316,6 @@ public class EdgeLineView extends View {
                 float replenishPro = 1.0f - Math.abs(leftCursorStartPro);
                 float repStartPosition;
                 float repEndPosition;
-                Log.e(TAG, "replenishPro =:" + replenishPro);
                 // 为什么要0.5呢，因为走到一半要缩小
                 if (replenishPro > 0.5) {
                     repStartPosition = replenishPro * mPathLength;
@@ -324,7 +323,6 @@ public class EdgeLineView extends View {
                 } else {
                     repStartPosition = 0.5f * mPathLength;
                     repEndPosition = repStartPosition + mPathLength * (offsetProcess + rightCursorStartPro);
-                    Log.e(TAG, "----- mProgress =:" + mProgress);
                 }
                 mPathMeasure.getSegment(repStartPosition, repEndPosition, replenishPath, true);
                 canvas.drawPath(replenishPath, mMixedPaint);

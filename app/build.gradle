@@ -7,8 +7,8 @@ android {
         applicationId "com.zibuyuqing.roundcorner"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
-        versionCode 1
-        versionName "1.0.2"
+        versionCode 2
+        versionName "2.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

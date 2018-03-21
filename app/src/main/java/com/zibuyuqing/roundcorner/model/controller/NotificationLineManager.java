@@ -59,8 +59,6 @@ public class NotificationLineManager {
             mWindowParams.alpha = 1;
             mWindowParams.x = 0;
             mWindowParams.type = ensureWindowType();
-            mWindowParams.screenBrightness = 1.0f;
-            mWindowParams.buttonBrightness = 1.0f;
             mWindowParams.width = ViewUtil.getScreenWidth(mContext);
             mWindowParams.height = ViewUtil.getScreenHeight(mContext);
         }
@@ -103,14 +101,7 @@ public class NotificationLineManager {
                 return;
             }
             Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow());
-
-            if (isBrightenScreenEnable()) {
-                mWindowParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-                mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-            } else {
-                mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-                mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-            }
+            confirmBrightness();
             Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAnimatorRunning() +",mLineView.isAttachedToWindow() =:" + mLineView.isAttachedToWindow());
             if (!mLineView.isAttachedToWindow()) {
                 mWindowManager.addView(mLineView, mWindowParams);
@@ -131,10 +122,21 @@ public class NotificationLineManager {
             if (!mLineView.isAttachedToWindow()) {
                 mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
                 mLineView.startAnimator();
+                confirmBrightness();
                 mWindowManager.addView(mLineView, mWindowParams);
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+    private void confirmBrightness(){
+        Log.e(TAG,"confirmBrightness  =;  " + isBrightenScreenEnable());
+        if (isBrightenScreenEnable()) {
+            mWindowParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+            mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
+        } else {
+            mWindowParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
+            mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
         }
     }
 

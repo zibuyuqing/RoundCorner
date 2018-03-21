@@ -69,6 +69,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             mLineManager = NotificationLineManager.getInstance(this);
             mLineManager.registerAnimationStateListener(this);
         }
+        NotificationListener.start(this);
         tryToAddCorners(this);
         tryToAddNotificationLine(this,ME);
     }
@@ -136,6 +137,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
                 break;
 
             case SettingsDataKeeper.CORNER_ENABLE:
+                showEdgeLineForPreview();
                 mCornerManager.showOrHideCorners();
                 break;
             case SettingsDataKeeper.NOTIFICATION_ENABLE:
