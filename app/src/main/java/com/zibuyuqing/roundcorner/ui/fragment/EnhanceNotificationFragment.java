@@ -137,9 +137,9 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         super.onResume();
         boolean hasAlertWindowPermission = checkAlertWindowPermission();
         boolean hasNotificationListenPermission = checkNotificationListenPermission();
-        isEnhanceNotificationEnable = hasAlertWindowPermission && hasNotificationListenPermission;
-        Log.e(TAG,"onResume isEnhanceNotificationEnable =：" + isEnhanceNotificationEnable);
-        if(!isEnhanceNotificationEnable) {
+        boolean hasPermission = hasAlertWindowPermission && hasNotificationListenPermission;
+        Log.e(TAG,"onResume isEnhanceNotificationEnable =：" + isEnhanceNotificationEnable +",hasPermission =:" + hasPermission) ;
+        if(!hasPermission) {
             mSwEnhanceNotificationEnable.setChecked(isEnhanceNotificationEnable);
         }
     }
@@ -163,6 +163,7 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
                     SettingsDataKeeper.writeSettingsBoolean(mActivity,
                             SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE, true);
                     updateSettingsWithBool(SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
+                    isEnhanceNotificationEnable = true;
                 } else {
                     requestNotificationListenPermission();
                     showTips(R.string.notification_listen_permission_required);
@@ -191,25 +192,22 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         if (checked) {
             boolean hasAlertWindowPermission = checkAlertWindowPermission();
             if (!hasAlertWindowPermission) {
+                isEnhanceNotificationEnable = false;
                 requestOverlayPermission();
                 return;
             }
             boolean hasNotificationListenPermission = checkNotificationListenPermission();
             if (!hasNotificationListenPermission) {
-                requestNotificationListenPermission();
-                return;
-            }
-            if (!checkNotificationListenPermission()) {
+                isEnhanceNotificationEnable = false;
                 requestNotificationListenPermission();
                 showTips(R.string.notification_listen_permission_required);
                 return;
             }
-        } else {
-
         }
         SettingsDataKeeper.writeSettingsBoolean(mActivity,
                 SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE, checked);
         updateSettingsWithBool(SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
+        isEnhanceNotificationEnable = checked;
     }
 
     @OnCheckedChanged(R.id.sw_enhance_notification_enable)

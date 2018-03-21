@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @OnClick(R.id.iv_action) void share(){
         Intent textIntent = new Intent(Intent.ACTION_SEND);
         textIntent.setType("text/plain");
-        textIntent.putExtra(Intent.EXTRA_TEXT, "我发现了一个好玩的应用，点击下载：https://pan.baidu.com/s/1-Ruu88ThKaUdeMtQiu1ROA");
+        textIntent.putExtra(Intent.EXTRA_TEXT, "https://www.coolapk.com/apk/180019");
         startActivity(Intent.createChooser(textIntent, "分享"));
     }
 
@@ -113,7 +113,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void favorite(){
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
-        Uri content_url = Uri.parse("https://www.jianshu.com/p/67b5b2072c15");
+        Uri content_url = Uri.parse("https://www.coolapk.com/apk/180019");
         intent.setData(content_url);
         startActivity(intent);
     }

@@ -185,6 +185,7 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
             isCornerEnable = true;
         }
     }
+
     @OnClick(R.id.iv_corner_left_top)
     void showOrHideLeftTopCorner() {
         isLeftTopEnable = !isLeftTopEnable;
@@ -261,12 +262,14 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
         SettingsDataKeeper.writeSettingsBoolean(mActivity,
                 SettingsDataKeeper.NOTIFICATION_ENABLE,checked);
         updateSettingsWithBool(SettingsDataKeeper.NOTIFICATION_ENABLE);
+        isNotifyEnable = checked;
     }
     private void confirmCornerEnable(boolean checked) {
         Log.e(TAG,"confirmCornerEnable :: checked =:" + checked);
         if (checked) {
             if (checkAlertWindowPermission()) {
                 SettingsDataKeeper.writeSettingsBoolean(mActivity, SettingsDataKeeper.CORNER_ENABLE, true);
+                isCornerEnable = true;
             } else {
                 requestOverlayPermission();
                 showTips(getString(R.string.alert_window_permission_required));
@@ -274,6 +277,7 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
             }
         } else {
             SettingsDataKeeper.writeSettingsBoolean(mActivity, SettingsDataKeeper.CORNER_ENABLE, false);
+            isCornerEnable = false;
         }
         updateSettingsWithBool(SettingsDataKeeper.CORNER_ENABLE);
     }

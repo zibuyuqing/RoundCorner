@@ -97,6 +97,7 @@ public class NotificationLineManager {
 
     public void showEdgeLineByConfigChanged() {
         try {
+            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow() +",isEnhanceNotificationEnable() =:" + isEnhanceNotificationEnable());
             if (!isEnhanceNotificationEnable()) {
                 return;
             }
