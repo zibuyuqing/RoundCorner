@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dimen_10_dp">
+
+    <FrameLayout
+        android:layout_marginTop="@dimen/dimen_12_dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_width="@dimen/font_size_normal_16dp"
+        android:layout_height="@dimen/font_size_normal_16dp">
+        <ImageView
+            android:id="@+id/iv_app_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY" />
+        <ImageView
+            android:id="@+id/iv_app_selected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:visibility="gone" />
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tv_app_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="14dp"
+        android:ems="10"
+        android:fadingEdge="horizontal"
+        android:gravity="center_horizontal"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        android:textSize="@dimen/font_size_small_12dp" />
+
+</LinearLayout>
