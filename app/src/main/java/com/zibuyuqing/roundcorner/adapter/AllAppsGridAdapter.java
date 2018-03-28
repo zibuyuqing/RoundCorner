@@ -23,6 +23,7 @@ import java.util.Set;
 
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
+import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
 import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
 
 /**
@@ -31,31 +32,31 @@ import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
 
 public class AllAppsGridAdapter extends RecyclerView.Adapter {
     private Context mContext;
-    private List<AppInfo> mAllApps;
+    private List<AppInfoWithIcon> mAllApps;
     private LayoutInflater mInflate;
     private static final String TAG = "AllAppsGridAdapter";
     private ArrayMap<AppInfo, Integer> mChangedInfos = new ArrayMap<>();
-    public static final Comparator<AppInfo> APPS_COMPARATOR = new Comparator<AppInfo>() {
+    public static final Comparator<AppInfoWithIcon> APPS_COMPARATOR = new Comparator<AppInfoWithIcon>() {
         @Override
-        public int compare(AppInfo one, AppInfo other) {
+        public int compare(AppInfoWithIcon one, AppInfoWithIcon other) {
             return other.getEnableState() - one.getEnableState();
         }
     };
-    public AllAppsGridAdapter(Context context, List<AppInfo> infos) {
+    public AllAppsGridAdapter(Context context) {
         mContext = context;
         mInflate = LayoutInflater.from(context);
-        initData(infos);
     }
 
-    private void initData(List<AppInfo> infos) {
+    public void updateData(List<AppInfoWithIcon> infos) {
         Iterator iterator = infos.iterator();
         mAllApps = new ArrayList<>();
-        AppInfo info;
+        AppInfoWithIcon info;
         while (iterator.hasNext()) {
-            info = (AppInfo) iterator.next();
+            info = (AppInfoWithIcon) iterator.next();
             mAllApps.add(info);
         }
         Collections.sort(mAllApps,APPS_COMPARATOR);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -72,7 +73,7 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final ItemViewHolder viewHolder = (ItemViewHolder) holder;
-        final AppInfo info = mAllApps.get(position);
+        final AppInfoWithIcon info = mAllApps.get(position);
 
         if (mChangedInfos.containsKey(info)) {
             viewHolder.verifySelectState(mChangedInfos.get(info));
@@ -91,11 +92,11 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
                 onItemChanged(info, viewHolder.select, info.enableState);
             }
         });
-        // viewHolder.appIcon.setImageBitmap();
+        viewHolder.appIcon.setImageBitmap(info.getIcon());
         viewHolder.appName.setText(info.title);
     }
 
-    private void onItemChanged(AppInfo appInfo, int enable, int originEnableState) {
+    private void onItemChanged(AppInfoWithIcon appInfo, int enable, int originEnableState) {
         if (enable != originEnableState) {
             mChangedInfos.put(appInfo, enable);
         } else {

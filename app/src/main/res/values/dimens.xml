@@ -31,4 +31,5 @@
     <dimen name="dimen_4_dp">4dp</dimen>
     <dimen name="dimen_2_dp">2dp</dimen>
     <dimen name="dimen_1_dp">1dp</dimen>
+    <dimen name="icon_size">48dp</dimen>
 </resources>

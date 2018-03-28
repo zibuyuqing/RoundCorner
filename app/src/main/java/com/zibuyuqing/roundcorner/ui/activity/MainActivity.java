@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zibuyuqing.roundcorner.MyApp;
+import com.zibuyuqing.roundcorner.model.db.AppLoadTask;
 import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.service.RemoteService;
 import com.zibuyuqing.roundcorner.ui.fragment.EnhanceNotificationFragment;
@@ -66,6 +67,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         MyApp app = MyApp.getInstance(this);
         startServices();
     }
+
     private void initData(){
         mFragmentManager  = getFragmentManager();
         showFragment(INDEX_FRAGMENT_CORNER);
@@ -109,9 +111,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void startServices(){
         RemoteService.start(this);
         LocalControllerService.tryToAddCorners(this);
+        startLoadApps();
     }
 
-
+    private void startLoadApps(){
+        AppLoadTask.execute(this);
+    }
     private void favorite(){
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);

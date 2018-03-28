@@ -23,7 +23,7 @@ public class AppInfo{
     @Id(autoincrement = true)
     private Long id;
     @Unique
-    private String packageName;
+    public String packageName;
 
     public int isSystemApp;
     public int enableState = APP_ENABLE;
