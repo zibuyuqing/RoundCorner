@@ -48,10 +48,14 @@ public class AppInfoDaoOpe {
     }
     public static List<AppInfo> querySystemAppInfos(Context context){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
-                queryBuilder().where(AppInfoDao.Properties.IsSystemApp.eq(AppInfo.SYSTEM_APP)).list();
+                queryBuilder().where(AppInfoDao.Properties.AppType.eq(AppInfo.SYSTEM_APP)).list();
     }
     public static List<AppInfo> queryUserAppInfos(Context context){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
-                queryBuilder().where(AppInfoDao.Properties.IsSystemApp.eq(AppInfo.USER_APP)).list();
+                queryBuilder().where(AppInfoDao.Properties.AppType.eq(AppInfo.USER_APP)).list();
+    }
+    public static List<AppInfo> queryAppinfosByPage(Context context,int page){
+        return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
+                queryBuilder().offset(page * 50).limit(50).build().list();
     }
 }

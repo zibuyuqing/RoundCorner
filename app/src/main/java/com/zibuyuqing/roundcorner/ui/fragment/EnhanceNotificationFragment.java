@@ -19,6 +19,7 @@ import com.larswerkman.holocolorpicker.OpacityBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseFragment;
+import com.zibuyuqing.roundcorner.ui.activity.AppsManageActivity;
 import com.zibuyuqing.roundcorner.ui.widget.LinearGradientView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
@@ -265,7 +266,10 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         }).create();
         builder.show();
     }
-
+    @OnClick(R.id.rl_apps_manager_layout)
+    void onClickAppsManagerLayout(){
+        AppsManageActivity.start(mActivity);
+    }
     @OnClick(R.id.rl_use_mixed_color_layout)
     void clickUseMixedColorLayout() {
         if (isUseMixedColorsEnable) {

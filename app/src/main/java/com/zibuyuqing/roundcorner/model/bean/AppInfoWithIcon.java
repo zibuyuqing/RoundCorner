@@ -24,7 +24,7 @@ public class AppInfoWithIcon extends AppInfo{
     public AppInfoWithIcon(AppInfo info,Bitmap icon){
         this.appInfo = info;
         this.enableState = info.enableState;
-        this.isSystemApp = info.isSystemApp;
+        this.appType = info.appType;
         this.title = info.title;
         this.packageName = info.packageName;
         this.icon = icon;

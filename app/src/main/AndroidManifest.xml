@@ -25,6 +25,7 @@
         <activity android:name=".ui.activity.SplashActivity">
 
         </activity>
+        <activity android:name=".ui.activity.AppsManageActivity"></activity>
         <activity android:name=".ui.activity.AboutMeActivity"></activity>
         <service android:name="com.zibuyuqing.roundcorner.service.NotificationListener"
             android:label="@string/enhance_notification"

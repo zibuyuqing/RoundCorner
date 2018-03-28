@@ -105,10 +105,10 @@ public class Utilities {
         return config;
     }
 
-    public static int isSystemApp(ApplicationInfo info) {
+    public static int getAppType(ApplicationInfo info) {
         if ((info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) {
             return AppInfo.SYSTEM_APP;
-        } else if ((info.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {//判断是不是系统应用
+        } else if ((info.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {//判断是不是系统应用
             return AppInfo.SYSTEM_APP;
         }
         return AppInfo.USER_APP;

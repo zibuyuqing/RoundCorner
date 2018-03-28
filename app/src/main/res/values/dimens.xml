@@ -19,6 +19,9 @@
     <dimen name="font_size_small_14dp">14dp</dimen>
     <dimen name="font_size_small_12dp">12dp</dimen>
 
+    <dimen name="dimen_108_dp">108dp</dimen>
+    <dimen name="dimen_96_dp">96dp</dimen>
+    <dimen name="dimen_84_dp">84dp</dimen>
     <dimen name="dimen_72_dp">72dp</dimen>
     <dimen name="dimen_64_dp">64dp</dimen>
     <dimen name="dimen_48_dp">48dp</dimen>

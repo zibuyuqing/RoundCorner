@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.utils.Utilities;
@@ -21,6 +22,7 @@ import java.util.List;
  * </pre>
  */
 public class AppLoadTask extends AsyncTask<Void,Void,Void> {
+    private final static String TAG = AppLoadTask.class.getSimpleName();
     private Context mContext;
     public AppLoadTask(Context context){
         mContext = context;
@@ -48,11 +50,12 @@ public class AppLoadTask extends AsyncTask<Void,Void,Void> {
                 continue;
             } else {
                 AppInfo appInfo = new AppInfo();
-                appInfo.setIsSystemApp(Utilities.isSystemApp(info));
-                appInfo.setEnableState(appInfo.getIsSystemApp());
+                appInfo.setAppType(Utilities.getAppType(info));
+                appInfo.setEnableState(appInfo.appType);
                 appInfo.setTitle(info.loadLabel(packageManager).toString());
                 appInfo.setPackageName(info.packageName);
                 newApps.add(appInfo);
+                Log.e(TAG,"appInfo.appType = :" + appInfo.appType+",name =:" + appInfo.getTitle());
             }
         }
         if(newApps.size() > 0) {

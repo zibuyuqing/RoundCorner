@@ -46,4 +46,5 @@ dependencies {
     compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'org.greenrobot:greendao:3.2.2' // add library
 
+
 }

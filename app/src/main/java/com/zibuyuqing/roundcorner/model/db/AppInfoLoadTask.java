@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 
+import com.zibuyuqing.roundcorner.model.AppInfoDao;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
@@ -21,19 +22,27 @@ import java.util.List;
  * </pre>
  */
 public class AppInfoLoadTask extends AsyncTask<Void,Void,List<AppInfoWithIcon>>{
+    public static final int QUERAY_ALL = -1;
     private AppInfoLoadStateListener mListener;
     private Context mContext;
-    public AppInfoLoadTask(Context context,AppInfoLoadStateListener listener){
+    private int mPage = 0;
+    public AppInfoLoadTask(Context context,int page,AppInfoLoadStateListener listener){
         mContext = context;
         mListener = listener;
+        mPage = page;
     }
-    public static void execute(Context context,AppInfoLoadStateListener listener){
-        new AppInfoLoadTask(context,listener).execute();
+    public static void execute(Context context,int page,AppInfoLoadStateListener listener){
+        new AppInfoLoadTask(context,page,listener).execute();
     }
     @Override
     protected List<AppInfoWithIcon> doInBackground(Void... voids) {
         PackageManager packageManager = mContext.getApplicationContext().getPackageManager();
-        List<AppInfo> appInfos = AppInfoDaoOpe.queryAll(mContext);
+        List<AppInfo> appInfos;
+        if(mPage == QUERAY_ALL) {
+             appInfos = AppInfoDaoOpe.queryAll(mContext);
+        } else {
+            appInfos = AppInfoDaoOpe.queryAppinfosByPage(mContext,mPage);
+        }
         List<AppInfoWithIcon> appInfoWithIconList = new ArrayList<>();
         int count = appInfos.size();
         if(mListener != null){

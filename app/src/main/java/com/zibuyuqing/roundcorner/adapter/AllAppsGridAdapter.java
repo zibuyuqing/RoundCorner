@@ -32,7 +32,7 @@ import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
 
 public class AllAppsGridAdapter extends RecyclerView.Adapter {
     private Context mContext;
-    private List<AppInfoWithIcon> mAllApps;
+    private List<AppInfoWithIcon> mAllApps = new ArrayList<>();
     private LayoutInflater mInflate;
     private static final String TAG = "AllAppsGridAdapter";
     private ArrayMap<AppInfo, Integer> mChangedInfos = new ArrayMap<>();

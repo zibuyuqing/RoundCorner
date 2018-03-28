@@ -25,15 +25,15 @@ public class AppInfo{
     @Unique
     public String packageName;
 
-    public int isSystemApp;
+    public int appType;
     public int enableState = APP_ENABLE;
     public String title;
 
-    @Generated(hash = 1326212595)
-    public AppInfo(Long id, String packageName, int isSystemApp, int enableState,String title) {
+    @Generated(hash = 404133199)
+    public AppInfo(Long id, String packageName, int appType, int enableState, String title) {
         this.id = id;
         this.packageName = packageName;
-        this.isSystemApp = isSystemApp;
+        this.appType = appType;
         this.enableState = enableState;
         this.title = title;
     }
@@ -52,11 +52,11 @@ public class AppInfo{
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
-    public int getIsSystemApp() {
-        return this.isSystemApp;
+    public int getAppType() {
+        return this.appType;
     }
-    public void setIsSystemApp(int isSystemApp) {
-        this.isSystemApp = isSystemApp;
+    public void setAppType(int appType) {
+        this.appType = appType;
     }
     public int getEnableState() {
         return this.enableState;
