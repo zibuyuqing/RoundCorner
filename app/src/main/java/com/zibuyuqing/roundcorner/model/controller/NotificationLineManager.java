@@ -13,6 +13,7 @@ import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
+import java.util.HashMap;
 import java.util.IllegalFormatCodePointException;
 import java.util.Map;
 
@@ -63,6 +64,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             mWindowParams.width = ViewUtil.getScreenWidth(mContext);
             mWindowParams.height = ViewUtil.getScreenHeight(mContext);
         }
+        mNotificationsMap = new HashMap<>();
     }
 
     private int ensureWindowType() {

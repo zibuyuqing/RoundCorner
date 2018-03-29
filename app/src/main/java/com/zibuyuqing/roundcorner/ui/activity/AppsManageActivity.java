@@ -1,50 +1,35 @@
 package com.zibuyuqing.roundcorner.ui.activity;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.ProgressBar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 
 import com.zibuyuqing.roundcorner.R;
-import com.zibuyuqing.roundcorner.adapter.AllAppsGridAdapter;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
-import com.zibuyuqing.roundcorner.model.bean.AppInfo;
-import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
-import com.zibuyuqing.roundcorner.model.db.AppInfoLoadTask;
-import com.zibuyuqing.roundcorner.utils.Utilities;
+import com.zibuyuqing.roundcorner.base.BaseAppListFragment;
+import com.zibuyuqing.roundcorner.ui.fragment.SystemAppListFragment;
+import com.zibuyuqing.roundcorner.ui.fragment.UserAppListFragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 /**
  * Created by xijun.wang on 2017/6/22.
  */
 
 public class AppsManageActivity extends BaseActivity {
-    private static final String TAG = "AppsManageActivity";
-    private AllAppsGridAdapter mAdapter;
-    @BindView(R.id.pb_load_progress)
-    ProgressBar mPbLoadProgress;
-    @BindView(R.id.rv_app_list)
-    RecyclerView mRvAppList;
-    private int mCurrentPage = 0;
-    @OnClick(R.id.tv_cancel) void cancel(){
-        mAdapter.cancel();
-        finish();
-    }
-    @OnClick(R.id.tv_confirm) void confirm(){
-        mAdapter.commitChanges();
-        finish();
-    }
+    @BindView(R.id.vp_app_fragment_container)
+    ViewPager mVpAppFragmentContainer;
+    BaseAppListFragment mUserAppListFragment;
+    BaseAppListFragment mSystemAppListFragment;
+    List<BaseAppListFragment> mAppListFragments;
+    FragmentManager mFragmentManager;
+    PageAdapter mAdapter;
     @Override
     protected int providedLayoutId() {
         return R.layout.activity_apps_manager;
@@ -56,35 +41,28 @@ public class AppsManageActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        mAdapter = new AllAppsGridAdapter(this);
-        mRvAppList.setAdapter(mAdapter);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this,3);
-        mRvAppList.setLayoutManager(gridLayoutManager);
-        AppInfoLoadTask.execute(this,mCurrentPage, new AppInfoLoadTask.AppInfoLoadStateListener() {
-            @Override
-            public void startLoad(int totalCount) {
-                Log.e(TAG,"startLoad totalCount =:" + totalCount);
-                mPbLoadProgress.setVisibility(View.VISIBLE);
-                mPbLoadProgress.setMax(totalCount);
-            }
+        mUserAppListFragment = new UserAppListFragment();
+        mSystemAppListFragment = new SystemAppListFragment();
+        mAppListFragments = new ArrayList<>(2);
+        mAppListFragments.add(mUserAppListFragment);
+        mAppListFragments.add(mSystemAppListFragment);
+        mFragmentManager = getSupportFragmentManager();
+        mAdapter = new PageAdapter(mFragmentManager);
+        mVpAppFragmentContainer.setAdapter(mAdapter);
+    }
+    private class PageAdapter extends FragmentStatePagerAdapter{
+        public PageAdapter(android.support.v4.app.FragmentManager fm) {
+            super(fm);
+        }
 
-            @Override
-            public void onLoad(int process) {
-                Log.e(TAG,"onLoad process =:" + process);
-                mPbLoadProgress.setProgress(process);
-            }
+        @Override
+        public android.support.v4.app.Fragment getItem(int position) {
+            return mAppListFragments.get(position);
+        }
 
-            @Override
-            public void endLoad(List<AppInfoWithIcon> appInfoWithIconList) {
-                mAdapter.updateData(appInfoWithIconList);
-                mRvAppList.setVisibility(View.VISIBLE);
-                mPbLoadProgress.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onError(String msg) {
-                Log.e(TAG,"onError msg =:" + msg);
-            }
-        });
+        @Override
+        public int getCount() {
+            return mAppListFragments.size();
+        }
     }
 }

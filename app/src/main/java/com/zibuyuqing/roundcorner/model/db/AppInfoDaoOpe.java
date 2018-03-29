@@ -5,6 +5,8 @@ import android.content.Context;
 import com.zibuyuqing.roundcorner.model.AppInfoDao;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 
+import org.greenrobot.greendao.query.QueryBuilder;
+
 import java.util.List;
 import java.util.Set;
 
@@ -54,7 +56,11 @@ public class AppInfoDaoOpe {
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
                 queryBuilder().where(AppInfoDao.Properties.AppType.eq(AppInfo.USER_APP)).list();
     }
-    public static List<AppInfo> queryAppinfosByPage(Context context,int page){
+    public static List<AppInfo> queryAppInfosByTypeWithPage(Context context,int appType,int page){
+        QueryBuilder queryBuilder = DbManager.getInstance(context).getDaoSession().getAppInfoDao().queryBuilder();
+        return queryBuilder.where(AppInfoDao.Properties.AppType.eq(appType)).offset(page * 40).limit(40).build().list();
+    }
+    public static List<AppInfo> queryAppInfosByPage(Context context, int page){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
                 queryBuilder().offset(page * 50).limit(50).build().list();
     }

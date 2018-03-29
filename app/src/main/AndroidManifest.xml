@@ -27,6 +27,7 @@
         </activity>
         <activity android:name=".ui.activity.AppsManageActivity"></activity>
         <activity android:name=".ui.activity.AboutMeActivity"></activity>
+        <activity android:name=".ui.activity.AppConfigActivity"></activity>
         <service android:name="com.zibuyuqing.roundcorner.service.NotificationListener"
             android:label="@string/enhance_notification"
             android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">

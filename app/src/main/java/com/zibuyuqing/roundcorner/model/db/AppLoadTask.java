@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 
@@ -54,6 +55,9 @@ public class AppLoadTask extends AsyncTask<Void,Void,Void> {
                 appInfo.setEnableState(appInfo.appType);
                 appInfo.setTitle(info.loadLabel(packageManager).toString());
                 appInfo.setPackageName(info.packageName);
+                appInfo.setMixedColorOne(mContext.getResources().getColor(R.color.color_purple,null));
+                appInfo.setMixedColorTwo(mContext.getResources().getColor(R.color.color_yellow_light,null));
+                appInfo.setMixedColorThree(mContext.getResources().getColor(R.color.color_cyan_light,null));
                 newApps.add(appInfo);
                 Log.e(TAG,"appInfo.appType = :" + appInfo.appType+",name =:" + appInfo.getTitle());
             }

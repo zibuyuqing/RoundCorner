@@ -3,6 +3,7 @@ package com.zibuyuqing.roundcorner.adapter;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -25,6 +26,7 @@ import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
 import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
+import com.zibuyuqing.roundcorner.ui.activity.AppConfigActivity;
 
 /**
  * Created by xijun.wang on 2017/6/22.
@@ -49,7 +51,6 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
 
     public void updateData(List<AppInfoWithIcon> infos) {
         Iterator iterator = infos.iterator();
-        mAllApps = new ArrayList<>();
         AppInfoWithIcon info;
         while (iterator.hasNext()) {
             info = (AppInfoWithIcon) iterator.next();
@@ -67,6 +68,9 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
         viewHolder.appName = (TextView) view.findViewById(R.id.tv_app_name);
         viewHolder.appSelectedFlag = (ImageView) view.findViewById(R.id.iv_app_selected);
         viewHolder.appSelectedFlag.setVisibility(View.VISIBLE);
+        viewHolder.mixedColorOne = (ImageView) view.findViewById(R.id.iv_mixed_color_1);
+        viewHolder.mixedColorTwo = (ImageView) view.findViewById(R.id.iv_mixed_color_2);
+        viewHolder.mixedColorThree = (ImageView) view.findViewById(R.id.iv_mixed_color_3);
         return viewHolder;
     }
 
@@ -92,10 +96,24 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
                 onItemChanged(info, viewHolder.select, info.enableState);
             }
         });
+        viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AppConfigActivity.start(mContext,info.getAppInfo());
+                return true;
+            }
+        });
         viewHolder.appIcon.setImageBitmap(info.getIcon());
         viewHolder.appName.setText(info.title);
+        updateMixedColor(viewHolder.mixedColorOne,info.getMixedColorOne());
+        updateMixedColor(viewHolder.mixedColorTwo,info.getMixedColorTwo());
+        updateMixedColor(viewHolder.mixedColorThree,info.getMixedColorThree());
     }
-
+    private void updateMixedColor(ImageView imageView,int color){
+        Drawable drawable = imageView.getDrawable();
+        drawable.setTint(color);
+        imageView.setImageDrawable(drawable);
+    }
     private void onItemChanged(AppInfoWithIcon appInfo, int enable, int originEnableState) {
         if (enable != originEnableState) {
             mChangedInfos.put(appInfo, enable);
@@ -134,7 +152,7 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {
-        private ImageView appIcon, appSelectedFlag;
+        private ImageView appIcon, appSelectedFlag,mixedColorOne,mixedColorTwo,mixedColorThree;
         private TextView appName;
         private int select = 0;
 

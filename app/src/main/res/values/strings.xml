@@ -40,6 +40,7 @@
     <string name="notification_apps_manager_summary">配置监听的应用，绑定颜色</string>
 
     <string name="notification_mixed_colors">使用混合色</string>
+    <string name="notification_mixed_colors_config">颜色配置</string>
     <string name="notification_line_size">通知线粗细</string>
     <string name="notification_animation_duration">通知动画时长</string>
     <string name="notification_animation_style">通知动画风格</string>
@@ -50,4 +51,5 @@
     <string name="animation_style_middle_out">中出</string>
     <string name="animation_style_bottom_to_top">一飞冲天</string>
     <string name="application_manager">应用管理</string>
+    <string name="enable_listen_notification">开启监听</string>
 </resources>
