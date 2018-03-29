@@ -19,6 +19,7 @@ import org.greenrobot.greendao.annotation.Generated;
  */
 @Entity
 public class AppInfo implements Parcelable{
+    private static final String TAG = "AppInfo";
     public static final int APP_DISABLE = 0;
     public static final int APP_ENABLE = 1;
     public static final int SYSTEM_APP = 0;
@@ -148,5 +149,11 @@ public class AppInfo implements Parcelable{
         dest.writeInt(mixedColorOne);
         dest.writeInt(mixedColorTwo);
         dest.writeInt(mixedColorThree);
+    }
+
+    @Override
+    public String toString() {
+        return TAG + "=: { title : " + title + ", package : " + packageName + ", appType : " + appType + ", enableState : " + enableState
+                + ", mixedColor : " + mixedColorOne + ", mixedColorTwo : " + mixedColorTwo + ", mixedColorThree : " + mixedColorThree + "}";
     }
 }

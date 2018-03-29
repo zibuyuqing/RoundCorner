@@ -53,11 +53,13 @@ public class XRecyclerView extends RecyclerView {
     public abstract interface LoadStateListener {
         void loadMore();
     }
-
+    public void setIsLoadingData(boolean isLoadingData){
+        this.isLoadingData = isLoadingData;
+    }
     @Override
     public void onScrollStateChanged(int state) {
         super.onScrollStateChanged(state);
-        if (state == RecyclerView.SCROLL_STATE_IDLE && mListener != null && !isLoadingData) {
+        if (mListener != null && !isLoadingData) {
             LayoutManager layoutManager = getLayoutManager();
             int lastVisibleItemPosition;
             if (layoutManager instanceof GridLayoutManager) {
@@ -72,7 +74,6 @@ public class XRecyclerView extends RecyclerView {
                     && lastVisibleItemPosition >= layoutManager.getItemCount() - 12
                     && layoutManager.getItemCount() > layoutManager.getChildCount()
                     && !isNoMore) {
-                isLoadingData = true;
                 if (mListener != null) {
                     mListener.loadMore();
                 }

@@ -51,5 +51,6 @@
     <string name="animation_style_middle_out">中出</string>
     <string name="animation_style_bottom_to_top">一飞冲天</string>
     <string name="application_manager">应用管理</string>
+    <string name="application_config">应用配置</string>
     <string name="enable_listen_notification">开启监听</string>
 </resources>

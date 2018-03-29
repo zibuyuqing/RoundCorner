@@ -25,9 +25,11 @@
     <dimen name="dimen_72_dp">72dp</dimen>
     <dimen name="dimen_64_dp">64dp</dimen>
     <dimen name="dimen_48_dp">48dp</dimen>
+    <dimen name="dimen_36_dp">36dp</dimen>
     <dimen name="dimen_24_dp">24dp</dimen>
     <dimen name="dimen_18_dp">18dp</dimen>
     <dimen name="dimen_16_dp">16dp</dimen>
+    <dimen name="dimen_14_dp">14dp</dimen>
     <dimen name="dimen_12_dp">12dp</dimen>
     <dimen name="dimen_10_dp">10dp</dimen>
     <dimen name="dimen_8_dp">8dp</dimen>

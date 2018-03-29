@@ -58,10 +58,10 @@ public class AppInfoDaoOpe {
     }
     public static List<AppInfo> queryAppInfosByTypeWithPage(Context context,int appType,int page){
         QueryBuilder queryBuilder = DbManager.getInstance(context).getDaoSession().getAppInfoDao().queryBuilder();
-        return queryBuilder.where(AppInfoDao.Properties.AppType.eq(appType)).offset(page * 40).limit(40).build().list();
+        return queryBuilder.where(AppInfoDao.Properties.AppType.eq(appType)).offset(page * 24).limit(24).build().list();
     }
     public static List<AppInfo> queryAppInfosByPage(Context context, int page){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
-                queryBuilder().offset(page * 50).limit(50).build().list();
+                queryBuilder().offset(page * 24).limit(24).build().list();
     }
 }

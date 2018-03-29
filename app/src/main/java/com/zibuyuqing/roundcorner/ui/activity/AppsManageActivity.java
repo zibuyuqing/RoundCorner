@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
@@ -25,6 +28,8 @@ import butterknife.BindView;
 public class AppsManageActivity extends BaseActivity {
     @BindView(R.id.vp_app_fragment_container)
     ViewPager mVpAppFragmentContainer;
+    @BindView(R.id.toolbar)
+    View mToolbar;
     BaseAppListFragment mUserAppListFragment;
     BaseAppListFragment mSystemAppListFragment;
     List<BaseAppListFragment> mAppListFragments;
@@ -41,6 +46,8 @@ public class AppsManageActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        mToolbar.setBackgroundColor(getColor(R.color.colorPrimary));
+        ((TextView)mToolbar.findViewById(R.id.tv_title)).setText(getString(R.string.application_manager));
         mUserAppListFragment = new UserAppListFragment();
         mSystemAppListFragment = new SystemAppListFragment();
         mAppListFragments = new ArrayList<>(2);

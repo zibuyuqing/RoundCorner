@@ -78,6 +78,7 @@ public abstract class BaseAppListFragment extends Fragment implements XRecyclerV
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
+        Log.e(TAG,"startLoad totalCount =:" + isVisibleToUser);
         if(isVisibleToUser){
             if(mRvAppList != null && mAdapter != null) {
                 mRvAppList.loadData();
@@ -95,6 +96,7 @@ public abstract class BaseAppListFragment extends Fragment implements XRecyclerV
                     mPbLoadProgress.setVisibility(View.VISIBLE);
                     mPbLoadProgress.setMax(totalCount);
                 }
+                mRvAppList.setIsLoadingData(true);
             }
 
             @Override
@@ -113,6 +115,7 @@ public abstract class BaseAppListFragment extends Fragment implements XRecyclerV
                     isFirstLoad = false;
                 }
                 mAdapter.updateData(appInfoWithIconList);
+                mRvAppList.setIsLoadingData(false);
                 mCurrentPage ++;
             }
 

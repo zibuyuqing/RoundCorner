@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     android:layout_width="match_parent"
-    android:paddingStart="24dp"
     android:paddingEnd="24dp"
     android:elevation="1dp"
     android:layout_height="@dimen/toolbar_height"
-    android:background="@color/colorPrimary"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
         android:id="@+id/tv_cancel"
         android:gravity="center"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dimen_48_dp"
         android:src="@drawable/ic_back_arrow"
         android:tint="@color/white"
-        android:background="?android:attr/selectableItemBackground"
-        android:layout_height="match_parent" />
+        android:padding="@dimen/dimen_14_dp"
+        android:layout_gravity="center_vertical"
+        android:layout_height="@dimen/dimen_48_dp" />
     <TextView
         android:fontFamily="sans-serif"
         android:layout_toEndOf="@id/tv_cancel"
         android:textSize="18dp"
-        android:layout_marginStart="@dimen/dimen_16_dp"
+        android:id="@+id/tv_title"
+        android:layout_marginStart="@dimen/dimen_4_dp"
         android:layout_marginEnd="5dp"
         android:text="@string/application_manager"
         android:layout_gravity="start|center"

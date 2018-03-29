@@ -105,6 +105,7 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
         });
         viewHolder.appIcon.setImageBitmap(info.getIcon());
         viewHolder.appName.setText(info.title);
+        Log.e(TAG,"onBindViewHolder = :" + info.toString());
         updateMixedColor(viewHolder.mixedColorOne,info.getMixedColorOne());
         updateMixedColor(viewHolder.mixedColorTwo,info.getMixedColorTwo());
         updateMixedColor(viewHolder.mixedColorThree,info.getMixedColorThree());

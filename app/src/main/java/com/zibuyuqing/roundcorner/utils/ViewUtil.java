@@ -13,6 +13,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.PaintDrawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
@@ -31,6 +32,7 @@ public class ViewUtil {
     private static final String TAG = "ViewUtil";
     private static final Rect sOldBounds = new Rect();
     private static final Canvas sCanvas = new Canvas();
+    private static final int NUMBER_OF_PALETTE_COLORS = 24;
     static {
         sCanvas.setDrawFilter(new PaintFlagsDrawFilter(Paint.DITHER_FLAG,
                 Paint.FILTER_BITMAP_FLAG));
@@ -163,5 +165,13 @@ public class ViewUtil {
             canvas.setBitmap(null);
             return bitmap;
         }
+    }
+    public static int getMainColorFromBitmap(Bitmap bitmap){
+        final Palette.Builder palette = Palette.from(bitmap);
+        Palette.Swatch swatch = palette.generate().getVibrantSwatch();
+        if(swatch != null){
+            return swatch.getRgb();
+        }
+        return 0x000000;
     }
 }
