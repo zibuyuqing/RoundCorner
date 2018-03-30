@@ -226,6 +226,9 @@ public class EdgeLineView extends View {
     }
 
     private void drawEdgeLine(Canvas canvas) {
+        mScreenWidth = ViewUtil.getScreenWidth(mContext);
+        mScreenHeight = ViewUtil.getScreenHeight(mContext);
+        configPath();
         switch (mStyle) {
             case STYLE_WIND:
                 drawWindStyle(canvas);

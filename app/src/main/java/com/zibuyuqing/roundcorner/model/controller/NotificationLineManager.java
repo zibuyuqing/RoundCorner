@@ -127,6 +127,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             if (!isEnhanceNotificationEnable()) {
                 return;
             }
+            Log.e(TAG,"updateWindow ----------------");
             if(mLineView != null){
                 mWindowParams.width = ViewUtil.getScreenWidth(mContext);
                 mWindowParams.height = ViewUtil.getScreenHeight(mContext);

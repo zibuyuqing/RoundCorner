@@ -3,10 +3,10 @@
     <dimen name="corner_size">10dp</dimen>
     <dimen name="toolbar_height">54dp</dimen>
     <integer name="corner_opacity">255</integer>
-    <integer name="min_notification_line_size">4</integer>
+    <integer name="min_notification_line_size">0</integer>
     <integer name="notification_line_size">6</integer>
     <integer name="max_notification_line_size">12</integer>
-    <integer name="min_notification_animation_duration">4</integer>
+    <integer name="min_notification_animation_duration">0</integer>
     <integer name="notification_animation_duration">6</integer>
     <integer name="max_notification_animation_duration">12</integer>
 
