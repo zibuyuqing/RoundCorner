@@ -25,7 +25,6 @@ public class SettingsDataKeeper {
     public static final String ENHANCE_NOTIFICATION_ENABLE = "enhance_notification_enable";
     public static final String BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE = "brighten_screen_when_notify_enable";
     public static final String NOTIFICATION_DISPLAY_CONFIG = "notification_display_config";
-    public static final String USE_MIXED_COLORS_ENABLE = "use_mixed_colors_enable";
     public static final String MIXED_COLOR_ONE = "mixed_color_one";
     public static final String MIXED_COLOR_TWO = "mixed_color_two";
     public static final String MIXED_COLOR_THREE = "mixed_color_three";
@@ -100,8 +99,6 @@ public class SettingsDataKeeper {
                 return preferences.getBoolean(ENHANCE_NOTIFICATION_ENABLE,false);
             case BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE:
                 return preferences.getBoolean(BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE,true);
-            case USE_MIXED_COLORS_ENABLE :
-                return preferences.getBoolean(CORNER_LEFT_TOP_ENABLE,true);
             case IS_FIRST_LOAD :
                 return preferences.getBoolean(IS_FIRST_LOAD,false);
         }

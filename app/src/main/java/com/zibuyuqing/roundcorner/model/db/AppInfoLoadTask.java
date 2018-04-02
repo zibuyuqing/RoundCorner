@@ -3,6 +3,7 @@ package com.zibuyuqing.roundcorner.model.db;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
@@ -21,6 +22,7 @@ import java.util.List;
  * </pre>
  */
 public class AppInfoLoadTask extends AsyncTask<Void,Void,List<AppInfoWithIcon>>{
+    public static final String TAG = "AppInfoLoadTask";
     public static final int QUERAY_ALL = -1;
     private AppInfoLoadStateListener mListener;
     private Context mContext;
@@ -52,6 +54,7 @@ public class AppInfoLoadTask extends AsyncTask<Void,Void,List<AppInfoWithIcon>>{
         AppInfo appInfo;
         for(int i = 0; i < count; i++){
             appInfo = appInfos.get(i);
+            Log.e(TAG,"AppInfoLoadTask : appInfo.=:" + appInfo);
             try {
                 AppInfoWithIcon infoWithIcon = new AppInfoWithIcon(appInfo,
                         ViewUtil.createIconBitmap(mContext,packageManager.getApplicationIcon(appInfo.packageName)));

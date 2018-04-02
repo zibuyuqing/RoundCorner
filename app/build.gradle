@@ -46,5 +46,4 @@ dependencies {
     compile 'com.larswerkman:HoloColorPicker:1.5'
     compile 'org.greenrobot:greendao:3.2.2' // add library
     compile 'com.android.support:palette-v7:25.3.1'
-
 }

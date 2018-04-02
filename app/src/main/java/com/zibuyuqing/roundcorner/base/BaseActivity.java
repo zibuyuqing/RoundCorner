@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.zibuyuqing.roundcorner.R;
 
 import butterknife.ButterKnife;
@@ -26,7 +25,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION );
         init();
     }
-
     public void showTips(String msg){
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }

@@ -153,7 +153,7 @@ public class AppInfo implements Parcelable{
 
     @Override
     public String toString() {
-        return TAG + "=: { title : " + title + ", package : " + packageName + ", appType : " + appType + ", enableState : " + enableState
+        return TAG + "=: { id : " + id + ",title : " + title + ", package : " + packageName + ", appType : " + appType + ", enableState : " + enableState
                 + ", mixedColor : " + mixedColorOne + ", mixedColorTwo : " + mixedColorTwo + ", mixedColorThree : " + mixedColorThree + "}";
     }
 }

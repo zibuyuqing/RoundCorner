@@ -2,7 +2,9 @@ package com.zibuyuqing.roundcorner.ui.activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,9 @@ import com.zibuyuqing.roundcorner.ui.fragment.ScreenCornerFragment;
 import com.zibuyuqing.roundcorner.utils.MobileInfoUtils;
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
+import com.zibuyuqing.roundcorner.utils.Utilities;
+
+import java.io.FileNotFoundException;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -62,10 +67,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
     @Override
     protected void init() {
+        Utilities.checkStoragePermission(this);
         initData();
         initViews();
-        MyApp app = MyApp.getInstance(this);
         startServices();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case Utilities.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS:
+                if(grantResults == null || grantResults.length <=0){
+                    return;
+                }
+                for(int i = 0; i<grantResults.length; i++){
+                    if(grantResults[i] != PackageManager.PERMISSION_GRANTED){
+                        showTips(R.string.storage_permission_denied);
+                        return;
+                    }
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private void initData(){

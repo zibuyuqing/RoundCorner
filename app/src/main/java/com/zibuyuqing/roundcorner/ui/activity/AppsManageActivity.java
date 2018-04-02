@@ -1,13 +1,11 @@
 package com.zibuyuqing.roundcorner.ui.activity;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zibuyuqing.roundcorner.R;
@@ -20,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * Created by xijun.wang on 2017/6/22.
@@ -35,6 +34,9 @@ public class AppsManageActivity extends BaseActivity {
     List<BaseAppListFragment> mAppListFragments;
     FragmentManager mFragmentManager;
     PageAdapter mAdapter;
+    @OnClick(R.id.iv_back) void back(){
+        finish();
+    }
     @Override
     protected int providedLayoutId() {
         return R.layout.activity_apps_manager;
@@ -43,6 +45,7 @@ public class AppsManageActivity extends BaseActivity {
         Intent starter = new Intent(context, AppsManageActivity.class);
         context.startActivity(starter);
     }
+
 
     @Override
     protected void init() {
@@ -56,6 +59,7 @@ public class AppsManageActivity extends BaseActivity {
         mFragmentManager = getSupportFragmentManager();
         mAdapter = new PageAdapter(mFragmentManager);
         mVpAppFragmentContainer.setAdapter(mAdapter);
+        showTips(R.string.long_click_tip);
     }
     private class PageAdapter extends FragmentStatePagerAdapter{
         public PageAdapter(android.support.v4.app.FragmentManager fm) {

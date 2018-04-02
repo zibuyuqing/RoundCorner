@@ -2,18 +2,23 @@ package com.zibuyuqing.roundcorner.service;
 
 import android.app.Notification;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import com.zibuyuqing.roundcorner.IProcessService;
+import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.controller.CornerManager;
 import com.zibuyuqing.roundcorner.model.controller.NotificationLineManager;
+import com.zibuyuqing.roundcorner.ui.activity.AppConfigActivity;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
@@ -29,6 +34,8 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
     public static final String ACTION_TRY_TO_ADD_NOTIFICATION_LINE = "try_to_add_notification_line";
     public static final String NOTIFICATION_IDENTIFY = "notification_identify";
     public static final String ME = "com.zibuyuqing.roundcorner";
+    public static final String ACTION_APP_ENABLE_STATE_CHANGED = "com.zibuyuqing.roundcorner.ACTION_APP_ENABLE_STATE_CHANGED";
+    private BroadcastReceiver mReceiver;
     private LocalBinder mBinder;
     private LocalConn mConnection;
     private CornerManager mCornerManager;
@@ -74,6 +81,24 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         NotificationListener.setNotificationsChangedListener(this);
         tryToAddCorners(this);
         tryToAddNotificationLine(this,ME);
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_APP_ENABLE_STATE_CHANGED);
+        mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if(ACTION_APP_ENABLE_STATE_CHANGED.equals(intent.getAction())){
+                    Log.e(TAG,"intent.getExtras() =:" + intent.getExtras());
+                    if(intent.getExtras() != null){
+                        AppInfo info = intent.getParcelableExtra(AppConfigActivity.EXTRA_KEY);
+                        mLineManager.updateAppMap(info);
+                        return;
+                    }
+                    mLineManager.updateEnableAppMap();
+                }
+            }
+        };
+        manager.registerReceiver(mReceiver,filter);
     }
 
     @Override
@@ -162,7 +187,6 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             case SettingsDataKeeper.MIXED_COLOR_ONE:
             case SettingsDataKeeper.MIXED_COLOR_TWO:
             case SettingsDataKeeper.MIXED_COLOR_THREE:
-            case SettingsDataKeeper.USE_MIXED_COLORS_ENABLE:
             case SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION:
                 showEdgeLineForPreview();
                 break;
@@ -184,6 +208,8 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
     @Override
     public void onDestroy() {
         Log.e(TAG, "keep corner service killed--------");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
+        mReceiver = null;
         NotificationListener.removeNotificationsChangedListener();
         Intent intent = new Intent(this, LocalControllerService.class);
         intent.putExtra(SettingsDataKeeper.CORNER_ENABLE,true);

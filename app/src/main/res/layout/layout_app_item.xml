@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/dimen_108_dp"
     android:background="@drawable/item_card_bg"
-    android:layout_marginTop="@dimen/dimen_16_dp"
+    android:layout_marginTop="@dimen/dimen_8_dp"
     android:layout_marginBottom="@dimen/dimen_16_dp"
     android:layout_marginLeft="@dimen/dimen_18_dp"
     android:layout_marginRight="@dimen/dimen_18_dp"

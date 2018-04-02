@@ -126,10 +126,7 @@ public class NotificationListener extends NotificationListenerService{
     public void onNotificationPosted(StatusBarNotification sbn) {
         super.onNotificationPosted(sbn);
 
-//        who = sbn.getPackageName();
-//        if(who.equals(SYSTEM_UI)||who.equals(ANDRIOD)){
-//            return;
-//        }
+        who = sbn.getPackageName();
         Log.e(TAG,"onNotificationPosted who =:" + who);
         if(sNotificationsChangedListener != null){
             sNotificationsChangedListener.onNotificationPosted(who);

@@ -45,7 +45,6 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
     private boolean isEnhanceNotificationEnable;
     private boolean isBrightenScreenEnable;
     private int mCurrentDisplayConfig;
-    private boolean isUseMixedColorsEnable;
     private int[] mMixedColorsArray = new int[3];
     private int mCurrentNotificationLineSize;
     private int mCurrentNotificationAnimationDuration;
@@ -60,9 +59,6 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
 
     @BindView(R.id.tv_display_config_summary)
     TextView mTvDisplayConfigSummary;
-
-    @BindView(R.id.sw_use_mixed_color)
-    Switch mSwUseMixedColorEnable;
 
     @BindView(R.id.lgv_mixed_colors_preview)
     LinearGradientView mLgvMixedColorsPreview;
@@ -84,8 +80,6 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
     TextView mTvAnimationDuration;
     @BindView(R.id.tv_animation_style_summary)
     TextView mTvAnimationStyleSummary;
-    @BindView(R.id.rl_mixed_colors_preview_layout)
-    RelativeLayout mRlMixedColorsPreviewLayout;
 
     @Override
     protected void initData() {
@@ -97,8 +91,6 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
                 getSettingsBoolean(mActivity, SettingsDataKeeper.BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE);
         mCurrentDisplayConfig = SettingsDataKeeper.
                 getSettingsInt(mActivity, SettingsDataKeeper.NOTIFICATION_DISPLAY_CONFIG);
-        isUseMixedColorsEnable = SettingsDataKeeper.
-                getSettingsBoolean(mActivity, SettingsDataKeeper.USE_MIXED_COLORS_ENABLE);
         mMixedColorsArray[0] = SettingsDataKeeper.
                 getSettingsInt(mActivity, SettingsDataKeeper.MIXED_COLOR_ONE);
         mMixedColorsArray[1] = SettingsDataKeeper.
@@ -119,8 +111,6 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         mSwEnhanceNotificationEnable.setChecked(isEnhanceNotificationEnable);
         mSwLightScreenEnable.setChecked(isBrightenScreenEnable);
         mTvDisplayConfigSummary.setText(mDisplayConfigArray[mCurrentDisplayConfig]);
-        mSwUseMixedColorEnable.setChecked(isUseMixedColorsEnable);
-        mRlMixedColorsPreviewLayout.setVisibility(isUseMixedColorsEnable ? View.VISIBLE : View.GONE);
         updateMixedColor(mIvMixedColorOne, mMixedColorsArray[0]);
         updateMixedColor(mIvMixedColorTwo, mMixedColorsArray[1]);
         updateMixedColor(mIvMixedColorThree, mMixedColorsArray[2]);
@@ -269,28 +259,6 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
     @OnClick(R.id.rl_apps_manager_layout)
     void onClickAppsManagerLayout(){
         AppsManageActivity.start(mActivity);
-    }
-    @OnClick(R.id.rl_use_mixed_color_layout)
-    void clickUseMixedColorLayout() {
-        if (isUseMixedColorsEnable) {
-            isUseMixedColorsEnable = false;
-            mSwUseMixedColorEnable.setChecked(false);
-        } else {
-            isUseMixedColorsEnable = true;
-            mSwUseMixedColorEnable.setChecked(false);
-        }
-    }
-
-    @OnCheckedChanged(R.id.sw_use_mixed_color)
-    void onUseMixedColorEnableChanged() {
-        confirmUseMixedColorEnable(mSwUseMixedColorEnable.isChecked());
-    }
-
-    private void confirmUseMixedColorEnable(boolean checked) {
-        mRlMixedColorsPreviewLayout.setVisibility(isUseMixedColorsEnable ? View.VISIBLE : View.GONE);
-        SettingsDataKeeper.writeSettingsBoolean(mActivity,
-                SettingsDataKeeper.USE_MIXED_COLORS_ENABLE, checked);
-        updateSettingsWithBool(SettingsDataKeeper.USE_MIXED_COLORS_ENABLE);
     }
 
     @OnClick(R.id.rl_change_animation_style)

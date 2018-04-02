@@ -1,20 +1,30 @@
 package com.zibuyuqing.roundcorner.model.controller;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.zibuyuqing.roundcorner.model.AppInfoDao;
+import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
+import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
+import com.zibuyuqing.roundcorner.model.db.DbManager;
 import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.IllegalFormatCodePointException;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,14 +37,14 @@ import java.util.Map;
  * </pre>
  */
 public class NotificationLineManager implements EdgeLineView.OnScreenConfigurationChangeListener {
+
     private static final String TAG = NotificationLineManager.class.getSimpleName();
     private static NotificationLineManager sInstance;
-    private Map<String, EdgeLineConfig> mNotificationsMap;
+    private static final Map<String, EdgeLineConfig> sNotificationsMap = new HashMap<>();
     private EdgeLineView mLineView;
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowParams;
     private Context mContext;
-
     private NotificationLineManager(Context context) {
         mContext = context;
         init();
@@ -64,9 +74,49 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             mWindowParams.width = ViewUtil.getScreenWidth(mContext);
             mWindowParams.height = ViewUtil.getScreenHeight(mContext);
         }
-        mNotificationsMap = new HashMap<>();
+        updateEnableAppMap();
     }
-
+    public void updateAppMap(AppInfo info){
+        if(sNotificationsMap.containsKey(info.packageName)){
+            EdgeLineConfig config = sNotificationsMap.get(info.packageName);
+            config.setMixedColorArr(new int[]{
+                    info.getMixedColorOne(),
+                    info.getMixedColorTwo(),
+                    info.getMixedColorThree()
+            });
+        }
+    }
+    public void updateEnableAppMap(){
+        List<AppInfo> enableApps = AppInfoDaoOpe.queryEnableAppInfos(mContext);
+        updateEnableAppMap(enableApps,true);
+    }
+    public synchronized void  updateEnableAppMap(List<AppInfo> apps,boolean isFirst){
+        if(isFirst){
+            sNotificationsMap.clear();
+        }
+        EdgeLineConfig config;
+        String packageName;
+        EdgeLineConfig defaultConfig = Utilities.getEdgeLineConfig(mContext);
+        for(AppInfo info : apps){
+            config = new EdgeLineConfig();
+            packageName = info.packageName;
+            Log.e(TAG,"updateEnableAppMap :: info =:" + info.getPackageName());
+            if(sNotificationsMap.containsKey(packageName)){
+                continue;
+            }
+            config.setMixedColorArr(new int[]{
+                    info.getMixedColorOne(),
+                    info.getMixedColorTwo(),
+                    info.getMixedColorThree()
+            });
+            config.setStyle(defaultConfig.getStyle());
+            config.setStrokeSize(defaultConfig.getStrokeSize());
+            config.setDuration(defaultConfig.getDuration());
+            config.setPrimaryColor(defaultConfig.getPrimaryColor());
+            config.setAlwaysOnAble(defaultConfig.isAlwaysOnAble());
+            sNotificationsMap.put(packageName,config);
+        }
+    }
     private int ensureWindowType() {
         mWindowParams.width = ViewUtil.getScreenWidth(mContext);
         mWindowParams.height = ViewUtil.getScreenHeight(mContext);
@@ -110,9 +160,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             if (!isEnhanceNotificationEnable()) {
                 return;
             }
-            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow());
             confirmBrightness();
-            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAnimatorRunning() +",mLineView.isAttachedToWindow() =:" + mLineView.isAttachedToWindow());
             if (!mLineView.isAttachedToWindow()) {
                 mWindowManager.addView(mLineView, mWindowParams);
             }
@@ -157,11 +205,14 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
                 return;
             }
             Log.e(TAG, "who =:" + who);
-            if (!mLineView.isAttachedToWindow()) {
-                mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
-                mLineView.startAnimator();
-                confirmBrightness();
-                mWindowManager.addView(mLineView, mWindowParams);
+            if(sNotificationsMap.containsKey(who)) {
+                if (!mLineView.isAttachedToWindow()) {
+                    EdgeLineConfig config = sNotificationsMap.get(who);
+                    mLineView.setConfig(config != null? config : Utilities.getEdgeLineConfig(mContext));
+                    mLineView.startAnimator();
+                    confirmBrightness();
+                    mWindowManager.addView(mLineView, mWindowParams);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();

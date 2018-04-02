@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.ArrayMap;
@@ -26,6 +27,7 @@ import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
 import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
+import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.ui.activity.AppConfigActivity;
 
 /**
@@ -38,6 +40,8 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
     private LayoutInflater mInflate;
     private static final String TAG = "AllAppsGridAdapter";
     private ArrayMap<AppInfo, Integer> mChangedInfos = new ArrayMap<>();
+    private int mSelectedIndex = 0;
+
     public static final Comparator<AppInfoWithIcon> APPS_COMPARATOR = new Comparator<AppInfoWithIcon>() {
         @Override
         public int compare(AppInfoWithIcon one, AppInfoWithIcon other) {
@@ -99,6 +103,7 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
         viewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                mSelectedIndex = position;
                 AppConfigActivity.start(mContext,info.getAppInfo());
                 return true;
             }
@@ -129,17 +134,14 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
     public void commitChanges() {
         if (mChangedInfos.size() > 0) {
             Set<AppInfo> infos = mChangedInfos.keySet();
-            ArrayList<AppInfo> items2Enable = new ArrayList<>();
-            ArrayList<AppInfo> items2Disable = new ArrayList<>();
+//            ArrayList<AppInfo> items2Enable = new ArrayList<>();
+//            ArrayList<AppInfo> items2Disable = new ArrayList<>();
             for (AppInfo info : infos) {
                 info.enableState = mChangedInfos.get(info);
-                if (info.enableState == AppInfo.APP_ENABLE) {
-                    items2Enable.add(info);
-                } else {
-                    items2Disable.add(info);
-                }
             }
-            AppInfoDaoOpe.updateAppInfos(mContext,mChangedInfos.keySet());
+            AppInfoDaoOpe.updateAppInfos(mContext,infos);
+            Intent intent = new Intent(LocalControllerService.ACTION_APP_ENABLE_STATE_CHANGED);
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
         }
     }
 
@@ -150,6 +152,23 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return mAllApps.size();
+    }
+    public List<AppInfoWithIcon> getAllApps(){
+        return mAllApps;
+    }
+    public void notifyItemChanged(AppInfo info) {
+        Log.e(TAG,"mSelectedIndex =:" + mSelectedIndex);
+        if(mAllApps.size() <= 0){
+            return;
+        }
+        if(mSelectedIndex < 0 && mSelectedIndex > mAllApps.size()){
+            return;
+        }
+        AppInfoWithIcon infoWithIcon = mAllApps.get(mSelectedIndex);
+        infoWithIcon.setMixedColorOne(info.mixedColorOne);
+        infoWithIcon.setMixedColorTwo(info.mixedColorTwo);
+        infoWithIcon.setMixedColorThree(info.mixedColorThree);
+        notifyItemChanged(mSelectedIndex);
     }
 
     private class ItemViewHolder extends RecyclerView.ViewHolder {

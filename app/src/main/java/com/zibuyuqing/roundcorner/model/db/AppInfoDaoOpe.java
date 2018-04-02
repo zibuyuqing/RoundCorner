@@ -1,6 +1,7 @@
 package com.zibuyuqing.roundcorner.model.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.zibuyuqing.roundcorner.model.AppInfoDao;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
@@ -24,7 +25,7 @@ public class AppInfoDaoOpe {
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().insert(info);
     }
     public static void insertAppInfos(Context context, List<AppInfo> infos){
-        DbManager.getInstance(context).getDaoSession().getAppInfoDao().insertInTx(infos);
+        DbManager.getInstance(context).getDaoSession().getAppInfoDao().insertInTx(infos,true);
     }
     public static void deleteAppInfo(Context context,AppInfo info){
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().delete(info);
@@ -36,9 +37,11 @@ public class AppInfoDaoOpe {
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().deleteAll();
     }
     public static void updateAppInfo(Context context,AppInfo info){
+        Log.e("hahaha","updateAppInfos ;; info = :" + info);
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().update(info);
     }
     public static void updateAppInfos(Context context,Set<AppInfo> infos){
+        Log.e("hahaha","updateAppInfos ;; info = :" + infos.size() +",info :" + infos.toArray()[0]);
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().updateInTx(infos);
     }
     public static List<AppInfo> queryAll(Context context){
@@ -58,7 +61,7 @@ public class AppInfoDaoOpe {
     }
     public static List<AppInfo> queryAppInfosByTypeWithPage(Context context,int appType,int page){
         QueryBuilder queryBuilder = DbManager.getInstance(context).getDaoSession().getAppInfoDao().queryBuilder();
-        return queryBuilder.where(AppInfoDao.Properties.AppType.eq(appType)).offset(page * 24).limit(24).build().list();
+        return queryBuilder.where(AppInfoDao.Properties.AppType.eq(appType)).offset(page * 100).limit(100).build().list();
     }
     public static List<AppInfo> queryAppInfosByPage(Context context, int page){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().

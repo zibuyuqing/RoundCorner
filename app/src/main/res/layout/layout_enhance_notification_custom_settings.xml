@@ -109,12 +109,6 @@
                     android:textSize="@dimen/font_size_normal_15dp" />
             </LinearLayout>
 
-            <Switch
-                android:id="@+id/sw_use_mixed_color"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
         </RelativeLayout>
 
 

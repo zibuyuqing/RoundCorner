@@ -59,7 +59,7 @@ public class AppLoadTask extends AsyncTask<Void,Void,Void> {
                 appInfo.setMixedColorTwo(mContext.getResources().getColor(R.color.color_yellow_light,null));
                 appInfo.setMixedColorThree(mContext.getResources().getColor(R.color.color_cyan_light,null));
                 newApps.add(appInfo);
-                Log.e(TAG,"appInfo.appType = :" + appInfo.appType+",name =:" + appInfo.getTitle());
+                Log.e(TAG,"AppLoadTask : appInfo.=:" + appInfo);
             }
         }
         if(newApps.size() > 0) {

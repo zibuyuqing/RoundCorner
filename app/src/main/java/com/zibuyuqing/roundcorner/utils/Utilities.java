@@ -1,12 +1,15 @@
 package com.zibuyuqing.roundcorner.utils;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -20,6 +23,8 @@ import com.zibuyuqing.roundcorner.ui.activity.MainActivity;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +32,7 @@ import java.util.Set;
  */
 
 public class Utilities {
-
+    public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     private static final int NOTIFY_ID = 1111;
 
     public static boolean isCanUseToastType() {
@@ -112,5 +117,26 @@ public class Utilities {
             return AppInfo.SYSTEM_APP;
         }
         return AppInfo.USER_APP;
+    }
+    public static boolean addPermission(Activity activity, List<String> permissionsList, String permission) {
+        if (activity.checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+            permissionsList.add(permission);
+            // Check for Rationale Option
+            if (!activity.shouldShowRequestPermissionRationale(permission)){
+                return false;
+            }
+        }
+        return true;
+    }
+    public static boolean checkStoragePermission(Activity activity) {
+        final List<String> permissionsList = new ArrayList<String>();
+        addPermission(activity,permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        addPermission(activity,permissionsList, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permissionsList.size() > 0) {
+            activity.requestPermissions(permissionsList.toArray(new String[permissionsList.size()]),
+                    REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS);
+            return false;
+        }
+        return true;
     }
 }

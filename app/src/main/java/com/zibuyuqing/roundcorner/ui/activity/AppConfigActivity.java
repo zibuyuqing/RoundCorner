@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
+import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.ui.widget.LinearGradientView;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
@@ -40,7 +42,7 @@ import butterknife.OnClick;
  */
 public class AppConfigActivity extends BaseActivity {
     private final String TAG = AppConfigActivity.class.getSimpleName();
-    private final static String EXTRA_KEY = "app_info";
+    public final static String EXTRA_KEY = "app_info";
     private AppInfo mAppInfo;
     private PackageManager mPackageManager;
     @BindView(R.id.iv_mixed_color_1)
@@ -53,8 +55,6 @@ public class AppConfigActivity extends BaseActivity {
     ImageView mIvAppIcon;
     @BindView(R.id.tv_app_name)
     TextView mTvAppName;
-//    @BindView(R.id.sw_listen_notification_enable)
-//    Switch mSwListenNotification;
     @BindView(R.id.lgv_mixed_colors_preview)
     LinearGradientView mGradientView;
     @BindView(R.id.ll_app_icon_head)
@@ -77,6 +77,9 @@ public class AppConfigActivity extends BaseActivity {
         } else {
             finish();
         }
+    }
+    @OnClick(R.id.iv_back) void back(){
+        finish();
     }
     void initView(AppInfo appInfo){
 //        mSwListenNotification.setChecked(appInfo.getEnableState() == AppInfo.APP_ENABLE);
@@ -107,6 +110,11 @@ public class AppConfigActivity extends BaseActivity {
     @OnClick(R.id.btn_ok)
     void confirm(){
         AppInfoDaoOpe.updateAppInfo(this,mAppInfo);
+        Intent intent = new Intent(LocalControllerService.ACTION_APP_ENABLE_STATE_CHANGED);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(EXTRA_KEY,mAppInfo);
+        intent.putExtras(bundle);
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         finish();
     }
     private void chooseMixedColor(final ImageView imageView, int currentColor) {

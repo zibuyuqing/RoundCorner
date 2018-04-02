@@ -49,7 +49,7 @@ public class AboutMeActivity extends BaseActivity {
     @Override
     protected void init() {
         title.setText(getString(R.string.about_me));
-        ivBack.setImageResource(R.drawable.ic_back_arrow);
+        ivBack.setImageResource(R.drawable.ic_back);
         ivAction.setImageResource(R.drawable.github);
         for(int resId : INFO_IMGS){
             View imagePage = View.inflate(this,R.layout.layout_me_info_item,null);

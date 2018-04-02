@@ -6,17 +6,17 @@
     android:layout_height="@dimen/toolbar_height"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <ImageView
-        android:id="@+id/tv_cancel"
+        android:id="@+id/iv_back"
         android:gravity="center"
         android:layout_width="@dimen/dimen_48_dp"
-        android:src="@drawable/ic_back_arrow"
+        android:src="@drawable/ic_back"
         android:tint="@color/white"
-        android:padding="@dimen/dimen_14_dp"
+        android:padding="@dimen/dimen_8_dp"
         android:layout_gravity="center_vertical"
         android:layout_height="@dimen/dimen_48_dp" />
     <TextView
         android:fontFamily="sans-serif"
-        android:layout_toEndOf="@id/tv_cancel"
+        android:layout_toEndOf="@id/iv_back"
         android:textSize="18dp"
         android:id="@+id/tv_title"
         android:layout_marginStart="@dimen/dimen_4_dp"
