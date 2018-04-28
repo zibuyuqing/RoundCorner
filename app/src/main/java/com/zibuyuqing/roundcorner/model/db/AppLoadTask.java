@@ -1,13 +1,16 @@
 package com.zibuyuqing.roundcorner.model.db;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
+import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 
 import java.util.ArrayList;
@@ -68,4 +71,10 @@ public class AppLoadTask extends AsyncTask<Void,Void,Void> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        Intent intent = new Intent(LocalControllerService.ACTION_APP_ENABLE_STATE_CHANGED);
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(intent);
+    }
 }

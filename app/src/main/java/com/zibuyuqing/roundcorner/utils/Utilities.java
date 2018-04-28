@@ -18,9 +18,9 @@ import android.util.Log;
 
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
+import com.zibuyuqing.roundcorner.model.bean.DanmuConfig;
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
-import com.zibuyuqing.roundcorner.ui.activity.MainActivity;
-import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
+import com.zibuyuqing.roundcorner.ui.activity.HomeActivity;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Utilities {
     public static final int REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS = 124;
     private static final int NOTIFY_ID = 1111;
 
-    public static boolean isCanUseToastType() {
+    public static boolean isBeforeAndroidN() {
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
     }
 
@@ -43,7 +43,13 @@ public class Utilities {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 
+    /**
+     * 检查是否有权限
+     * @param context
+     * @return
+     */
     public static boolean checkNotificationListenPermission(Context context) {
+        // 获取允许监听通知的包
         Set<String> packageNames = NotificationManagerCompat.getEnabledListenerPackages(context);
         if (packageNames.contains(context.getPackageName())) {
             return true;
@@ -83,7 +89,7 @@ public class Utilities {
         // bigView.setOnClickPendingIntent() etc..
         Notification.Builder notifyBuilder = new Notification.Builder(context);
         PendingIntent pendingIntent = PendingIntent.getActivity(
-                context, 0, new Intent(context, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+                context, 0, new Intent(context, HomeActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         notifyBuilder.setContentIntent(pendingIntent);
         notification = notifyBuilder.setSmallIcon(R.drawable.ic_change_number)
                 .setContentTitle(context.getString(R.string.app_name))
@@ -109,7 +115,15 @@ public class Utilities {
         });
         return config;
     }
-
+    public static DanmuConfig getDanmuConfig(Context context) {
+        DanmuConfig config = new DanmuConfig();
+        config.setMoveSpeed(SettingsDataKeeper.getSettingsInt(context,SettingsDataKeeper.DANMU_MOVE_SPEED));
+        config.setPrimaryColor(SettingsDataKeeper.getSettingsInt(context,SettingsDataKeeper.DANMU_PRIMARY_COLOR));
+        config.setRepeatCount(SettingsDataKeeper.getSettingsInt(context,SettingsDataKeeper.DANMU_REPEAT_COUNT));
+        config.setTextColor(SettingsDataKeeper.getSettingsInt(context,SettingsDataKeeper.DANMU_TEXT_COLOR));
+        config.setUseRandomColor(SettingsDataKeeper.getSettingsBoolean(context,SettingsDataKeeper.DANMU_USE_RANDOM_COLOR_ENABLE));
+        return config;
+    }
     public static int getAppType(ApplicationInfo info) {
         if ((info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0) {
             return AppInfo.SYSTEM_APP;

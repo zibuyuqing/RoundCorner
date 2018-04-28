@@ -1,29 +1,20 @@
 package com.zibuyuqing.roundcorner.model.controller;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.PixelFormat;
-import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.zibuyuqing.roundcorner.model.AppInfoDao;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
 import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
-import com.zibuyuqing.roundcorner.model.db.DbManager;
 import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.IllegalFormatCodePointException;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +27,7 @@ import java.util.Map;
  *     version: 1.0
  * </pre>
  */
-public class NotificationLineManager implements EdgeLineView.OnScreenConfigurationChangeListener {
+public class NotificationLineManager implements EdgeLineView.OnScreenConfigurationChangeListener, EdgeLineView.AnimationStateListener {
 
     private static final String TAG = NotificationLineManager.class.getSimpleName();
     private static NotificationLineManager sInstance;
@@ -54,6 +45,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
         if (mLineView == null) {
             mLineView = new EdgeLineView(mContext);
             mLineView.setOnScreenConfigurationChangeListener(this);
+            mLineView.setAnimationStateListener(this);
         }
         if (mWindowManager == null) {
             mWindowManager = (WindowManager)
@@ -94,6 +86,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
         if(isFirst){
             sNotificationsMap.clear();
         }
+        Log.e(TAG,"updateEnableAppMap :: isFirst =:" + isFirst +",enableApps =:" + apps.size());
         EdgeLineConfig config;
         String packageName;
         EdgeLineConfig defaultConfig = Utilities.getEdgeLineConfig(mContext);
@@ -130,7 +123,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
                 mWindowParams.x = 0;
             }
         }
-        if (Utilities.isCanUseToastType()) {
+        if (Utilities.isBeforeAndroidN()) {
             return WindowManager.LayoutParams.TYPE_TOAST;
         } else if (Utilities.isCanUseApplicationOverlayType()) {
             return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
@@ -247,15 +240,9 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
         return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
     }
 
-    public void registerAnimationStateListener(EdgeLineView.AnimationStateListener listener) {
-        if (mLineView != null) {
-            mLineView.setAnimationStateListener(listener);
-        }
-    }
-
     public void showOrHideEdgeLine() {
         if (isEnhanceNotificationEnable()) {
-            showEdgeLine(LocalControllerService.ME);
+            // showEdgeLine(LocalControllerService.ME);
         } else {
             removeEdgeLine();
         }
@@ -264,5 +251,19 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
     @Override
     public void onScreenConfigurationChanged() {
         updateWindow();
+    }
+    @Override
+    public void onAnimationStart() {
+
+    }
+
+    @Override
+    public void onAnimationRunning(float progress) {
+
+    }
+
+    @Override
+    public void onAnimationEnd() {
+        removeEdgeLine();
     }
 }

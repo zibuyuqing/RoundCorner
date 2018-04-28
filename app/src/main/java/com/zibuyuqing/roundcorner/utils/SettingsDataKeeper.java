@@ -10,7 +10,9 @@ import com.zibuyuqing.roundcorner.R;
  */
 
 public class SettingsDataKeeper {
+
     public static final String PREFERENCES_NAME = "com_zibuyuqing_round_corner";
+    public static final String DB_VERSION = "db_version";
     public static final String IS_FIRST_LOAD = "is_first_load";
     public static final String CORNER_ENABLE = "corner_enable";
     public static final String NOTIFICATION_ENABLE = "notification_enable";
@@ -23,6 +25,7 @@ public class SettingsDataKeeper {
     public static final String CORNER_OPACITY = "corner_opacity";
 
     public static final String ENHANCE_NOTIFICATION_ENABLE = "enhance_notification_enable";
+    public static final String ENHANCE_NOTIFICATION_STYLE = "enhance_notification_style";
     public static final String BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE = "brighten_screen_when_notify_enable";
     public static final String NOTIFICATION_DISPLAY_CONFIG = "notification_display_config";
     public static final String MIXED_COLOR_ONE = "mixed_color_one";
@@ -31,6 +34,13 @@ public class SettingsDataKeeper {
     public static final String NOTIFICATION_LINE_SIZE = "notification_line_size";
     public static final String NOTIFICATION_ANIMATION_DURATION = "notification_animation_duration";
     public static final String NOTIFICATION_ANIMATION_STYLE = "notification_style";
+
+    public static final String DANMU_USE_RANDOM_COLOR_ENABLE = "danmu_use_random_color_enable";
+    public static final String DANMU_MOVE_SPEED = "danmu_move_speed";
+    public static final String DANMU_REPEAT_COUNT = "danmu_repeat_count";
+    public static final String DANMU_PRIMARY_COLOR = "danmu_primary_color";
+    public static final String DANMU_BG_OPACITY = "danmu_bg_opacity";
+    public static final String DANMU_TEXT_COLOR = "danmu_text_color";
 
 
     public static void writeSettingsInt(Context context, String key, int value){
@@ -48,6 +58,8 @@ public class SettingsDataKeeper {
     public static synchronized int getSettingsInt(Context context,String key){
         SharedPreferences preferences = context.getSharedPreferences(PREFERENCES_NAME,Context.MODE_PRIVATE);
         switch (key){
+            case DB_VERSION:
+                return preferences.getInt(DB_VERSION,0);
             case CORNER_COLOR:
                 return preferences.getInt(CORNER_COLOR,
                         context.getColor(R.color.black));
@@ -57,6 +69,9 @@ public class SettingsDataKeeper {
             case CORNER_OPACITY :
                 return preferences.getInt(CORNER_OPACITY,
                         context.getResources().getInteger(R.integer.corner_opacity));
+
+            case ENHANCE_NOTIFICATION_STYLE :
+                return preferences.getInt(ENHANCE_NOTIFICATION_STYLE,0);
 
             case NOTIFICATION_DISPLAY_CONFIG :
                 return preferences.getInt(NOTIFICATION_DISPLAY_CONFIG,0);
@@ -75,8 +90,22 @@ public class SettingsDataKeeper {
             case NOTIFICATION_ANIMATION_DURATION :
                 return preferences.getInt(NOTIFICATION_ANIMATION_DURATION,
                         context.getResources().getInteger(R.integer.notification_animation_duration));
+
             case NOTIFICATION_ANIMATION_STYLE :
                 return preferences.getInt(NOTIFICATION_ANIMATION_STYLE, 0);
+
+            case DANMU_PRIMARY_COLOR :
+                return preferences.getInt(DANMU_PRIMARY_COLOR,
+                        context.getResources().getColor(R.color.black_22,null));
+            case DANMU_REPEAT_COUNT :
+                return preferences.getInt(NOTIFICATION_LINE_SIZE,
+                        context.getResources().getInteger(R.integer.danmu_repeat_count));
+            case DANMU_TEXT_COLOR :
+                return preferences.getInt(DANMU_TEXT_COLOR,
+                        context.getResources().getColor(R.color.white,null));
+            case DANMU_MOVE_SPEED :
+                return preferences.getInt(DANMU_MOVE_SPEED,
+                        context.getResources().getInteger(R.integer.danmu_move_speed));
         }
         return 0;
     }
@@ -101,6 +130,9 @@ public class SettingsDataKeeper {
                 return preferences.getBoolean(BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE,true);
             case IS_FIRST_LOAD :
                 return preferences.getBoolean(IS_FIRST_LOAD,false);
+
+            case DANMU_USE_RANDOM_COLOR_ENABLE :
+                return preferences.getBoolean(DANMU_USE_RANDOM_COLOR_ENABLE,true);
         }
         return true;
     }

@@ -10,9 +10,12 @@
     <string name="show_notification_summary">提供便捷操作，延长圆角寿命哟</string>
     <string name="custom_settings">自定义</string>
     <string name="corner_color">圆角颜色</string>
+    <string name="danmaku_bg_color">弹幕背景颜色</string>
+    <string name="danmaku_text_color">弹幕字体颜色</string>
     <string name="corner_location">圆角显示位置</string>
     <string name="corner_size">圆角大小</string>
     <string name="corner_opacity">圆角透明度</string>
+    <string name="danmu_bg_opacity">弹幕背景透明度</string>
     <string name="others">其他</string>
     <string name="praise">求赞</string>
     <string name="about_me">关于我</string>
@@ -29,6 +32,7 @@
 
 
     <string name="general_feature_settings">常规操作</string>
+    <string name="select_notification_style">选择通知方式</string>
     <string name="enhance_notification">开启增强通知</string>
     <string name="light_screen_when_notify">来通知时增大屏幕亮度</string>
     <string name="notification_show_when">显示配置</string>
@@ -44,6 +48,7 @@
     <string name="notification_line_size">通知线粗细</string>
     <string name="notification_animation_duration">通知动画时长</string>
     <string name="notification_animation_style">通知动画风格</string>
+    <string name="danmu_repeat_count">设置弹幕重复次数</string>
 
     <string name="animation_style_fade_in_out">淡入淡出</string>
     <string name="animation_style_lattice">闪点点</string>

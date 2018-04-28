@@ -3,6 +3,8 @@
     <dimen name="corner_size">10dp</dimen>
     <dimen name="toolbar_height">54dp</dimen>
     <integer name="corner_opacity">255</integer>
+    <integer name="danmu_repeat_count">1</integer>
+    <integer name="danmu_move_speed">0</integer>
     <integer name="min_notification_line_size">0</integer>
     <integer name="notification_line_size">6</integer>
     <integer name="max_notification_line_size">12</integer>
@@ -19,6 +21,9 @@
     <dimen name="font_size_small_14dp">14dp</dimen>
     <dimen name="font_size_small_12dp">12dp</dimen>
 
+
+    <dimen name="dimen_200_dp">200dp</dimen>
+    <dimen name="dimen_150_dp">150dp</dimen>
     <dimen name="dimen_108_dp">108dp</dimen>
     <dimen name="dimen_96_dp">96dp</dimen>
     <dimen name="dimen_84_dp">84dp</dimen>

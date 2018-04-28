@@ -2,10 +2,12 @@ package com.zibuyuqing.roundcorner.service;
 
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
+import android.app.Notification;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Process;
 import android.service.notification.NotificationListenerService;
@@ -36,6 +38,7 @@ public class NotificationListener extends NotificationListenerService{
     private static boolean sIsCreated;
     private static NotificationListener sInstance;
     private static NotificationsChangedListener sNotificationsChangedListener;
+    private PackageManager mPackageManager;
     public NotificationListener(){
         super();
     }
@@ -44,16 +47,21 @@ public class NotificationListener extends NotificationListenerService{
         super.onCreate();
         Log.e(TAG, "NotificationListener onCreate " + Process.myPid() +",   ===" + Process.myUid() +",," + Process.myUserHandle());
         sIsCreated = true;
-
+        mPackageManager = getPackageManager();
         if(!isEnhanceNotificationEnable()){
-            requestUnbind();
+            if(!Utilities.isBeforeAndroidN()) {
+                requestUnbind();
+            } else {
+                disableListenerService();
+            }
         } else {
             Log.e(TAG, "NotificationListener onCreate -- ensureListenerRunning");
-            if(Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            if(Utilities.isBeforeAndroidN()){
+                toggleNotificationListenerService();
+            } else {
                 ensureListenerRunning(getApplicationContext());
             }
         }
-        toggleNotificationListenerService();
     }
     @Override
     public void onDestroy() {
@@ -67,19 +75,38 @@ public class NotificationListener extends NotificationListenerService{
 
 
     //确认NotificationMonitor是否开启
+    @TargetApi(Build.VERSION_CODES.N)
     private void ensureListenerRunning(Context context) {
         Log.e(TAG,"ensureCollectorRunning");
         ComponentName component = new ComponentName(context, NotificationListener.class);
-        Log.e(TAG,"ensureCollectorRunning = : "  + component);
         NotificationListener.requestRebind(component);
     }
+    private void disableListenerService(){
+        mPackageManager.setComponentEnabledSetting(new ComponentName(this, com.zibuyuqing.roundcorner.service.NotificationListener.class),
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+    }
+    private void enableListenerService(){
+        mPackageManager.setComponentEnabledSetting(new ComponentName(this,  com.zibuyuqing.roundcorner.service.NotificationListener.class),
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+    }
+
+    public static void requestRebind(Context context){
+        if(Utilities.isBeforeAndroidN()){
+            PackageManager packageManager = context.getApplicationContext().getPackageManager();
+            packageManager.setComponentEnabledSetting(new ComponentName(context, com.zibuyuqing.roundcorner.service.NotificationListener.class),
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
+            packageManager.setComponentEnabledSetting(new ComponentName(context,  com.zibuyuqing.roundcorner.service.NotificationListener.class),
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        } else {
+            NotificationListener.requestRebind(new ComponentName(
+                    context, NotificationListener.class));
+        }
+    }
+
     private void toggleNotificationListenerService() {
         Log.e(TAG,"toggleNotificationListenerService");
-        PackageManager pm = getPackageManager();
-        pm.setComponentEnabledSetting(new ComponentName(this, com.zibuyuqing.roundcorner.service.NotificationListener.class),
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED, PackageManager.DONT_KILL_APP);
-        pm.setComponentEnabledSetting(new ComponentName(this,  com.zibuyuqing.roundcorner.service.NotificationListener.class),
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED, PackageManager.DONT_KILL_APP);
+        disableListenerService();
+        enableListenerService();
     }
     public static void start(Context context) {
         Intent starter = new Intent(context, NotificationListener.class);
@@ -125,11 +152,10 @@ public class NotificationListener extends NotificationListenerService{
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
         super.onNotificationPosted(sbn);
-
-        who = sbn.getPackageName();
-        Log.e(TAG,"onNotificationPosted who =:" + who);
+        Log.e(TAG,"onNotificationPosted sbn =:" + sbn);
         if(sNotificationsChangedListener != null){
-            sNotificationsChangedListener.onNotificationPosted(who);
+            sNotificationsChangedListener.onNotificationPosted(sbn);
+            sNotificationsChangedListener.onNotificationPosted(sbn.getPackageName());
         }
     }
     @Override
@@ -148,6 +174,7 @@ public class NotificationListener extends NotificationListenerService{
         return SettingsDataKeeper.getSettingsBoolean(this,SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
     }
     public interface NotificationsChangedListener {
+        void onNotificationPosted(StatusBarNotification sbn);
         void onNotificationPosted(String who);
     }
 }

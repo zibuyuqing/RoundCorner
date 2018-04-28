@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_root"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+    <FrameLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.zibuyuqing.roundcorner.ui.widget.DynamicBgView
+            android:id="@+id/bg_view"
+            custom:base_color="?attr/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <include layout="@layout/layout_custom_toolbar"></include>
+    </FrameLayout>
+    <include
+        layout="@layout/layout_bottom_bar"
+        android:id="@+id/bottom_bar"></include>
+    <FrameLayout
+        android:layout_marginTop="@dimen/dimen_64_dp"
+        android:layout_above="@id/bottom_bar"
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </FrameLayout>
+
+</RelativeLayout>
+

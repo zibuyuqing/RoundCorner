@@ -22,8 +22,7 @@ public class MyApp extends Application {
         CrashHandler crashHandler = CrashHandler.instance();
         crashHandler.init(getApplicationContext());
         if(SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE)) {
-            NotificationListener.requestRebind(new ComponentName(
-                    mContext, NotificationListener.class));
+            NotificationListener.requestRebind(mContext);
         }
     }
     public static MyApp getInstanceNoCreate() {

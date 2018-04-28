@@ -82,7 +82,7 @@ public class CornerManager {
     private void ensureWindowType(String position){
         // 系统提示类型,重要
         boolean hasNav =  ViewUtil.getNavigationBarHeight(mContext) > 0;
-        if (Utilities.isCanUseToastType()) {
+        if (Utilities.isBeforeAndroidN()) {
             mWindowParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         } else if(Utilities.isCanUseApplicationOverlayType()){
             mWindowParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;

@@ -33,8 +33,6 @@ public class AboutMeActivity extends BaseActivity {
     private List<View> imageList = new ArrayList<>();
     @BindView(R.id.vp_me_info)
     ViewPager vpMeInfo;
-    @BindView(R.id.iv_menu)
-    ImageView ivBack;
     @BindView(R.id.title)
     TextView title;
     @BindView(R.id.iv_action)
@@ -49,7 +47,6 @@ public class AboutMeActivity extends BaseActivity {
     @Override
     protected void init() {
         title.setText(getString(R.string.about_me));
-        ivBack.setImageResource(R.drawable.ic_back);
         ivAction.setImageResource(R.drawable.github);
         for(int resId : INFO_IMGS){
             View imagePage = View.inflate(this,R.layout.layout_me_info_item,null);
@@ -57,10 +54,6 @@ public class AboutMeActivity extends BaseActivity {
             imageList.add(imagePage);
         }
         vpMeInfo.setAdapter(new MyViewPagerAdapter(imageList));
-    }
-    @OnClick(R.id.iv_menu)
-    void back(){
-        finish();
     }
     @OnClick(R.id.iv_action)
     void toMyGithub(){

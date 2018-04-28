@@ -9,6 +9,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -25,6 +27,7 @@ import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.OnCheckedChanged;
 import butterknife.OnClick;
 
@@ -37,8 +40,12 @@ import butterknife.OnClick;
  *     version: 1.0
  * </pre>
  */
-public class EnhanceNotificationFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener {
+public class EnhanceNotificationFragment extends BaseFragment implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener {
     private static final String TAG = EnhanceNotificationFragment.class.getSimpleName();
+    private static final int NOTIFICATION_STYLE_LINE = 0;
+    private static final int NOTIFICATION_STYLE_DANMAKU = 1;
+    private static final int NOTIFICATION_STYLE_ICON = 3;
+
     private static final int NOTIFICATION_LISTENER_SETTINGS_REQUEST_CODE = 3333;
     private static final int SYSTEM_ALERT_WINDOW_REQUEST_CODE = 2222;
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
@@ -49,8 +56,29 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
     private int mCurrentNotificationLineSize;
     private int mCurrentNotificationAnimationDuration;
     private int mCurrentNotificationAnimationStyle;
+
     private String[] mDisplayConfigArray = new String[2];
     private String[] mAnimationStyleArray = new String[5];
+
+    private int mCurrentNotificationStyle;
+
+    private int mCurrentDanmuBgColor;
+    private int mCurrentDanmuTextColor;
+    private int mCurrentDanmuOpacity;
+    private int mCurrentDanmuSpeed;
+    private int mCurrentDanmuRepeatCount;
+
+    @BindView(R.id.layout_notification_line_settings)
+    View mLineSettingsLayout;
+
+    @BindView(R.id.layout_notification_danmaku_settings)
+    View mDanmakuSettingsLayout;
+
+    @BindView(R.id.layout_notification_icon_settings)
+    View mIconSettingsLayout;
+
+    @BindView(R.id.rg_notification_style)
+    RadioGroup mRgNotificationStyle;
 
     @BindView(R.id.sw_enhance_notification_enable)
     Switch mSwEnhanceNotificationEnable;
@@ -81,6 +109,19 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
     @BindView(R.id.tv_animation_style_summary)
     TextView mTvAnimationStyleSummary;
 
+    @BindView(R.id.iv_current_bg_color)
+    ImageView mIvCurrentDanmuBgColor;
+    @BindView(R.id.sb_change_opacity)
+    SeekBar mChangeDanmuBgOpacity;
+    @BindView(R.id.tv_opacity)
+    TextView mTvDanmuOpacity;
+    @BindView(R.id.tv_danmaku_text_color)
+    TextView mTvDanmuTextColor;
+    @BindView(R.id.ll_speed)
+    LinearLayout mLlDanmuSpeed;
+    @BindView(R.id.tv_danmu_repeat_count)
+    TextView mTvDanmuRepeatCount;
+
     @Override
     protected void initData() {
         mDisplayConfigArray = mActivity.getResources().getStringArray(R.array.display_config);
@@ -89,6 +130,10 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
                 getSettingsBoolean(mActivity, SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
         isBrightenScreenEnable = SettingsDataKeeper.
                 getSettingsBoolean(mActivity, SettingsDataKeeper.BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE);
+
+        mCurrentNotificationStyle = SettingsDataKeeper.
+                getSettingsInt(mActivity, SettingsDataKeeper.ENHANCE_NOTIFICATION_STYLE);
+
         mCurrentDisplayConfig = SettingsDataKeeper.
                 getSettingsInt(mActivity, SettingsDataKeeper.NOTIFICATION_DISPLAY_CONFIG);
         mMixedColorsArray[0] = SettingsDataKeeper.
@@ -104,6 +149,18 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
                 getSettingsInt(mActivity, SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION);
         mCurrentNotificationAnimationStyle = SettingsDataKeeper.
                 getSettingsInt(mActivity, SettingsDataKeeper.NOTIFICATION_ANIMATION_STYLE);
+        /*
+            private int mCurrentDanmuBgColor;
+    private int mCurrentDanmuTextColor;
+    private int mCurrentDanmuOpacity;
+    private int mCurrentDanmuSpeed;
+    private int mCurrentDanmuRepeatCount;
+         */
+        mCurrentDanmuBgColor = SettingsDataKeeper.getSettingsInt(mActivity,SettingsDataKeeper.DANMU_PRIMARY_COLOR);
+        mCurrentDanmuOpacity = SettingsDataKeeper.getSettingsInt(mActivity,SettingsDataKeeper.DANMU_BG_OPACITY);
+        mCurrentDanmuTextColor = SettingsDataKeeper.getSettingsInt(mActivity,SettingsDataKeeper.DANMU_TEXT_COLOR);
+        mCurrentDanmuSpeed = SettingsDataKeeper.getSettingsInt(mActivity,SettingsDataKeeper.DANMU_MOVE_SPEED);
+        mCurrentDanmuRepeatCount = SettingsDataKeeper.getSettingsInt(mActivity,SettingsDataKeeper.DANMU_REPEAT_COUNT);
     }
 
     @Override
@@ -119,7 +176,21 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         mSbChangeAnimationDuration.setOnSeekBarChangeListener(this);
         mTvAnimationDuration.setText(mCurrentNotificationAnimationDuration + "s");
         mSbChangeLineSize.setOnSeekBarChangeListener(this);
+        mRgNotificationStyle.setOnCheckedChangeListener(this);
         mTvAnimationStyleSummary.setText(mAnimationStyleArray[mCurrentNotificationAnimationStyle]);
+        updateColorFlower(mCurrentDanmuBgColor);
+        switch (mCurrentNotificationStyle){
+            case NOTIFICATION_STYLE_LINE:
+                mRgNotificationStyle.check(R.id.rb_line_style);
+                break;
+            case NOTIFICATION_STYLE_DANMAKU:
+                mRgNotificationStyle.check(R.id.rb_danmaku_style);
+                break;
+            case NOTIFICATION_STYLE_ICON:
+                mRgNotificationStyle.check(R.id.rb_icon_style);
+                break;
+        }
+
     }
 
 
@@ -177,6 +248,9 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
         startActivityForResult(intent, SYSTEM_ALERT_WINDOW_REQUEST_CODE);
     }
 
+    /**
+     * 申请权限
+     */
     private void requestNotificationListenPermission() {
         try {
             Intent intent = new Intent(ACTION_NOTIFICATION_LISTENER_SETTINGS);
@@ -271,6 +345,16 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
             }
         }).create();
         builder.show();
+    }
+    @OnClick(R.id.change_danmaku_bg_color_layout)
+    void clickDanmuBgColorLayout(){
+
+    }
+
+    private void updateColorFlower(int color){
+        Drawable drawable = mActivity.getDrawable(R.drawable.ic_color_selected);
+        drawable.setTint(color);
+        mIvCurrentDanmuBgColor.setImageDrawable(drawable);
     }
 
     private void confirmAnimationStyle(int select) {
@@ -410,5 +494,28 @@ public class EnhanceNotificationFragment extends BaseFragment implements SeekBar
     @Override
     public String getIdentifyTag() {
         return TAG;
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        mLineSettingsLayout.setVisibility(View.GONE);
+        mDanmakuSettingsLayout.setVisibility(View.GONE);
+        mIconSettingsLayout.setVisibility(View.GONE);
+        switch (checkedId){
+            case R.id.rb_line_style:
+                mCurrentNotificationStyle = NOTIFICATION_STYLE_LINE;
+                mLineSettingsLayout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.rb_danmaku_style:
+                mCurrentNotificationStyle = NOTIFICATION_STYLE_DANMAKU;
+                mDanmakuSettingsLayout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.rb_icon_style:
+                mCurrentNotificationStyle = NOTIFICATION_STYLE_ICON;
+                mIconSettingsLayout.setVisibility(View.VISIBLE);
+                break;
+        }
+        SettingsDataKeeper.writeSettingsInt(mActivity,
+                SettingsDataKeeper.ENHANCE_NOTIFICATION_STYLE, mCurrentNotificationStyle);
     }
 }

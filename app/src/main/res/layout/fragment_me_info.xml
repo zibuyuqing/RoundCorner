@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:id="@+id/rl_head"
+        android:layout_height="@dimen/dimen_150_dp"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/person"
+            android:layout_width="@dimen/dimen_64_dp"
+            android:layout_height="@dimen/dimen_64_dp"
+            android:layout_marginTop="@dimen/dimen_16_dp"
+            android:src="@mipmap/ic_launcher_round"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"
+            android:textColor="#ffffff"
+            android:layout_marginBottom="18dp"
+            android:text="人生需要一些灵动"/>
+    </LinearLayout>
+    <ScrollView
+        android:layout_below="@id/rl_head"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:padding="@dimen/dimen_16_dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:drawableLeft="@drawable/ic_boot_complete"
+                android:drawableTint="@color/color_gray_light"
+                android:text="自启管理"
+                android:textColor="@color/color_gray_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="@dimen/dimen_8_dp"
+                android:textSize="@dimen/font_size_normal_15dp" />
+            <TextView
+                android:drawableLeft="@drawable/ic_favorite"
+                android:drawableTint="@color/color_gray_light"
+                android:text="顺手好评"
+                android:textColor="@color/color_gray_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="@dimen/dimen_8_dp"
+                android:textSize="@dimen/font_size_normal_15dp" />
+            <TextView
+                android:drawableLeft="@drawable/ic_donate"
+                android:drawableTint="@color/color_gray_light"
+                android:text="友情赞助"
+                android:textColor="@color/color_gray_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="@dimen/dimen_8_dp"
+                android:textSize="@dimen/font_size_normal_15dp" />
+            <TextView
+                android:drawableLeft="@drawable/ic_group"
+                android:drawableTint="@color/color_gray_light"
+                android:text="加入组织"
+                android:textColor="@color/color_gray_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="@dimen/dimen_8_dp"
+                android:textSize="@dimen/font_size_normal_15dp" />
+            <TextView
+                android:drawableTint="@color/color_gray_light"
+                android:text="项目源码"
+                android:drawableLeft="@drawable/ic_github"
+                android:textColor="@color/color_gray_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="@dimen/dimen_8_dp"
+                android:textSize="@dimen/font_size_normal_15dp" />
+            <TextView
+                android:drawableLeft="@drawable/ic_about"
+                android:drawableTint="@color/color_gray_light"
+                android:text="关于"
+                android:textColor="@color/color_gray_light"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp"
+                android:gravity="center_vertical"
+                android:drawablePadding="@dimen/dimen_8_dp"
+                android:textSize="@dimen/font_size_normal_15dp" />
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

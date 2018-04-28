@@ -4,129 +4,174 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dimen_8_dp"
-    android:paddingRight="@dimen/dimen_8_dp"
-    android:paddingTop="@dimen/dimen_8_dp">
-    <LinearLayout
+    android:background="@drawable/card_bg_light"
+    android:layout_margin="@dimen/dimen_8_dp"
+    android:padding="@dimen/dimen_8_dp">
+    <TextView
+        android:paddingTop="@dimen/dimen_8_dp"
+        android:paddingBottom="@dimen/dimen_8_dp"
+        android:text="@string/general_feature_settings"
+        android:textColor="@color/color_gray_light"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/card_bg_gray"
-        android:orientation="vertical"
-        android:padding="@dimen/dimen_12_dp">
+        android:textSize="@dimen/font_size_normal_16dp"
+        android:layout_height="wrap_content" />
+
+    <RelativeLayout
+        android:id="@+id/rl_enhance_notification_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48_dp">
+
+        <ImageView
+            android:id="@+id/enhance_notification_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:tint="#ff8083"
+            android:src="@drawable/ic_enhance_notification" />
+
         <TextView
-            android:paddingTop="@dimen/dimen_8_dp"
-            android:paddingBottom="@dimen/dimen_8_dp"
-            android:text="@string/general_feature_settings"
-            android:textColor="@color/white"
-            android:layout_width="match_parent"
-            android:textSize="@dimen/font_size_normal_16dp"
-            android:layout_height="wrap_content" />
+            android:layout_toRightOf="@id/enhance_notification_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:gravity="center"
+            android:textColor="@color/color_gray_light"
+            android:text="@string/enhance_notification"
+            android:textSize="@dimen/font_size_normal_15dp" />
 
-        <RelativeLayout
-            android:id="@+id/rl_enhance_notification_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_48_dp">
+        <Switch
+            android:id="@+id/sw_enhance_notification_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_brighten_enable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48_dp">
+        <ImageView
+            android:id="@+id/brighten_enable_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:tint="#ffd500"
+            android:src="@drawable/ic_lighting" />
+        <TextView
+            android:layout_toRightOf="@id/brighten_enable_img"
+            android:textColor="@color/color_gray_light"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:gravity="center"
+            android:text="@string/light_screen_when_notify"
+            android:textSize="@dimen/font_size_normal_15dp" />
+        <Switch
+            android:id="@+id/sw_lighting_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_notification_display_config"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48_dp"
+        android:layout_marginTop="@dimen/dimen_8_dp">
 
-            <ImageView
-                android:id="@+id/enhance_notification_img"
-                android:layout_width="@dimen/dimen_24_dp"
-                android:layout_height="@dimen/dimen_24_dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:tint="#ff8083"
-                android:src="@drawable/ic_enhance_notification" />
+        <ImageView
+            android:id="@+id/auto_start_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:tint="#459cff"
+            android:src="@drawable/ic_display" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/auto_start_img"
+            android:orientation="vertical">
 
             <TextView
-                android:layout_toRightOf="@id/enhance_notification_img"
+                android:textColor="@color/color_gray_light"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimen_10_dp"
                 android:layout_marginStart="@dimen/dimen_10_dp"
                 android:gravity="center"
-                android:textColor="@color/white"
-                android:text="@string/enhance_notification"
+                android:text="@string/notification_show_when"
                 android:textSize="@dimen/font_size_normal_15dp" />
 
-            <Switch
-                android:id="@+id/sw_enhance_notification_enable"
+            <TextView
+                android:textColor="@color/color_gray_light"
+                android:id="@+id/tv_display_config_summary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/rl_brighten_enable_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_48_dp">
-            <ImageView
-                android:id="@+id/brighten_enable_img"
-                android:layout_width="@dimen/dimen_24_dp"
-                android:layout_height="@dimen/dimen_24_dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:tint="#ffd500"
-                android:src="@drawable/ic_lighting" />
-                <TextView
-                    android:layout_toRightOf="@id/brighten_enable_img"
-                    android:textColor="@color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimen_10_dp"
-                    android:layout_marginStart="@dimen/dimen_10_dp"
-                    android:gravity="center"
-                    android:text="@string/light_screen_when_notify"
-                    android:textSize="@dimen/font_size_normal_15dp" />
-            <Switch
-                android:id="@+id/sw_lighting_enable"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:gravity="center"
+                android:text="@string/notification_show_when_notify"
+                android:textSize="@dimen/font_size_small_12dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_apps_manager_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48_dp"
+        android:layout_marginTop="@dimen/dimen_8_dp">
+
+        <ImageView
+            android:id="@+id/apps_manager_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dimen_2_dp"
+            android:src="@drawable/ic_apps"
+            android:tint="#ff00fb" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/apps_manager_img"
+            android:orientation="vertical">
+
+            <TextView
+                android:textColor="@color/color_gray_light"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/rl_notification_display_config"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_48_dp"
-            android:layout_marginTop="@dimen/dimen_8_dp">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:gravity="center"
+                android:text="@string/notification_apps_manager"
+                android:textSize="@dimen/font_size_normal_15dp" />
 
-            <ImageView
-                android:id="@+id/auto_start_img"
-                android:layout_width="@dimen/dimen_24_dp"
-                android:layout_height="@dimen/dimen_24_dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:tint="#459cff"
-                android:src="@drawable/ic_display" />
-
-            <LinearLayout
+            <TextView
+                android:textColor="@color/color_gray_light"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@id/auto_start_img"
-                android:orientation="vertical">
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:gravity="center"
+                android:text="@string/notification_apps_manager_summary"
+                android:textSize="@dimen/font_size_small_12dp" />
+        </LinearLayout>
 
-                <TextView
-                    android:textColor="@color/white"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimen_10_dp"
-                    android:layout_marginStart="@dimen/dimen_10_dp"
-                    android:gravity="center"
-                    android:text="@string/notification_show_when"
-                    android:textSize="@dimen/font_size_normal_15dp" />
-
-                <TextView
-                    android:textColor="@color/white"
-                    android:id="@+id/tv_display_config_summary"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimen_10_dp"
-                    android:layout_marginStart="@dimen/dimen_10_dp"
-                    android:gravity="center"
-                    android:text="@string/notification_show_when_notify"
-                    android:textSize="@dimen/font_size_small_12dp" />
-            </LinearLayout>
-
-        </RelativeLayout>
-    </LinearLayout>
+        <ImageView
+            android:layout_width="@dimen/dimen_18_dp"
+            android:layout_height="@dimen/dimen_18_dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_forward"
+            android:tint="@color/color_gray_light" />
+    </RelativeLayout>
 </LinearLayout>

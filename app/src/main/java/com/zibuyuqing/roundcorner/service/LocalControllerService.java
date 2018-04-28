@@ -10,23 +10,28 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.service.notification.StatusBarNotification;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
+
 import com.zibuyuqing.roundcorner.IProcessService;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.controller.CornerManager;
+import com.zibuyuqing.roundcorner.model.controller.NotificationDanmuManager;
 import com.zibuyuqing.roundcorner.model.controller.NotificationLineManager;
 import com.zibuyuqing.roundcorner.ui.activity.AppConfigActivity;
+import com.zibuyuqing.roundcorner.ui.widget.DanmakuNotificationView;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
+
 /**
  * Created by Xijun.Wang on 2017/11/7.
  */
 
-public class LocalControllerService extends Service implements EdgeLineView.AnimationStateListener, NotificationListener.NotificationsChangedListener {
+public class LocalControllerService extends Service implements NotificationListener.NotificationsChangedListener {
     private static final String TAG = LocalControllerService.class.getSimpleName();
 
     public static final int NOTIFICATION_ID = 0x11;
@@ -40,6 +45,8 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
     private LocalConn mConnection;
     private CornerManager mCornerManager;
     private NotificationLineManager mLineManager;
+    private NotificationDanmuManager mDanmakuManager;
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -51,12 +58,13 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         super.onCreate();
         init();
     }
-    private void showOrHideNotify(){
+
+    private void showOrHideNotify() {
         //API 18以下，直接发送Notification并将其置为前台
-       boolean isNotifyEnable = SettingsDataKeeper.
+        boolean isNotifyEnable = SettingsDataKeeper.
                 getSettingsBoolean(this, SettingsDataKeeper.NOTIFICATION_ENABLE);
-        Log.e(TAG,"showOrHideNotify ::show = ：" + isNotifyEnable);
-        if(isNotifyEnable) {
+        Log.e(TAG, "showOrHideNotify ::show = ：" + isNotifyEnable);
+        if (isNotifyEnable) {
             Notification notification = Utilities.buildNotification(this);
             startForeground(NOTIFICATION_ID, notification);
         } else {
@@ -64,32 +72,34 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         }
     }
 
-    private void init(){
-        Log.e(TAG,"LocalControllerService init");
+    private void init() {
+        Log.e(TAG, "LocalControllerService init");
         mBinder = new LocalBinder();
-        if(mConnection == null){
+        if (mConnection == null) {
             mConnection = new LocalConn();
         }
-        if(mCornerManager == null){
+        if (mCornerManager == null) {
             mCornerManager = CornerManager.getInstance(this);
         }
-        if(mLineManager == null){
+        if (mLineManager == null) {
             mLineManager = NotificationLineManager.getInstance(this);
-            mLineManager.registerAnimationStateListener(this);
+        }
+        if(mDanmakuManager == null){
+            mDanmakuManager = NotificationDanmuManager.getInstance(this);
         }
         NotificationListener.start(this.getApplicationContext());
         NotificationListener.setNotificationsChangedListener(this);
         tryToAddCorners(this);
-        tryToAddNotificationLine(this,ME);
+        tryToAddNotificationLine(this, ME);
         LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_APP_ENABLE_STATE_CHANGED);
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                if(ACTION_APP_ENABLE_STATE_CHANGED.equals(intent.getAction())){
-                    Log.e(TAG,"intent.getExtras() =:" + intent.getExtras());
-                    if(intent.getExtras() != null){
+                if (ACTION_APP_ENABLE_STATE_CHANGED.equals(intent.getAction())) {
+                    Log.e(TAG, "intent.getExtras() =:" + intent.getExtras());
+                    if (intent.getExtras() != null) {
                         AppInfo info = intent.getParcelableExtra(AppConfigActivity.EXTRA_KEY);
                         mLineManager.updateAppMap(info);
                         return;
@@ -98,7 +108,7 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
                 }
             }
         };
-        manager.registerReceiver(mReceiver,filter);
+        manager.registerReceiver(mReceiver, filter);
     }
 
     @Override
@@ -107,11 +117,11 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         bindService(new Intent(LocalControllerService.this, RemoteService.class),
                 mConnection,
                 Context.BIND_IMPORTANT);
-        if(intent != null) {
+        if (intent != null) {
             String action = intent.getAction();
-            Log.e(TAG,"action =:" + action);
+            Log.e(TAG, "action =:" + action);
             if (!TextUtils.isEmpty(action)) {
-                handleAction(intent,action);
+                handleAction(intent, action);
             }
             NotificationListener.setNotificationsChangedListener(this);
         } else {
@@ -122,16 +132,17 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         }
         return Service.START_STICKY;
     }
-    public static void tryToAddCorners(Context context){
+
+    public static void tryToAddCorners(Context context) {
         Intent intent = new Intent(context, LocalControllerService.class);
         intent.setAction(ACTION_TRY_TO_ADD_CORNERS);
         context.startService(intent);
     }
 
-    public static void tryToAddNotificationLine(Context context,String who){
-        Intent intent = new Intent(context,LocalControllerService.class);
+    public static void tryToAddNotificationLine(Context context, String who) {
+        Intent intent = new Intent(context, LocalControllerService.class);
         intent.setAction(ACTION_TRY_TO_ADD_NOTIFICATION_LINE);
-        intent.putExtra(NOTIFICATION_IDENTIFY,who);
+        intent.putExtra(NOTIFICATION_IDENTIFY, who);
         context.startService(intent);
     }
 
@@ -139,7 +150,8 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         Intent starter = new Intent(context, LocalControllerService.class);
         context.startService(starter);
     }
-    private void handleAction(Intent intent,String action){
+
+    private void handleAction(Intent intent, String action) {
         switch (action) {
             case ACTION_TRY_TO_ADD_CORNERS:
                 mCornerManager.tryToAddCorners();
@@ -165,7 +177,6 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             case SettingsDataKeeper.CORNER_RIGHT_BOTTOM_ENABLE:
                 mCornerManager.showOrHideRightBottomCorner();
                 break;
-
             case SettingsDataKeeper.CORNER_ENABLE:
                 showEdgeLineForPreview();
                 mCornerManager.showOrHideCorners();
@@ -184,10 +195,12 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
             case SettingsDataKeeper.NOTIFICATION_ANIMATION_STYLE:
             case SettingsDataKeeper.NOTIFICATION_LINE_SIZE:
             case SettingsDataKeeper.BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE:
+            case SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION:
+                Intent i = new Intent(LocalControllerService.ACTION_APP_ENABLE_STATE_CHANGED);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(i);
             case SettingsDataKeeper.MIXED_COLOR_ONE:
             case SettingsDataKeeper.MIXED_COLOR_TWO:
             case SettingsDataKeeper.MIXED_COLOR_THREE:
-            case SettingsDataKeeper.NOTIFICATION_ANIMATION_DURATION:
                 showEdgeLineForPreview();
                 break;
         }
@@ -195,14 +208,16 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
 
     private void startOrStopListenNotification() {
         mLineManager.showOrHideEdgeLine();
+        mDanmakuManager.showOrHideDanmaku();
     }
 
-    private void showEdgeLineForPreview(){
+    private void showEdgeLineForPreview() {
         mLineManager.showEdgeLineByConfigChanged();
     }
-    private void showEdgeLine(Intent intent){
+
+    private void showEdgeLine(Intent intent) {
         String who = intent.getStringExtra(NOTIFICATION_IDENTIFY);
-        mLineManager.showEdgeLine(who);
+        //mLineManager.showEdgeLine(who);
     }
 
     @Override
@@ -212,45 +227,40 @@ public class LocalControllerService extends Service implements EdgeLineView.Anim
         mReceiver = null;
         NotificationListener.removeNotificationsChangedListener();
         Intent intent = new Intent(this, LocalControllerService.class);
-        intent.putExtra(SettingsDataKeeper.CORNER_ENABLE,true);
+        intent.putExtra(SettingsDataKeeper.CORNER_ENABLE, true);
         intent.setAction(SettingsDataKeeper.CORNER_ENABLE);
         startService(intent);
         super.onDestroy();
     }
 
-    @Override
-    public void onAnimationStart() {
-
-    }
 
     @Override
-    public void onAnimationRunning(float progress) {
-
-    }
-
-    @Override
-    public void onAnimationEnd() {
-        mLineManager.removeEdgeLine();
+    public void onNotificationPosted(StatusBarNotification sbn) {
+        Log.e(TAG, "onNotificationPosted :: sbn =:" + sbn);
+        if(mDanmakuManager != null){
+            mDanmakuManager.showDanmu(sbn);
+        }
     }
 
     @Override
     public void onNotificationPosted(String who) {
-        Log.e(TAG,"onNotificationPosted :: who =:" + who);
-        tryToAddNotificationLine(this,who);
+        Log.e(TAG, "onNotificationPosted :: who =:" + who);
+        //tryToAddNotificationLine(this, who);
     }
 
-    private class LocalBinder extends IProcessService.Stub{
+    private class LocalBinder extends IProcessService.Stub {
 
         @Override
         public String getServiceName() throws RemoteException {
             return TAG;
         }
     }
-    private class LocalConn implements ServiceConnection{
+
+    private class LocalConn implements ServiceConnection {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            Log.e(TAG,"Local 链接远程服务成功   *******");
+            Log.e(TAG, "Local 链接远程服务成功   *******");
         }
 
         @Override

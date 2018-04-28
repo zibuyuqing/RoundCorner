@@ -15,19 +15,18 @@
         android:supportsRtl="true"
         android:persistent="true"
         android:theme="@style/AppTheme">
-        <activity
-            android:name=".ui.activity.MainActivity"
-            android:launchMode="singleTask"
-            android:enabled="true"
-            android:screenOrientation="portrait">
+        <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.SplashActivity">
-
+        <activity android:name=".ui.activity.HomeActivity"
+            android:launchMode="singleTask"
+            android:enabled="true"
+            android:screenOrientation="portrait">
         </activity>
+
         <activity android:name=".ui.activity.AppsManageActivity"></activity>
         <activity android:name=".ui.activity.AboutMeActivity"></activity>
         <activity android:name=".ui.activity.AppConfigActivity"></activity>
@@ -52,8 +51,6 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
-        <meta-data android:value="5ac1cd08f29d98595600002a" android:name="UMENG_APPKEY"/>
-        <meta-data android:value="KuAn" android:name="UMENG_CHANNEL"/>
     </application>
 
 </manifest>

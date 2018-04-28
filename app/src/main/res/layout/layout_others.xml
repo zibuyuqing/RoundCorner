@@ -30,7 +30,7 @@
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
                 android:id="@+id/feature_enable_img"
-                android:src="@drawable/ic_favorite"
+                android:src="@drawable/ic_donate"
                 android:tint="#ff0011"
                 android:layout_width="@dimen/dimen_24_dp"
                 android:layout_height="@dimen/dimen_24_dp" />
