@@ -33,7 +33,26 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_48_dp">
+                <TextView
+                    android:drawableTint="@color/color_gray_light"
+                    android:drawableLeft="@drawable/ic_hide_recent"
+                    android:text="后台隐藏"
+                    android:drawablePadding="@dimen/dimen_8_dp"
+                    android:textSize="@dimen/font_size_normal_15dp"
+                    android:gravity="center_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent" />
+                <Switch
+                    android:id="@+id/sw_hide_recent_enable"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="@dimen/dimen_48_dp"
+                    android:layout_height="@dimen/dimen_48_dp" />
+            </RelativeLayout>
             <TextView
+                android:id="@+id/tv_auto_restart"
                 android:drawableLeft="@drawable/ic_boot_complete"
                 android:drawableTint="@color/color_gray_light"
                 android:text="自启管理"
@@ -44,6 +63,7 @@
                 android:drawablePadding="@dimen/dimen_8_dp"
                 android:textSize="@dimen/font_size_normal_15dp" />
             <TextView
+                android:id="@+id/tv_favorite"
                 android:drawableLeft="@drawable/ic_favorite"
                 android:drawableTint="@color/color_gray_light"
                 android:text="顺手好评"
@@ -54,6 +74,8 @@
                 android:drawablePadding="@dimen/dimen_8_dp"
                 android:textSize="@dimen/font_size_normal_15dp" />
             <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_donate"
                 android:drawableLeft="@drawable/ic_donate"
                 android:drawableTint="@color/color_gray_light"
                 android:text="友情赞助"
@@ -64,6 +86,7 @@
                 android:drawablePadding="@dimen/dimen_8_dp"
                 android:textSize="@dimen/font_size_normal_15dp" />
             <TextView
+                android:id="@+id/tv_join_group"
                 android:drawableLeft="@drawable/ic_group"
                 android:drawableTint="@color/color_gray_light"
                 android:text="加入组织"
@@ -74,6 +97,7 @@
                 android:drawablePadding="@dimen/dimen_8_dp"
                 android:textSize="@dimen/font_size_normal_15dp" />
             <TextView
+                android:id="@+id/tv_code"
                 android:drawableTint="@color/color_gray_light"
                 android:text="项目源码"
                 android:drawableLeft="@drawable/ic_github"
@@ -84,9 +108,10 @@
                 android:drawablePadding="@dimen/dimen_8_dp"
                 android:textSize="@dimen/font_size_normal_15dp" />
             <TextView
+                android:id="@+id/tv_about"
                 android:drawableLeft="@drawable/ic_about"
                 android:drawableTint="@color/color_gray_light"
-                android:text="关于"
+                android:text="关于软件"
                 android:textColor="@color/color_gray_light"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_48_dp"

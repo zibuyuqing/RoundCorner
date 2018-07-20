@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
@@ -27,15 +28,13 @@ public class AppInfoLoadTask extends AsyncTask<Void,Void,List<AppInfoWithIcon>>{
     private AppInfoLoadStateListener mListener;
     private Context mContext;
     private int mPage = 0;
-    private int mAppType;
-    public AppInfoLoadTask(Context context,int appType,int page,AppInfoLoadStateListener listener){
+    public AppInfoLoadTask(Context context,int page,AppInfoLoadStateListener listener){
         mContext = context;
         mListener = listener;
         mPage = page;
-        mAppType = appType;
     }
-    public static void execute(Context context,int appType,int page,AppInfoLoadStateListener listener){
-        new AppInfoLoadTask(context,appType,page,listener).execute();
+    public static void execute(Context context,int page,AppInfoLoadStateListener listener){
+        new AppInfoLoadTask(context,page,listener).execute();
     }
     @Override
     protected List<AppInfoWithIcon> doInBackground(Void... voids) {
@@ -44,7 +43,7 @@ public class AppInfoLoadTask extends AsyncTask<Void,Void,List<AppInfoWithIcon>>{
         if(mPage == QUERAY_ALL) {
              appInfos = AppInfoDaoOpe.queryAll(mContext);
         } else {
-            appInfos = AppInfoDaoOpe.queryAppInfosByTypeWithPage(mContext,mAppType,mPage);
+            appInfos = AppInfoDaoOpe.queryAppInfosByPage(mContext,mPage);
         }
         List<AppInfoWithIcon> appInfoWithIconList = new ArrayList<>();
         int count = appInfos.size();
@@ -57,7 +56,8 @@ public class AppInfoLoadTask extends AsyncTask<Void,Void,List<AppInfoWithIcon>>{
             Log.e(TAG,"AppInfoLoadTask : appInfo.=:" + appInfo);
             try {
                 AppInfoWithIcon infoWithIcon = new AppInfoWithIcon(appInfo,
-                        ViewUtil.createIconBitmap(mContext,packageManager.getApplicationIcon(appInfo.packageName)));
+                        ViewUtil.createIconBitmap(packageManager.getApplicationIcon(appInfo.packageName),
+                                mContext.getResources().getDimensionPixelSize(R.dimen.icon_size)));
                 if(!appInfoWithIconList.contains(infoWithIcon)){
                     appInfoWithIconList.add(infoWithIcon);
                 }

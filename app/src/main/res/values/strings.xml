@@ -48,7 +48,10 @@
     <string name="notification_line_size">通知线粗细</string>
     <string name="notification_animation_duration">通知动画时长</string>
     <string name="notification_animation_style">通知动画风格</string>
+
     <string name="danmu_repeat_count">设置弹幕重复次数</string>
+    <string name="danmu_skin">个性皮肤</string>
+    <string name="danmu_skin_style">弹幕风格</string>
 
     <string name="animation_style_fade_in_out">淡入淡出</string>
     <string name="animation_style_lattice">闪点点</string>
@@ -62,4 +65,19 @@
     <string name="user_app">用户应用</string>
     <string name="system_app">系统应用</string>
     <string name="storage_permission_denied">请允许存储权限</string>
+
+    <string name="weichat_pay">微信赞助</string>
+    <string name="alipay">支付宝赞助</string>
+
+    <string name="danmu_random_style">随机弹幕风格</string>
+    <string name="danmu_big_style">增大弹幕</string>
+    <string name="danmu_random_style_summary">开启后弹幕大小,颜色，速度等随机确定</string>
+    <string name="icon_bg_color">图标背景色</string>
+    <string name="icon_show_duration">显示时长</string>
+    <string name="icon_is_collect">多应用通知聚合</string>
+    <string name="icon_is_collect_summary">开启后不同应用的通知将会归类到一个列表</string>
+    <string name="icon_shape">图标形状</string>
+    <string name="icon_size">图标大小</string>
+    <string name="app_not_found">没有找到app</string>
+    <string name="demo_notificaton">示例通知开心开心</string>
 </resources>

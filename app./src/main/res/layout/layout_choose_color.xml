@@ -13,9 +13,9 @@
         android:id="@+id/cp_color_value"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-    <com.larswerkman.holocolorpicker.OpacityBar
+    <com.larswerkman.holocolorpicker.SaturationBar
         android:layout_gravity="center"
-        android:id="@+id/cp_color_opacity"
+        android:id="@+id/cp_color_saturation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:id="@+id/danmu_layout"
+    android:layout_height="@dimen/dimen_36_dp">
+    <ImageView
+        android:layout_margin="@dimen/dimen_1_dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/iv_skin_rail"
+        android:src="@drawable/hentai_07"
+        android:layout_centerVertical="true"
+        android:scaleType="fitEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+    <LinearLayout
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_12_dp"
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_danmu_icon"
+            android:src="@mipmap/ic_launcher"
+            android:scaleType="centerCrop"
+            android:layout_centerVertical="true"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp" />
+        <TextView
+            android:id="@+id/tv_danmu_title"
+            android:paddingLeft="@dimen/dimen_8_dp"
+            android:textSize="@dimen/font_size_small_14dp"
+            android:text="haha"
+            android:maxLines="1"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_danmu_content"
+            android:textSize="@dimen/font_size_small_14dp"
+            android:text="haha"
+            android:maxLines="1"
+            android:gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</RelativeLayout>

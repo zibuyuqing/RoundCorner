@@ -22,7 +22,7 @@ public class WakeReceiver extends BroadcastReceiver{
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.e(TAG,"action =:" + action);
+        Log.d(TAG,"action =:" + action);
         RemoteService.start(context);
         LocalControllerService.tryToAddCorners(context);
     }

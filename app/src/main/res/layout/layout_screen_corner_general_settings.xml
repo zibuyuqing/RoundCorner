@@ -84,4 +84,34 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true" />
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_full_screen_enable_layout"
+        android:layout_width="match_parent"
+        android:layout_weight="0"
+        android:layout_height="@dimen/dimen_48_dp">
+        <ImageView
+            android:id="@+id/full_screen_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:tint="#ffa200"
+            android:src="@drawable/ic_full_screen" />
+        <TextView
+            android:layout_toRightOf="@id/full_screen_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:gravity="center"
+            android:text="如果圆角显示不全，请打开开关"
+            android:textColor="@color/color_gray_light"
+            android:textSize="@dimen/font_size_normal_15dp"/>
+        <Switch
+            android:id="@+id/sw_full_screen_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 </LinearLayout>

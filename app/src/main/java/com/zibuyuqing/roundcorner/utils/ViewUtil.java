@@ -1,23 +1,20 @@
 package com.zibuyuqing.roundcorner.utils;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.PaintDrawable;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.graphics.Palette;
-import android.util.Log;
-import android.view.KeyCharacterMap;
-import android.view.KeyEvent;
-import android.view.ViewConfiguration;
 import android.view.WindowManager;
 
 import com.zibuyuqing.roundcorner.R;
@@ -42,7 +39,6 @@ public class ViewUtil {
                 context.getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         Point point = new Point();
         manager.getDefaultDisplay().getRealSize(point);
-        Log.e(TAG,"getScreenSize =:" + getNavigationBarHeight(context));
         return point;
     }
     public static int getScreenWidth(Context context){
@@ -86,92 +82,79 @@ public class ViewUtil {
         DrawableCompat.setTint(wrappedDrawable, colors);
         return wrappedDrawable;
     }
-    /*
-    private static int getNavBarHeight(Context context) {
-        boolean hasMenuKey = ViewConfiguration.get(context).hasPermanentMenuKey();
-        boolean hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK);
-        boolean hasNavBar = !hasMenuKey && !hasBackKey;// 通过判断是否有虚拟菜单键和返回键来确定是否有导航栏
-
-        if (hasNavBar) {
-            boolean isPortrait = context.getResources().getConfiguration().orientation
-                    == Configuration.ORIENTATION_PORTRAIT;
-
-            boolean isTablet = (context.getResources().getConfiguration().screenLayout
-                    & Configuration.SCREENLAYOUT_SIZE_MASK)
-                    >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-
-            String key = isPortrait ? "navigation_bar_height"
-                    : (isTablet ? "navigation_bar_height_landscape" : null);
-
-            return key == null ? 0 : getDimenSize(context, key);
-        } else {
-            return 0;
-        }
-    }
-    // 根据关键字获取对应的值
-    private static int getDimenSize(Context context, String key) {
-        int resourceId = context.getResources().getIdentifier(key, "dimen", "android");
-        return resourceId > 0 ? context.getResources().getDimensionPixelSize(resourceId) : 0;
-    }
-    */
     /**
      * Returns a bitmap suitable for the all apps view.
      */
-    public static Bitmap createIconBitmap(Context context,Drawable icon) {
+    public static Bitmap createIconBitmap(Drawable icon,int size) {
+        if(icon == null){
+            return null;
+        }
         synchronized (sCanvas) {
-            final int iconBitmapSize = context.getResources().getDimensionPixelSize(R.dimen.icon_size);
-            int width = iconBitmapSize;
-            int height = iconBitmapSize;
-
-            if (icon instanceof PaintDrawable) {
-                PaintDrawable painter = (PaintDrawable) icon;
-                painter.setIntrinsicWidth(width);
-                painter.setIntrinsicHeight(height);
-            } else if (icon instanceof BitmapDrawable) {
-                // Ensure the bitmap has a density.
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) icon;
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                if (bitmap.getDensity() == Bitmap.DENSITY_NONE) {
-                    bitmapDrawable.setTargetDensity(context.getResources().getDisplayMetrics());
-                }
-            }
-            int sourceWidth = icon.getIntrinsicWidth();
-            int sourceHeight = icon.getIntrinsicHeight();
-            if (sourceWidth > 0 && sourceHeight > 0) {
-                // Scale the icon proportionally to the icon dimensions
-                final float ratio = (float) sourceWidth / sourceHeight;
-                if (sourceWidth > sourceHeight) {
-                    height = (int) (width / ratio);
-                } else if (sourceHeight > sourceWidth) {
-                    width = (int) (height * ratio);
-                }
-            }
-
-            // no intrinsic size --> use default size
-            int textureWidth = iconBitmapSize;
-            int textureHeight = iconBitmapSize;
-
-            final Bitmap bitmap = Bitmap.createBitmap(textureWidth, textureHeight,
-                    Bitmap.Config.ARGB_8888);
-            final Canvas canvas = sCanvas;
-            canvas.setBitmap(bitmap);
-
-            final int left = (textureWidth-width) / 2;
-            final int top = (textureHeight-height) / 2;
-            sOldBounds.set(icon.getBounds());
-            icon.setBounds(left, top, left+width, top+height);
+            // 取 drawable 的长宽
+            int w = icon.getIntrinsicWidth();
+            int h = icon.getIntrinsicHeight();
+            // 取 drawable 的颜色格式
+            Bitmap.Config config = icon.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                    : Bitmap.Config.RGB_565;
+            // 建立对应 bitmap
+            Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+            // 建立对应 bitmap 的画布
+            Canvas canvas = new Canvas(bitmap);
+            icon.setBounds(0, 0, w, h);
+            // 把 drawable 内容画到画布中
             icon.draw(canvas);
-            icon.setBounds(sOldBounds);
-            canvas.setBitmap(null);
-            return bitmap;
+            Bitmap scaleBmp = Bitmap.createScaledBitmap(bitmap,size,size,true);
+            if(bitmap != null){
+                if (!bitmap.isRecycled()){
+                    bitmap.recycle();
+                }
+            }
+            return scaleBmp;
         }
     }
-    public static int getMainColorFromBitmap(Bitmap bitmap){
-        final Palette.Builder palette = Palette.from(bitmap);
-        Palette.Swatch swatch = palette.generate().getVibrantSwatch();
-        if(swatch != null){
-            return swatch.getRgb();
+    public static Bitmap drawable2Bitmap(Drawable drawable){
+        synchronized (sCanvas) {
+            // 取 drawable 的长宽
+            int w = drawable.getIntrinsicWidth();
+            int h = drawable.getIntrinsicHeight();
+            // 取 drawable 的颜色格式
+            Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                    : Bitmap.Config.RGB_565;
+            // 建立对应 bitmap
+            Bitmap bitmap = Bitmap.createBitmap(w, h, config);
+            // 建立对应 bitmap 的画布
+            Canvas canvas = new Canvas(bitmap);
+            drawable.setBounds(0, 0, w, h);
+            // 把 drawable 内容画到画布中
+            drawable.draw(canvas);
+            Bitmap scaleBmp = Bitmap.createScaledBitmap(bitmap,w,h,true);
+            if(bitmap != null){
+                if (!bitmap.isRecycled()){
+                    bitmap.recycle();
+                }
+            }
+            return scaleBmp;
         }
-        return 0x000000;
+    }
+    public static int colorFromBitmap(Bitmap bitmap) {
+        // Author of Palette recommends using 24 colors when analyzing profile photos.
+        final Palette palette = Palette.from(bitmap).generate();
+        if (palette != null && palette.getVibrantSwatch() != null) {
+            return palette.getVibrantSwatch().getRgb();
+        }
+        return 0;
+    }
+    public static int getIconSize(Context context){
+        int sizeSelect =  SettingsDataKeeper.getSettingsInt(context,SettingsDataKeeper.ICON_SIZE);
+        switch (sizeSelect) {
+            case 0:
+                return context.getResources().getDimensionPixelSize(R.dimen.dimen_30_dp);
+            case 1:
+                return context.getResources().getDimensionPixelSize(R.dimen.dimen_36_dp);
+            case 2:
+                return context.getResources().getDimensionPixelSize(R.dimen.dimen_48_dp);
+            default:
+                return context.getResources().getDimensionPixelSize(R.dimen.dimen_36_dp);
+        }
     }
 }

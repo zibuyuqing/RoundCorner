@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="@dimen/dimen_48_dp">
+    <LinearLayout
+        android:background="@drawable/general_color_bg"
+        android:layout_marginLeft="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dimen_4_dp"
+        android:paddingBottom="@dimen/dimen_4_dp"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dimen_8_dp"
+        android:paddingRight="@dimen/dimen_8_dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iv_danmu_icon"
+            android:layout_width="@dimen/dimen_18_dp"
+            android:layout_marginLeft="@dimen/dimen_48_dp"
+            android:layout_height="@dimen/dimen_18_dp"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/tv_danmu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:layout_marginLeft="@dimen/dimen_8_dp"
+            android:text="haha"
+            android:textSize="@dimen/font_size_small_14dp" />
+
+        <TextView
+            android:id="@+id/tv_danmu_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="haha"
+            android:textSize="@dimen/font_size_small_14dp" />
+    </LinearLayout>
+    <FrameLayout
+        android:id="@+id/rocket"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/iv_skin_head"
+            android:layout_gravity="center"
+            android:layout_width="@dimen/dimen_96_dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_rocket" />
+    </FrameLayout>
+</RelativeLayout>

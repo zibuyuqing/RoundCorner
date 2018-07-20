@@ -75,7 +75,7 @@ public class XRecyclerView extends RecyclerView {
                     && layoutManager.getItemCount() > layoutManager.getChildCount()
                     && !isNoMore) {
                 if (mListener != null) {
-                    mListener.loadMore();
+                    // mListener.loadMore();
                 }
             }
         }

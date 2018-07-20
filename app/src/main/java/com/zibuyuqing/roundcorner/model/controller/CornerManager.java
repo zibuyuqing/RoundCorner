@@ -82,6 +82,13 @@ public class CornerManager {
     private void ensureWindowType(String position){
         // 系统提示类型,重要
         boolean hasNav =  ViewUtil.getNavigationBarHeight(mContext) > 0;
+        // 系统提示类型,重要
+        if(hasNav){
+            if(isFullScreenEnable()) {
+                mWindowParams.type =  WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+                return;
+            }
+        }
         if (Utilities.isBeforeAndroidN()) {
             mWindowParams.type = WindowManager.LayoutParams.TYPE_TOAST;
         } else if(Utilities.isCanUseApplicationOverlayType()){
@@ -140,7 +147,6 @@ public class CornerManager {
         return corner;
     }
     public void removeCorners(){
-        Log.e(TAG, "removeCorners -- mCornersMap =:" + mCornersMap.size());
         try {
             for (CornerView corner : mCornersMap.values()) {
                 mWindowManager.removeView(corner);
@@ -200,7 +206,6 @@ public class CornerManager {
         if(!mCornersMap.containsValue(corner)) {
             mCornersMap.put(position, corner);
             mWindowManager.addView(corner, mWindowParams);
-            Log.e(TAG,"manager =: add view position =:" + position +",params =:" + mWindowParams.x +",y =:" + mWindowParams.y+",mWindowParams.height =:"  + mWindowParams.height);
         }
     }
     public void hideCornerByPosition(String position) {
@@ -216,14 +221,12 @@ public class CornerManager {
     }
     public void changeCornersSize() {
         int cornerSize = SettingsDataKeeper.getSettingsInt(mContext,SettingsDataKeeper.CORNER_SIZE);
-        Log.e(TAG, "changeCornerSize :: cornerSize =:" + cornerSize);
         for (CornerView cornerView : mCornersMap.values()) {
             cornerView.setCornerSize(cornerSize);
         }
     }
     public void changeCornersColor() {
         int color = SettingsDataKeeper.getSettingsInt(mContext,SettingsDataKeeper.CORNER_COLOR);
-        Log.e(TAG, "changeCornerColor :: color =:" + color);
         for (CornerView cornerView : mCornersMap.values()) {
             cornerView.setColor(color);
         }
@@ -268,7 +271,6 @@ public class CornerManager {
             return;
         }
         boolean leftTopEnable = SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.CORNER_LEFT_TOP_ENABLE);
-        Log.e(TAG,"showOrHideLeftTopCorner :: leftTopEnable =:" + leftTopEnable);
         if(!leftTopEnable){
             hideCornerByPosition(LEFT_TOP);
         } else {
@@ -311,5 +313,11 @@ public class CornerManager {
             mCornersMap.get(RIGHT_BOTTOM).show();
         }
 
+    }
+    private boolean isFullScreenEnable(){
+        return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.FULL_SCREEN_ENABLE);
+    }
+    public void updateWindowForFullScreen() {
+        reAddCorners();
     }
 }

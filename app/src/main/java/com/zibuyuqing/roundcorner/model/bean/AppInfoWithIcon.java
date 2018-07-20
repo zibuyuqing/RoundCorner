@@ -29,9 +29,6 @@ public class AppInfoWithIcon extends AppInfo{
         this.title = info.title;
         this.packageName = info.packageName;
         this.icon = icon;
-        this.mixedColorOne = info.mixedColorOne;
-        this.mixedColorTwo = info.mixedColorTwo;
-        this.mixedColorThree = info.mixedColorThree;
     }
     public AppInfo getAppInfo(){
         return appInfo;

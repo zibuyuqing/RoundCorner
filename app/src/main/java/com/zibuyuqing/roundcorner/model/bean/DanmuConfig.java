@@ -15,6 +15,15 @@ public class DanmuConfig {
     private int repeatCount;
     private int moveSpeed;
     private boolean useRandomColor;
+    private int bgAlpha;
+
+    public int getBgAlpha() {
+        return bgAlpha;
+    }
+
+    public void setBgAlpha(int bgAlpha) {
+        this.bgAlpha = bgAlpha;
+    }
 
     public int getTextColor() {
         return textColor;

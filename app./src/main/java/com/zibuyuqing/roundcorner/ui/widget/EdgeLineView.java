@@ -93,7 +93,6 @@ public class EdgeLineView extends View {
     private void init() {
         mScreenWidth = ViewUtil.getScreenWidth(mContext);
         mScreenHeight = ViewUtil.getScreenHeight(mContext);
-        Log.e(TAG, "init ;; mScreenHeight =：" + mScreenHeight);
         mPath = new Path();
         mDst = new Path();
         mPathMeasure = new PathMeasure();
@@ -102,13 +101,13 @@ public class EdgeLineView extends View {
         mMixedPaint = new Paint();
         mMixedPaint.setAntiAlias(true);
         mGradientMatrix = new Matrix();
+        //动画状态监听
         mAnimatorListener = new AnimatorListenerAdapter() {
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-                Log.e(TAG,"onAnimationCancel ---------------- ");
                 hide(true);
-                mCurrentRepeatCount = 0;
+                mCurrentRepeatCount = 0;// 记录动画重复次数
             }
 
             @Override
@@ -129,6 +128,7 @@ public class EdgeLineView extends View {
                 super.onAnimationStart(animation);
             }
         };
+        //动画进度监听
         mValueUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
@@ -147,10 +147,11 @@ public class EdgeLineView extends View {
     public void setOnScreenConfigurationChangeListener(OnScreenConfigurationChangeListener listener){
         mConfigurationChangeListener = listener;
     }
+
     private void flush() {
         if (needChangeAlpha) {
             mMixedPaint.setAlpha((int) (mProgress * 255));
-            mPrimaryPaint.setAlpha((int) (mProgress * 255));
+            mPrimaryPaint.setAlpha((int) (mProgress * 255));// 绘制单个色调的画笔
         }
         invalidate();
     }
@@ -172,7 +173,6 @@ public class EdgeLineView extends View {
         mMixedPaint.setShader(mColorShader);
         mMixedPaint.setStyle(Paint.Style.STROKE);
         mMixedPaint.setStrokeWidth(mStrokeWidth);
-        Log.e(TAG,"mStyle =:" + mStyle +",mStrokeWidth =:" + mStrokeWidth);
         switch (mStyle) {
             case STYLE_FADE_IN_OUT:
                 needReverse = true;
@@ -226,6 +226,9 @@ public class EdgeLineView extends View {
     }
 
     private void drawEdgeLine(Canvas canvas) {
+        mScreenWidth = ViewUtil.getScreenWidth(mContext);
+        mScreenHeight = ViewUtil.getScreenHeight(mContext);
+        configPath();
         switch (mStyle) {
             case STYLE_WIND:
                 drawWindStyle(canvas);
@@ -269,10 +272,11 @@ public class EdgeLineView extends View {
     }
 
     private void drawLatticeStyle(Canvas canvas) {
+        // step 是混合色数组的index 通过变化我们实现不同颜色切换
         int step = mCurrentRepeatCount % 3;
         mPhase = (int) (step * mPathIntervals[1] / 3);
-
         mPrimaryPaint.setColor(mMixedColorArr[step]);
+        // 渐隐效果
         mPrimaryPaint.setAlpha((int) (mProgress * 255));
         mPathEffect = new DashPathEffect(mPathIntervals, mPhase);
         mPrimaryPaint.setPathEffect(mPathEffect);
@@ -282,18 +286,32 @@ public class EdgeLineView extends View {
 
     private void drawMiddleOutStyle(Canvas canvas) {
         Path leftMiddlePath = new Path();
+        // 整个一圈的 progress 为 1
+        // 初始化进度 屏幕左边缘中点 即 1/4
         float leftReferencePro = 0.25f;
 
         Path rightMiddlePath = new Path();
+        // 初始化进度 屏幕右边缘中点 即 3/4
         float rightReferencePro = 0.75f;
+        // 线宽设置为屏幕高度的 1/4 ,可随意
         float distance = mScreenHeight >> 2;
+
+        // range的设置是为了在动画刚开始时做一个线段有短变长的效果
+
         float offsetProcess = distance / mPathLength;
         float range = offsetProcess;
+
+
         if (mProgress < range) {
+            // 当总进度小于range时 即线段长小于distance时 我们让线段不断变长
+
+            // 改变左边起始点
             float leftStartPro = leftReferencePro - mProgress;
             float leftEndPro = leftReferencePro;
+            // 改变右边起始点
             float rightStartPro = rightReferencePro - mProgress;
             float rightEndPro = rightReferencePro;
+            //截取path并绘制
             mPathMeasure.getSegment(leftStartPro * mPathLength, leftEndPro * mPathLength, leftMiddlePath, true);
             canvas.drawPath(leftMiddlePath, mMixedPaint);
             mPathMeasure.getSegment(rightStartPro * mPathLength, rightEndPro * mPathLength, rightMiddlePath, true);
@@ -301,20 +319,27 @@ public class EdgeLineView extends View {
 
         } else {
 
-            Path rightCursorPath = new Path();
+            // 当总进度>=range时 即线段长度达到distance时 我们固定线长
+
+            //左边移动线段的起始progress
             float leftCursorStartPro = leftReferencePro - mProgress;
 
+            //右边移动的线段
+            Path rightCursorPath = new Path();
 
             float rightCursorStartPro = rightReferencePro - mProgress;
+            // 右边移动线段起始点
             float rightPosition = rightCursorStartPro * mPathLength;
 
             if (leftCursorStartPro >= -offsetProcess) {
+
                 Path leftCursorPath = new Path();
                 float leftPosition = leftCursorStartPro * mPathLength;
                 mPathMeasure.getSegment(leftPosition, leftPosition + distance, leftCursorPath, true);
                 canvas.drawPath(leftCursorPath, mMixedPaint);
             }
             if (leftCursorStartPro < 0) {
+                // 当左边到达起始点时，线段会逐渐缩短到0，这个时候我们需要补上一条新的path，否则就断片了
                 Path replenishPath = new Path();
                 float replenishPro = 1.0f - Math.abs(leftCursorStartPro);
                 float repStartPosition;
@@ -327,15 +352,15 @@ public class EdgeLineView extends View {
                     repStartPosition = 0.5f * mPathLength;
                     repEndPosition = repStartPosition + mPathLength * (offsetProcess + rightCursorStartPro);
                 }
+                // 补充线段绘制
                 mPathMeasure.getSegment(repStartPosition, repEndPosition, replenishPath, true);
                 canvas.drawPath(replenishPath, mMixedPaint);
             }
-
+            // 因为右边的游动线段起始是从0.75开始的，可以一直减到0
             mPathMeasure.getSegment(rightPosition, rightPosition + distance, rightCursorPath, true);
             canvas.drawPath(rightCursorPath, mMixedPaint);
 
         }
-        // 中间固定线
 
     }
 
@@ -367,25 +392,38 @@ public class EdgeLineView extends View {
         mDst.reset();
         float offset = 2 * mStrokeWidth / 5;
         mScreenRectF = new RectF(offset, offset, mScreenWidth - offset, mScreenHeight - offset);
-        Log.e(TAG, "config : " + isCornersShown() + "mCornerSize =:" + mCornerSize);
-        float edge = mStrokeWidth / 2;
+        float edge = mStrokeWidth * 0.35f;
+        // 应为加了屏幕圆角功能，所以要判断圆角是否已经显示了
+        // mCornerSize 为圆角的半径，依次确定矩形边框圆角大小
         if (isCornersShown()) {
+            //起点移植顶部中间
             mPath.moveTo(mScreenWidth / 2 - edge, edge);
+            //绘制到左边沿
             mPath.lineTo(mCornerSize, edge);
+            //左上角圆弧
             mPath.arcTo(new RectF(edge, edge, (mCornerSize * 2.0f + edge),
                     (mCornerSize * 2.0f + edge)), 270, -90.0f, false);
+
+            //绘制左边沿
             mPath.lineTo(edge, mScreenHeight - mCornerSize - edge);
+            //左下圆弧
             mPath.arcTo(new RectF(edge, (mScreenHeight - 2 * mCornerSize - edge),
                     (mCornerSize * 2.0f + edge), (mScreenHeight - edge)), 180.0f, -90.0f, false);
+
             mPath.lineTo(mScreenWidth - mCornerSize - edge, mScreenHeight - edge);
+            //右下圆弧
             mPath.arcTo(new RectF((mScreenWidth - 2 * mCornerSize - edge), (mScreenHeight - 2 * mCornerSize - edge),
                     (mScreenWidth - edge), (mScreenHeight - edge)), 90.0f, -90.0f, false);
             mPath.lineTo(mScreenWidth - edge, mCornerSize + edge);
+            //右上圆弧
             mPath.arcTo(new RectF((mScreenWidth - 2 * mCornerSize - edge), edge,
                     (mScreenWidth - edge), (mCornerSize * 2.0f + edge)), 0.0f, -90.0f, false);
+            //回到起点
             mPath.lineTo(mScreenWidth / 2 - edge, edge);
+            //闭合
             mPath.close();
         } else {
+            // edge 是线宽的一半，避免所画的线被屏幕边沿遮住一半
             mPath.moveTo(mScreenWidth / 2 - edge, edge);
             mPath.lineTo(edge, edge);
             mPath.lineTo(edge, mScreenHeight - edge);
@@ -399,6 +437,8 @@ public class EdgeLineView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        mScreenWidth = ViewUtil.getScreenWidth(mContext);
+        mScreenHeight = ViewUtil.getScreenHeight(mContext);
         setMeasuredDimension(mScreenWidth, mScreenHeight);
         if(mConfigurationChangeListener != null){
             mConfigurationChangeListener.onScreenConfigurationChanged();
@@ -416,7 +456,6 @@ public class EdgeLineView extends View {
     }
 
     public void startAnimator() {
-        Log.e(TAG,"startAnimator :: startAnimator =:");
         postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -459,7 +498,6 @@ public class EdgeLineView extends View {
         animator.start();
     }
     private void hide(boolean immediately){
-        Log.e(TAG,"hide immediately = :"  + immediately + ",isAnimatorRunning =:" + isAnimatorRunning);
         if(!isAnimatorRunning){
             return;
         }

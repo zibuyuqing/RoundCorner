@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:paddingEnd="24dp"
+        android:elevation="1dp"
+        android:layout_height="@dimen/toolbar_height"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+        <ImageView
+            android:id="@+id/iv_back"
+            android:gravity="center"
+            android:layout_width="@dimen/dimen_48_dp"
+            android:src="@drawable/ic_back"
+            android:tint="@color/white"
+            android:padding="@dimen/dimen_8_dp"
+            android:layout_gravity="center_vertical"
+            android:layout_height="@dimen/dimen_48_dp" />
+        <TextView
+            android:fontFamily="sans-serif"
+            android:layout_toEndOf="@id/iv_back"
+            android:textSize="18dp"
+            android:id="@+id/tv_title"
+            android:layout_marginStart="@dimen/dimen_4_dp"
+            android:layout_marginEnd="5dp"
+            android:text="@string/danmu_skin"
+            android:layout_gravity="start|center"
+            android:textAlignment="textStart"
+            android:textColor="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_marginTop="@dimen/dimen_24_dp"
+        android:layout_marginBottom="@dimen/dimen_16_dp"
+        android:id="@+id/danmu_layout"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/danmu_bg"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:paddingLeft="@dimen/dimen_16_dp"
+            android:background="@drawable/danmu_bg_fill"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_width="match_parent">
+        <ImageView
+            android:id="@+id/iv_danmu_icon"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_weichat" />
+
+        <TextView
+            android:id="@+id/tv_danmu_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="@dimen/dimen_8_dp"
+            android:text="【於海之】"
+            android:textSize="@dimen/font_size_small_14dp" />
+
+        <TextView
+            android:id="@+id/tv_danmu_content"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:text="能动手就少xx"
+            android:textSize="@dimen/font_size_small_14dp" />
+
+        <ImageView
+            android:layout_margin="@dimen/dimen_1_dp"
+            android:id="@+id/iv_skin_rail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:scaleType="center"
+            android:src="@drawable/hentai_07" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_skin_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/danmu_layout">
+    </android.support.v7.widget.RecyclerView>
+</RelativeLayout>

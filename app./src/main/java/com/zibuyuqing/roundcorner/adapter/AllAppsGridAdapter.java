@@ -1,16 +1,15 @@
 package com.zibuyuqing.roundcorner.adapter;
 
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.ArrayMap;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 
@@ -19,10 +18,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import com.zibuyuqing.roundcorner.R;
-import com.zibuyuqing.roundcorner.model.bean.AppInfo;
+import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
 import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
 
 /**
@@ -31,100 +29,88 @@ import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
 
 public class AllAppsGridAdapter extends RecyclerView.Adapter {
     private Context mContext;
-    private List<AppInfo> mAllApps;
+    private List<AppInfoWithIcon> mAllApps = new ArrayList<>();
+    private SparseBooleanArray mEnablePositions = new SparseBooleanArray();
     private LayoutInflater mInflate;
     private static final String TAG = "AllAppsGridAdapter";
-    private ArrayMap<AppInfo, Integer> mChangedInfos = new ArrayMap<>();
-    public static final Comparator<AppInfo> APPS_COMPARATOR = new Comparator<AppInfo>() {
+    private int mSelectedIndex = 0;
+
+    public static final Comparator<AppInfoWithIcon> APPS_COMPARATOR = new Comparator<AppInfoWithIcon>() {
         @Override
-        public int compare(AppInfo one, AppInfo other) {
+        public int compare(AppInfoWithIcon one, AppInfoWithIcon other) {
             return other.getEnableState() - one.getEnableState();
         }
     };
-    public AllAppsGridAdapter(Context context, List<AppInfo> infos) {
+    public AllAppsGridAdapter(Context context) {
         mContext = context;
         mInflate = LayoutInflater.from(context);
-        initData(infos);
     }
 
-    private void initData(List<AppInfo> infos) {
+    public void updateData(List<AppInfoWithIcon> infos) {
         Iterator iterator = infos.iterator();
-        mAllApps = new ArrayList<>();
-        AppInfo info;
+        AppInfoWithIcon info;
+        mAllApps.clear();
+        mEnablePositions.clear();
         while (iterator.hasNext()) {
-            info = (AppInfo) iterator.next();
+            info = (AppInfoWithIcon) iterator.next();
             mAllApps.add(info);
         }
         Collections.sort(mAllApps,APPS_COMPARATOR);
+        int N = mAllApps.size();
+        AppInfoWithIcon infoWithIcon;
+        for(int i = 0;i < N ; i++){
+            infoWithIcon = mAllApps.get(i);
+            mEnablePositions.put(i,infoWithIcon.enableState == 1);
+        }
+        notifyDataSetChanged();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflate.inflate(R.layout.layout_app_item, parent, false);
         ItemViewHolder viewHolder = new ItemViewHolder(view);
-        viewHolder.appIcon = (ImageView) view.findViewById(R.id.iv_app_icon);
-        viewHolder.appName = (TextView) view.findViewById(R.id.tv_app_name);
-        viewHolder.appSelectedFlag = (ImageView) view.findViewById(R.id.iv_app_selected);
-        viewHolder.appSelectedFlag.setVisibility(View.VISIBLE);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         final ItemViewHolder viewHolder = (ItemViewHolder) holder;
-        final AppInfo info = mAllApps.get(position);
-
-        if (mChangedInfos.containsKey(info)) {
-            viewHolder.verifySelectState(mChangedInfos.get(info));
-        } else {
-            viewHolder.verifySelectState(info.enableState);
-        }
-
+        final AppInfoWithIcon info = mAllApps.get(position);
+        viewHolder.verifySelectState(isItemChecked(position));
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (viewHolder.select == 1) {
-                    viewHolder.select(0);
+                if (viewHolder.enable) {
+                    viewHolder.select(false);
                 } else {
-                    viewHolder.select(1);
+                    viewHolder.select(true);
                 }
-                onItemChanged(info, viewHolder.select, info.enableState);
+                onItemChanged(info,position,viewHolder.enable);
             }
         });
-        // viewHolder.appIcon.setImageBitmap();
+        viewHolder.appEnable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (viewHolder.enable) {
+                    viewHolder.select(false);
+                } else {
+                    viewHolder.select(true);
+                }
+                onItemChanged(info,position,viewHolder.enable);
+            }
+        });
+        viewHolder.appIcon.setImageBitmap(info.getIcon());
         viewHolder.appName.setText(info.title);
     }
 
-    private void onItemChanged(AppInfo appInfo, int enable, int originEnableState) {
-        if (enable != originEnableState) {
-            mChangedInfos.put(appInfo, enable);
-        } else {
-            if (!mChangedInfos.isEmpty() && mChangedInfos.containsKey(appInfo)) {
-                mChangedInfos.remove(appInfo);
-                Log.i(TAG, "onItemChanged hidden state is not changed,should not update ,info =:" + appInfo);
-            }
-        }
+    private void onItemChanged(AppInfoWithIcon appInfo,int position, boolean enable) {
+        appInfo.enableState = enable ? 1:0;
+        AppInfoDaoOpe.updateAppInfo(mContext,appInfo);
+        mEnablePositions.put(position, enable);
     }
 
-    public void commitChanges() {
-        if (mChangedInfos.size() > 0) {
-            Set<AppInfo> infos = mChangedInfos.keySet();
-            ArrayList<AppInfo> items2Enable = new ArrayList<>();
-            ArrayList<AppInfo> items2Disable = new ArrayList<>();
-            for (AppInfo info : infos) {
-                info.enableState = mChangedInfos.get(info);
-                if (info.enableState == AppInfo.APP_ENABLE) {
-                    items2Enable.add(info);
-                } else {
-                    items2Disable.add(info);
-                }
-            }
-            AppInfoDaoOpe.updateAppInfos(mContext,mChangedInfos.keySet());
-        }
-    }
-
-    public void cancel() {
-        mChangedInfos.clear();
+    private boolean isItemChecked(int position) {
+        return mEnablePositions.get(position);
     }
 
     @Override
@@ -132,27 +118,31 @@ public class AllAppsGridAdapter extends RecyclerView.Adapter {
         return mAllApps.size();
     }
 
+    public void clear() {
+        mAllApps.clear();
+        mAllApps = null;
+    }
+
     private class ItemViewHolder extends RecyclerView.ViewHolder {
-        private ImageView appIcon, appSelectedFlag;
+        private ImageView appIcon;
+        private Switch appEnable;
         private TextView appName;
-        private int select = 0;
+        private boolean enable = false;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
+            appIcon = (ImageView) itemView.findViewById(R.id.iv_app_icon);
+            appName = (TextView) itemView.findViewById(R.id.tv_app_name);
+            appEnable = (Switch) itemView.findViewById(R.id.sw_enable);
         }
 
-        public void verifySelectState(int select) {
-            select(select);
+        public void verifySelectState(boolean enable) {
+            select(enable);
         }
 
-        public void select(int select) {
-            this.select = select;
-            if (select == 1) {
-                appSelectedFlag.setVisibility(View.VISIBLE);
-                appSelectedFlag.setImageResource(R.drawable.app_state_selected);
-            } else {
-                appSelectedFlag.setVisibility(View.GONE);
-            }
+        public void select(boolean enable) {
+            this.enable = enable;
+            appEnable.setChecked(enable);
         }
     }
 }

@@ -1,9 +1,12 @@
 package com.zibuyuqing.roundcorner.model.db;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.zibuyuqing.roundcorner.model.AppInfoDao;
 import com.zibuyuqing.roundcorner.model.bean.AppInfo;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 import java.util.Set;
@@ -22,7 +25,7 @@ public class AppInfoDaoOpe {
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().insert(info);
     }
     public static void insertAppInfos(Context context, List<AppInfo> infos){
-        DbManager.getInstance(context).getDaoSession().getAppInfoDao().insertInTx(infos);
+        DbManager.getInstance(context).getDaoSession().getAppInfoDao().insertInTx(infos,false);
     }
     public static void deleteAppInfo(Context context,AppInfo info){
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().delete(info);
@@ -48,10 +51,34 @@ public class AppInfoDaoOpe {
     }
     public static List<AppInfo> querySystemAppInfos(Context context){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
-                queryBuilder().where(AppInfoDao.Properties.IsSystemApp.eq(AppInfo.SYSTEM_APP)).list();
+                queryBuilder().where(AppInfoDao.Properties.AppType.eq(AppInfo.SYSTEM_APP)).list();
     }
     public static List<AppInfo> queryUserAppInfos(Context context){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
-                queryBuilder().where(AppInfoDao.Properties.IsSystemApp.eq(AppInfo.USER_APP)).list();
+                queryBuilder().where(AppInfoDao.Properties.AppType.eq(AppInfo.USER_APP)).list();
+    }
+    public static List<AppInfo> queryAppInfosByTypeWithPage(Context context,int appType,int page){
+        QueryBuilder queryBuilder = DbManager.getInstance(context).getDaoSession().getAppInfoDao().queryBuilder();
+        return queryBuilder.where(AppInfoDao.Properties.AppType.eq(appType)).offset(page * 100).limit(100).build().list();
+    }
+    public static List<AppInfo> queryAppInfosByPage(Context context, int page){
+        return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
+                queryBuilder().offset(page * 24).limit(24).build().list();
+    }
+
+    public static boolean isExist(Context context,String who){
+        AppInfo info = DbManager.getInstance(context).getDaoSession().getAppInfoDao().
+                queryBuilder().where(AppInfoDao.Properties.PackageName.eq(who)).unique();
+        return info != null;
+    }
+    public static boolean appEnable(Context context,String who){
+        List<AppInfo> infoList = DbManager.getInstance(context).getDaoSession().getAppInfoDao().
+                queryBuilder().where(AppInfoDao.Properties.EnableState.eq(AppInfo.APP_ENABLE)).build().list();
+        for(AppInfo info : infoList){
+            if(info.getPackageName().equals(who)){
+                return true;
+            }
+        }
+        return false;
     }
 }

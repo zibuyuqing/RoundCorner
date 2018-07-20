@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_notification_danmaku_settings"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_margin="@dimen/dimen_8_dp"
     android:background="@drawable/card_bg_light"
-    android:id="@+id/layout_notification_danmaku_settings"
-    android:padding="@dimen/dimen_8_dp"
-    android:layout_margin="@dimen/dimen_8_dp">
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_8_dp">
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,125 +16,300 @@
         android:text="@string/custom_settings"
         android:textColor="@color/color_gray_light"
         android:textSize="@dimen/font_size_normal_16dp" />
+
     <RelativeLayout
-        android:id="@+id/change_danmaku_bg_color_layout"
+        android:id="@+id/rl_danmu_skin"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_48_dp"
-        android:layout_marginTop="@dimen/dimen_8_dp"
-        android:background="@drawable/settings_item_bg">
+        android:layout_marginTop="@dimen/dimen_8_dp">
 
         <ImageView
+            android:id="@+id/danmu_skin_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:padding="@dimen/dimen_2_dp"
-            android:id="@+id/change_danmaku_bg_img"
-            android:layout_width="@dimen/dimen_24_dp"
-            android:layout_height="@dimen/dimen_24_dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_danmu_bg"
-            android:tint="#ff3300" />
+            android:src="@drawable/ic_style"
+            android:tint="#ff00fb" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dimen_10_dp"
             android:layout_marginStart="@dimen/dimen_10_dp"
-            android:layout_toRightOf="@id/change_danmaku_bg_img"
+            android:layout_toRightOf="@id/danmu_skin_img"
             android:gravity="center"
-            android:text="@string/danmaku_bg_color"
+            android:text="@string/danmu_skin"
             android:textColor="@color/color_gray_light"
             android:textSize="@dimen/font_size_normal_15dp" />
 
         <ImageView
-            android:id="@+id/iv_current_bg_color"
-            android:layout_width="@dimen/dimen_24_dp"
-            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_width="@dimen/dimen_18_dp"
+            android:layout_height="@dimen/dimen_18_dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_color_selected" />
-    </RelativeLayout>
-    <RelativeLayout
-        android:id="@+id/change_opacity_layout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_64_dp"
-        android:layout_marginTop="@dimen/dimen_16_dp"
-        android:background="@drawable/settings_item_bg">
-
-
-        <ImageView
-            android:id="@+id/change_opacity_img"
-            android:layout_width="@dimen/dimen_24_dp"
-            android:layout_height="@dimen/dimen_24_dp"
-            android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_change_opacity"
-            android:tint="#00c4ff" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_24_dp"
-            android:layout_marginLeft="@dimen/dimen_10_dp"
-            android:layout_marginStart="@dimen/dimen_10_dp"
-            android:layout_toRightOf="@id/change_opacity_img"
-            android:gravity="center"
-            android:text="@string/danmu_bg_opacity"
-            android:textColor="@color/color_gray_light"
-            android:textSize="@dimen/font_size_normal_15dp" />
-
-        <TextView
-            android:id="@+id/tv_opacity"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_24_dp"
-            android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:text="30"
-            android:textColor="@color/color_gray_light" />
-
-        <SeekBar
-            android:id="@+id/sb_change_opacity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true" />
+            android:src="@drawable/ic_forward"
+            android:tint="@color/color_gray_light" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/change_danmaku_text_color_layout"
+        android:id="@+id/rl_change_danmu_skin_style"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_48_dp"
-        android:layout_marginTop="@dimen/dimen_8_dp"
-        android:background="@drawable/settings_item_bg">
+        android:layout_marginTop="@dimen/dimen_8_dp">
 
         <ImageView
-            android:id="@+id/change_color_img"
+            android:id="@+id/danmu_skin_style_img"
             android:layout_width="@dimen/dimen_24_dp"
             android:layout_height="@dimen/dimen_24_dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_danmu_text"
-            android:tint="#a9a8a4" />
+            android:src="@drawable/ic_danmu_skin_style"
+            android:tint="#009e22" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dimen_10_dp"
             android:layout_marginStart="@dimen/dimen_10_dp"
-            android:layout_toRightOf="@id/change_color_img"
+            android:layout_toRightOf="@id/danmu_skin_style_img"
             android:gravity="center"
-            android:text="@string/danmaku_text_color"
+            android:text="@string/danmu_skin_style"
             android:textColor="@color/color_gray_light"
             android:textSize="@dimen/font_size_normal_15dp" />
 
         <TextView
-            android:id="@+id/tv_danmaku_text_color"
+            android:id="@+id/tv_danmu_skin_style"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dimen_24_dp"
-            android:text="MIMI"
-            android:gravity="center"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_color_selected" />
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:gravity="center"
+            android:text="不重复"
+            android:textColor="@color/color_gray_light"
+            android:textSize="@dimen/font_size_normal_15dp" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/danmu_skin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_marginTop="@dimen/dimen_8_dp">
+
+            <ImageView
+                android:id="@+id/danmu_big_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dimen_2_dp"
+                android:src="@drawable/ic_icon_size"
+                android:tint="#2f5cff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:layout_toRightOf="@id/danmu_big_img"
+                android:gravity="center"
+                android:text="@string/danmu_big_style"
+                android:textColor="@color/color_gray_light"
+                android:textSize="@dimen/font_size_normal_15dp" />
+
+            <Switch
+                android:id="@+id/sw_big_danmu"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_18_dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:checked="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_collect_enable_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_marginTop="@dimen/dimen_8_dp">
+
+            <ImageView
+                android:id="@+id/danmu_random_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dimen_2_dp"
+                android:src="@drawable/ic_random"
+                android:tint="#2f5cff" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@id/danmu_random_img"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginStart="@dimen/dimen_10_dp"
+                    android:gravity="center"
+                    android:text="@string/danmu_random_style"
+                    android:textColor="@color/color_gray_light"
+                    android:textSize="@dimen/font_size_normal_15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dimen_10_dp"
+                    android:layout_marginStart="@dimen/dimen_10_dp"
+                    android:gravity="center"
+                    android:text="@string/danmu_random_style_summary"
+                    android:textColor="@color/color_gray_light"
+                    android:textSize="@dimen/font_size_small_12dp" />
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/sw_danmu_random_style_enable"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_18_dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:checked="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/change_danmaku_bg_color_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_marginTop="@dimen/dimen_8_dp"
+            android:background="@drawable/settings_item_bg">
+
+            <ImageView
+                android:id="@+id/change_danmaku_bg_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/dimen_2_dp"
+                android:src="@drawable/ic_danmu_bg"
+                android:tint="#ff3300" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:layout_toRightOf="@id/change_danmaku_bg_img"
+                android:gravity="center"
+                android:text="@string/danmaku_bg_color"
+                android:textColor="@color/color_gray_light"
+                android:textSize="@dimen/font_size_normal_15dp" />
+
+            <ImageView
+                android:id="@+id/iv_current_danmu_bg_color"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_color_selected" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/change_opacity_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_64_dp"
+            android:layout_marginTop="@dimen/dimen_16_dp"
+            android:background="@drawable/settings_item_bg">
+
+
+            <ImageView
+                android:id="@+id/change_opacity_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/ic_change_opacity"
+                android:tint="#00c4ff" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:layout_toRightOf="@id/change_opacity_img"
+                android:gravity="center"
+                android:text="@string/danmu_bg_opacity"
+                android:textColor="@color/color_gray_light"
+                android:textSize="@dimen/font_size_normal_15dp" />
+
+            <TextView
+                android:id="@+id/tv_opacity"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentRight="true"
+                android:gravity="center"
+                android:text="30"
+                android:textColor="@color/color_gray_light" />
+
+            <SeekBar
+                android:id="@+id/sb_change_danmu_opacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:max="100" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/change_danmaku_text_color_layout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_48_dp"
+            android:layout_marginTop="@dimen/dimen_8_dp"
+            android:background="@drawable/settings_item_bg">
+
+            <ImageView
+                android:id="@+id/change_color_img"
+                android:layout_width="@dimen/dimen_24_dp"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_danmu_text"
+                android:tint="#a9a8a4" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dimen_10_dp"
+                android:layout_marginStart="@dimen/dimen_10_dp"
+                android:layout_toRightOf="@id/change_color_img"
+                android:gravity="center"
+                android:text="@string/danmaku_text_color"
+                android:textColor="@color/color_gray_light"
+                android:textSize="@dimen/font_size_normal_15dp" />
+
+            <TextView
+                android:id="@+id/tv_danmaku_text_color"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dimen_24_dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:src="@drawable/ic_color_selected"
+                android:text="MIMI" />
+        </RelativeLayout>
+    </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_64_dp">
+
         <ImageView
             android:id="@+id/iv_speed"
             android:layout_width="@dimen/dimen_24_dp"
@@ -143,67 +319,73 @@
             android:padding="@dimen/dimen_2_dp"
             android:src="@drawable/ic_speed"
             android:tint="#54cf02" />
+
         <LinearLayout
-            android:layout_centerHorizontal="true"
             android:id="@+id/ll_speed"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true">
+
             <TextView
+                android:layout_width="@dimen/dimen_36_dp"
+                android:layout_height="@dimen/dimen_36_dp"
                 android:layout_gravity="center"
-                android:background="@drawable/dark_circle_bg_normal"
-                android:text="超慢"
-                android:textSize="@dimen/font_size_small_12dp"
-                android:layout_marginRight="@dimen/dimen_18_dp"
                 android:layout_marginLeft="@dimen/dimen_18_dp"
-                android:gravity="center"
-                android:textColor="@color/white"
-                android:layout_width="@dimen/dimen_36_dp"
-                android:layout_height="@dimen/dimen_36_dp" />
-            <TextView
-                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dimen_18_dp"
                 android:background="@drawable/dark_circle_bg_normal"
+                android:gravity="center"
+                android:text="超慢"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_small_12dp" />
+
+            <TextView
+                android:layout_width="@dimen/dimen_36_dp"
+                android:layout_height="@dimen/dimen_36_dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dimen_18_dp"
+                android:background="@drawable/dark_circle_bg_normal"
+                android:gravity="center"
                 android:text="慢"
-                android:textSize="@dimen/font_size_small_12dp"
-                android:layout_marginRight="@dimen/dimen_18_dp"
-                android:gravity="center"
                 android:textColor="@color/white"
-                android:layout_width="@dimen/dimen_36_dp"
-                android:layout_height="@dimen/dimen_36_dp" />
+                android:textSize="@dimen/font_size_small_12dp" />
+
             <TextView
+                android:layout_width="@dimen/dimen_36_dp"
+                android:layout_height="@dimen/dimen_36_dp"
                 android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dimen_18_dp"
                 android:background="@drawable/dark_circle_bg_normal"
+                android:gravity="center"
                 android:text="正常"
-                android:textSize="@dimen/font_size_small_12dp"
-                android:layout_marginRight="@dimen/dimen_18_dp"
-                android:gravity="center"
                 android:textColor="@color/white"
-                android:layout_width="@dimen/dimen_36_dp"
-                android:layout_height="@dimen/dimen_36_dp" />
+                android:textSize="@dimen/font_size_small_12dp" />
+
             <TextView
+                android:layout_width="@dimen/dimen_36_dp"
+                android:layout_height="@dimen/dimen_36_dp"
                 android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dimen_18_dp"
                 android:background="@drawable/dark_circle_bg_normal"
+                android:gravity="center"
                 android:text="快"
-                android:textSize="@dimen/font_size_small_12dp"
-                android:layout_marginRight="@dimen/dimen_18_dp"
-                android:gravity="center"
                 android:textColor="@color/white"
-                android:layout_width="@dimen/dimen_36_dp"
-                android:layout_height="@dimen/dimen_36_dp" />
+                android:textSize="@dimen/font_size_small_12dp" />
+
             <TextView
-                android:layout_gravity="center"
-                android:background="@drawable/dark_circle_bg_normal"
-                android:text="超快"
-                android:textSize="@dimen/font_size_small_12dp"
-                android:layout_marginRight="@dimen/dimen_18_dp"
-                android:gravity="center"
-                android:textColor="@color/white"
                 android:layout_width="@dimen/dimen_36_dp"
-                android:layout_height="@dimen/dimen_36_dp" />
+                android:layout_height="@dimen/dimen_36_dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="@dimen/dimen_18_dp"
+                android:background="@drawable/dark_circle_bg_normal"
+                android:gravity="center"
+                android:text="超快"
+                android:textColor="@color/white"
+                android:textSize="@dimen/font_size_small_12dp" />
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_change_animation_style"
+        android:id="@+id/rl_change_danmu_repeat_count"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_48_dp"
         android:layout_marginTop="@dimen/dimen_8_dp">
@@ -217,26 +399,29 @@
             android:padding="@dimen/dimen_2_dp"
             android:src="@drawable/ic_repeat"
             android:tint="#3939f9" />
+
         <TextView
-            android:textColor="@color/color_gray_light"
-            android:layout_toRightOf="@id/repeat_count_img"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dimen_10_dp"
             android:layout_marginStart="@dimen/dimen_10_dp"
+            android:layout_toRightOf="@id/repeat_count_img"
             android:gravity="center"
             android:text="@string/danmu_repeat_count"
+            android:textColor="@color/color_gray_light"
             android:textSize="@dimen/font_size_normal_15dp" />
+
         <TextView
             android:id="@+id/tv_danmu_repeat_count"
-            android:layout_alignParentRight="true"
-            android:textColor="@color/color_gray_light"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
             android:layout_marginLeft="@dimen/dimen_10_dp"
             android:layout_marginStart="@dimen/dimen_10_dp"
             android:gravity="center"
             android:text="不重复"
+            android:textColor="@color/color_gray_light"
             android:textSize="@dimen/font_size_normal_15dp" />
     </RelativeLayout>
+
 </LinearLayout>

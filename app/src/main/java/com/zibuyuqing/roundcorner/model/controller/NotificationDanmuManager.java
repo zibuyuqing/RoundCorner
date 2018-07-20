@@ -9,6 +9,7 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -38,7 +39,6 @@ public class NotificationDanmuManager implements DanmakuNotificationView.Animati
     private static NotificationDanmuManager sInstance;
     private Context mContext;
     private List<DanmakuNotificationView> mDanmuList;
-    private List<String> mEnableApps = new ArrayList<>();
 
     private NotificationDanmuManager(Context context){
         mContext = context;
@@ -49,30 +49,40 @@ public class NotificationDanmuManager implements DanmakuNotificationView.Animati
         if(mDanmuList == null){
             mDanmuList = new ArrayList<>();
         }
-        updateEnableApps();
     }
     private DanmakuNotificationView buildNewDanmaku(String text, Drawable icon){
         DanmakuNotificationView danmaku = new DanmakuNotificationView(mContext);
-        danmaku.setConfig(Utilities.getDanmuConfig(mContext));
-        danmaku.show(text,icon);
+        if(isUseRandomStyle()){
+            danmaku.configRandomStyle();
+        } else {
+            danmaku.setConfig(Utilities.getDanmuConfig(mContext));
+        }
+        danmaku.show("【屏幕圆角】 ",text,icon);
         danmaku.addDanmakuStateListener(this);
         return danmaku;
     }
     public DanmakuNotificationView buildNewDanmaku(StatusBarNotification sbn){
         DanmakuNotificationView danmaku = new DanmakuNotificationView(mContext);
-        danmaku.setConfig(Utilities.getDanmuConfig(mContext));
+        if(isUseRandomStyle()) {
+            danmaku.configRandomStyle();
+        } else {
+            danmaku.setConfig(Utilities.getDanmuConfig(mContext));
+        }
         String who = sbn.getPackageName();//获取发起通知的包名
         Notification notification = sbn.getNotification();//获取通知对象
         Bundle extras = notification.extras;
         CharSequence notificationText = extras.getCharSequence(Notification.EXTRA_TEXT);//获取通知内容
+        CharSequence notificationTitle = "【" + extras.getCharSequence(Notification.EXTRA_TITLE) +"】 ";//获取通知标题
+        Log.d(TAG,"notificationText =:" + notificationText +",notificationTitle =:" + notificationTitle);
+        if(TextUtils.isEmpty(notificationText)){
+            return null;
+        }
         PackageManager packageManager = mContext.getPackageManager();
         danmaku.addDanmakuStateListener(this);
-        Log.e(TAG, "buildNewDanmaku 11=:" + who);
         try {
-            danmaku.show(notificationText.toString(),packageManager.getApplicationIcon(who));
+            danmaku.show(notificationTitle.toString(),notificationText.toString(),packageManager.getApplicationIcon(who));
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            Log.e(TAG, " catch buildNewDanmaku =:" + e);
         }
         PendingIntent intent = notification.contentIntent;
         if(intent != null){
@@ -85,6 +95,9 @@ public class NotificationDanmuManager implements DanmakuNotificationView.Animati
             if (!isEnhanceNotificationEnable()) {
                 return;
             }
+            if(isUseRandomStyle()){
+                return;
+            }
             String testDanmaku = "示例弹幕 纸短情长";
             PackageManager packageManager = mContext.getPackageManager();
             Drawable icon = packageManager.getApplicationIcon(LocalControllerService.ME);
@@ -95,19 +108,19 @@ public class NotificationDanmuManager implements DanmakuNotificationView.Animati
     }
 
     private boolean appEnable(String who){
-        for(String packageName : mEnableApps){
-            if(packageName.equals(who)){
-                return true;
-            }
-        }
-        return false;
+        return AppInfoDaoOpe.appEnable(mContext,who);
     }
+
     public void showDanmu(StatusBarNotification sbn) {
         try {
-            if (!isEnhanceNotificationEnable()) {
+            boolean isEnhanceNotificationEnable = isEnhanceNotificationEnable();
+            Log.d(TAG,"showDanmu : isEnhanceNotificationEnable =:" + isEnhanceNotificationEnable);
+            if (!isEnhanceNotificationEnable) {
                 return;
             }
             String who = sbn.getPackageName();
+            boolean appEnable = appEnable(who);
+            Log.d(TAG,"showDanmu : appEnable =:" + appEnable);
             if(appEnable(who)) {
                 buildNewDanmaku(sbn);
             }
@@ -129,20 +142,11 @@ public class NotificationDanmuManager implements DanmakuNotificationView.Animati
         }
     }
 
-    public synchronized void updateEnableApps(){
-        List<AppInfo> enableApps = AppInfoDaoOpe.queryEnableAppInfos(mContext);
-        mEnableApps.clear();
-        String packageName;
-        for(AppInfo info : enableApps){
-            packageName = info.packageName;
-            Log.e(TAG,"updateEnableAppMap :: info =:" + info.getPackageName());
-            mEnableApps.add(packageName);
-        }
-    }
-
-
     private boolean isEnhanceNotificationEnable() {
         return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
+    }
+    private boolean isUseRandomStyle(){
+        return SettingsDataKeeper.getSettingsBoolean(mContext,SettingsDataKeeper.DANMU_USE_RANDOM_STYlE_ENABLE);
     }
     public static NotificationDanmuManager getInstance(Context context){
         if(sInstance == null){
@@ -164,8 +168,12 @@ public class NotificationDanmuManager implements DanmakuNotificationView.Animati
 
     @Override
     public void onStopShowDanmu(DanmakuNotificationView view) {
+        Log.d(TAG,"onStopShowDanmu :: view =:" + view.getDanmakuText());
         if(mDanmuList.contains(view)){
             mDanmuList.remove(view);
         }
+        view.destroy();
+        view = null;
+        Log.d(TAG,"onStopShowDanmu :: mDanmuList =:" + mDanmuList.size());
     }
 }

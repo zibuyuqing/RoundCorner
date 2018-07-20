@@ -1,9 +1,12 @@
 package com.zibuyuqing.roundcorner.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 
 import com.larswerkman.holocolorpicker.ColorPicker;
 import com.larswerkman.holocolorpicker.OpacityBar;
+import com.larswerkman.holocolorpicker.SaturationBar;
 import com.larswerkman.holocolorpicker.ValueBar;
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseFragment;
@@ -54,6 +58,7 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     private boolean isLeftBottomEnable;
     private boolean isRightTopEnable;
     private boolean isRightBottomEnable;
+    private boolean isFullScreenEnable;
     @BindView(R.id.rl_corner_enable_layout)
     RelativeLayout mRlCornerEnable;
     @BindView(R.id.sw_corner_enable)
@@ -87,6 +92,15 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     @BindView(R.id.iv_corner_right_bottom)
     ImageView mIvCornerRightBottom;
 
+    @BindView(R.id.sw_full_screen_enable)
+    Switch mSwFullScreenEnable;
+
+    public static ScreenCornerFragment newInstance() {
+        Bundle args = new Bundle();
+        ScreenCornerFragment fragment = new ScreenCornerFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
     @Override
     protected void initData() {
         // settings data
@@ -94,6 +108,8 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
                 getSettingsBoolean(mActivity, SettingsDataKeeper.CORNER_ENABLE);
         isNotifyEnable = SettingsDataKeeper.
                 getSettingsBoolean(mActivity, SettingsDataKeeper.NOTIFICATION_ENABLE);
+        isFullScreenEnable = SettingsDataKeeper.
+                getSettingsBoolean(mActivity, SettingsDataKeeper.FULL_SCREEN_ENABLE);
         mCurrentCornerSize = SettingsDataKeeper.
                 getSettingsInt(mActivity, SettingsDataKeeper.CORNER_SIZE);
         mCurrentOpacity = SettingsDataKeeper.
@@ -114,6 +130,7 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     protected void initViews() {
         mSwCornerEnable.setChecked(isCornerEnable);
         mSwNotifyEnable.setChecked(isNotifyEnable);
+        mSwFullScreenEnable.setChecked(isFullScreenEnable);
         mSbChangeCornerSize.setProgress(mCurrentCornerSize);
         mSbChangeCornerSize.setMax(100);
         mSbChangeCornerSize.setOnSeekBarChangeListener(this);
@@ -142,7 +159,12 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
 
     private void updateLocationFlag(ImageView imageView,boolean enable){
         Drawable drawable = imageView.getDrawable();
-        int color = enable? mActivity.getColor(R.color.position_selected_color) : mActivity.getColor(R.color.black);
+        int color;
+        if(Utilities.isBeforeAndroidM()){
+            color = enable? mActivity.getResources().getColor(R.color.position_selected_color) : mActivity.getResources().getColor(R.color.black);
+        } else {
+            color = enable? mActivity.getColor(R.color.position_selected_color) : mActivity.getColor(R.color.black);
+        }
         drawable.setTint(color);
         imageView.setImageDrawable(drawable);
     }
@@ -154,9 +176,13 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     private boolean checkAlertWindowPermission() {
         return Utilities.checkFloatWindowPermission(mActivity);
     }
+
+    @OnCheckedChanged(R.id.sw_full_screen_enable)
+    void onFullScreenEnableChanged(){
+     confirmFullScreenEnable(mSwFullScreenEnable.isChecked());
+    }
     @OnCheckedChanged(R.id.sw_corner_enable)
     void onCornerEnableChanged() {
-        Log.e(TAG,"onCornerEnableChanged ;;;");
         confirmCornerEnable(mSwCornerEnable.isChecked());
     }
 
@@ -224,13 +250,17 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     @OnClick(R.id.change_color_layout) void chooseColor(){
         AlertDialog.Builder colorPickDialog = new AlertDialog.Builder(mActivity);
         View colorPickLayout = View.inflate(mActivity,R.layout.layout_choose_color,null);
-        colorPickLayout.setBackgroundColor(mActivity.getColor(R.color.window_bg_light));
+        if(Utilities.isBeforeAndroidM()){
+            colorPickLayout.setBackgroundColor(mActivity.getResources().getColor(R.color.window_bg_light));
+        } else {
+            colorPickLayout.setBackgroundColor(mActivity.getColor(R.color.window_bg_light));
+        }
         colorPickDialog.setView(colorPickLayout);
         final ColorPicker picker = colorPickLayout.findViewById(R.id.cp_colors_panel);
         ValueBar valueBar = colorPickLayout.findViewById(R.id.cp_color_value);
-        OpacityBar opacityBar = colorPickLayout.findViewById(R.id.cp_color_opacity);
+        SaturationBar saturationBar = colorPickLayout.findViewById(R.id.cp_color_saturation);
         picker.addValueBar(valueBar);
-        picker.addOpacityBar(opacityBar);
+        picker.addSaturationBar(saturationBar);
         picker.setColor(mCurrentColor);
         colorPickDialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
@@ -252,11 +282,19 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SYSTEM_ALERT_WINDOW_REQUEST_CODE) {
-            if (Settings.canDrawOverlays(mActivity)) {
-                SettingsDataKeeper.writeSettingsBoolean(mActivity, SettingsDataKeeper.CORNER_ENABLE, true);
-                updateSettingsWithBool(SettingsDataKeeper.CORNER_ENABLE);
+            if (!Utilities.isBeforeAndroidM()) {
+                if (Settings.canDrawOverlays(mActivity)) {
+                    SettingsDataKeeper.writeSettingsBoolean(mActivity, SettingsDataKeeper.CORNER_ENABLE, true);
+                    updateSettingsWithBool(SettingsDataKeeper.CORNER_ENABLE);
+                }
             }
         }
+    }
+    private void confirmFullScreenEnable(boolean checked) {
+        SettingsDataKeeper.writeSettingsBoolean(mActivity,
+                SettingsDataKeeper.FULL_SCREEN_ENABLE, checked);
+        updateSettingsWithBool(SettingsDataKeeper.FULL_SCREEN_ENABLE);
+        isFullScreenEnable = checked;
     }
     private void confirmNotifyEnable(boolean checked) {
         SettingsDataKeeper.writeSettingsBoolean(mActivity,
@@ -289,7 +327,6 @@ public class ScreenCornerFragment extends BaseFragment implements SeekBar.OnSeek
     private void changeCornerSize() {
         SettingsDataKeeper.writeSettingsInt(
                 mActivity,SettingsDataKeeper.CORNER_SIZE, mCurrentCornerSize);
-        Log.e(TAG,"changeCornerSize ;;;; mCurrentCornerSize =:" + mCurrentCornerSize);
         updateSettingsWithInteger(SettingsDataKeeper.CORNER_SIZE);
     }
 

@@ -8,3 +8,5 @@
 /build
 /captures
 /app/build
+/app/build/
+.idea/vcs.xml

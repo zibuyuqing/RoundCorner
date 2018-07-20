@@ -26,31 +26,23 @@ public class AppInfo implements Parcelable{
     public static final int USER_APP = 1;
     @Id(autoincrement = true)
     private Long id;
-    @Unique
+
     public String packageName;
 
     public int appType;
     public int enableState = APP_ENABLE;
     public String title;
-    public int mixedColorOne;
-    public int mixedColorTwo;
-    public int mixedColorThree;
-    @Generated(hash = 79720016)
-    public AppInfo(Long id, String packageName, int appType, int enableState, String title,
-            int mixedColorOne, int mixedColorTwo, int mixedColorThree) {
+    @Generated(hash = 404133199)
+    public AppInfo(Long id, String packageName, int appType, int enableState, String title) {
         this.id = id;
         this.packageName = packageName;
         this.appType = appType;
         this.enableState = enableState;
         this.title = title;
-        this.mixedColorOne = mixedColorOne;
-        this.mixedColorTwo = mixedColorTwo;
-        this.mixedColorThree = mixedColorThree;
     }
     @Generated(hash = 1656151854)
     public AppInfo() {
     }
-
     protected AppInfo(Parcel in) {
         if (in.readByte() == 0) {
             id = null;
@@ -61,9 +53,6 @@ public class AppInfo implements Parcelable{
         appType = in.readInt();
         enableState = in.readInt();
         title = in.readString();
-        mixedColorOne = in.readInt();
-        mixedColorTwo = in.readInt();
-        mixedColorThree = in.readInt();
     }
 
     public static final Creator<AppInfo> CREATOR = new Creator<AppInfo>() {
@@ -110,25 +99,6 @@ public class AppInfo implements Parcelable{
     public void setTitle(String title) {
         this.title = title;
     }
-    public int getMixedColorOne() {
-        return this.mixedColorOne;
-    }
-    public void setMixedColorOne(int mixedColorOne) {
-        this.mixedColorOne = mixedColorOne;
-    }
-    public int getMixedColorTwo() {
-        return this.mixedColorTwo;
-    }
-    public void setMixedColorTwo(int mixedColorTwo) {
-        this.mixedColorTwo = mixedColorTwo;
-    }
-    public int getMixedColorThree() {
-        return this.mixedColorThree;
-    }
-    public void setMixedColorThree(int mixedColorThree) {
-        this.mixedColorThree = mixedColorThree;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -146,14 +116,10 @@ public class AppInfo implements Parcelable{
         dest.writeInt(appType);
         dest.writeInt(enableState);
         dest.writeString(title);
-        dest.writeInt(mixedColorOne);
-        dest.writeInt(mixedColorTwo);
-        dest.writeInt(mixedColorThree);
     }
 
     @Override
     public String toString() {
-        return TAG + "=: { id : " + id + ",title : " + title + ", package : " + packageName + ", appType : " + appType + ", enableState : " + enableState
-                + ", mixedColor : " + mixedColorOne + ", mixedColorTwo : " + mixedColorTwo + ", mixedColorThree : " + mixedColorThree + "}";
+        return TAG + "=: { id : " + id + ",title : " + title + ", package : " + packageName + ", appType : " + appType + ", enableState : " + enableState + "}";
     }
 }

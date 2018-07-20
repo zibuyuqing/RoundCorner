@@ -1,10 +1,7 @@
 package com.zibuyuqing.roundcorner.ui.activity;
 
-import android.Manifest;
 import android.content.pm.PackageManager;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
+import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,7 +15,7 @@ import com.zibuyuqing.roundcorner.service.RemoteService;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 
-import java.util.ArrayList;
+import java.util.logging.Handler;
 
 
 /**
@@ -41,15 +38,24 @@ public class SplashActivity  extends BaseActivity {
         view.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-        Utilities.checkStoragePermission(this);
+        initData();
+        Utilities.checkPermissions(this);
         startServices();
         toMain();
+    }
+
+    private void initData() {
+        int oldDBVersion = SettingsDataKeeper.getSettingsInt(this, SettingsDataKeeper.DB_VERSION);
+        int dbVersion = DbManager.getInstance(this).getDaoMaster().getSchemaVersion();
+        if (oldDBVersion != dbVersion) {
+            startLoadApps();
+            SettingsDataKeeper.writeSettingsInt(this, SettingsDataKeeper.DB_VERSION, dbVersion);
+        }
     }
 
     private void startServices() {
         RemoteService.start(this);
         LocalControllerService.tryToAddCorners(this);
-        startLoadApps();
     }
 
     private void startLoadApps() {

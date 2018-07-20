@@ -56,8 +56,7 @@
  -dontwarn android.test.**
  -dontwarn android.support.test.**
  -dontwarn org.junit.**
- # 友盟
- -keep class com.umeng.commonsdk.** {*;}
+ -dontwarn android.support.v4.**
  # greendao
  -keep class org.greenrobot.greendao.**{*;}
  -keep public interface org.greenrobot.greendao.**
@@ -69,3 +68,11 @@
  -keep public interface net.sqlcipher.database.**
  -dontwarn net.sqlcipher.database.**
  -dontwarn org.greenrobot.greendao.**
+-keep class com.umeng.** {*;}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}

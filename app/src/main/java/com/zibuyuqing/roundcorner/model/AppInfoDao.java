@@ -29,9 +29,6 @@ public class AppInfoDao extends AbstractDao<AppInfo, Long> {
         public final static Property AppType = new Property(2, int.class, "appType", false, "APP_TYPE");
         public final static Property EnableState = new Property(3, int.class, "enableState", false, "ENABLE_STATE");
         public final static Property Title = new Property(4, String.class, "title", false, "TITLE");
-        public final static Property MixedColorOne = new Property(5, int.class, "mixedColorOne", false, "MIXED_COLOR_ONE");
-        public final static Property MixedColorTwo = new Property(6, int.class, "mixedColorTwo", false, "MIXED_COLOR_TWO");
-        public final static Property MixedColorThree = new Property(7, int.class, "mixedColorThree", false, "MIXED_COLOR_THREE");
     }
 
 
@@ -48,13 +45,10 @@ public class AppInfoDao extends AbstractDao<AppInfo, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"APP_INFO\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
-                "\"PACKAGE_NAME\" TEXT UNIQUE ," + // 1: packageName
+                "\"PACKAGE_NAME\" TEXT," + // 1: packageName
                 "\"APP_TYPE\" INTEGER NOT NULL ," + // 2: appType
                 "\"ENABLE_STATE\" INTEGER NOT NULL ," + // 3: enableState
-                "\"TITLE\" TEXT," + // 4: title
-                "\"MIXED_COLOR_ONE\" INTEGER NOT NULL ," + // 5: mixedColorOne
-                "\"MIXED_COLOR_TWO\" INTEGER NOT NULL ," + // 6: mixedColorTwo
-                "\"MIXED_COLOR_THREE\" INTEGER NOT NULL );"); // 7: mixedColorThree
+                "\"TITLE\" TEXT);"); // 4: title
     }
 
     /** Drops the underlying database table. */
@@ -83,9 +77,6 @@ public class AppInfoDao extends AbstractDao<AppInfo, Long> {
         if (title != null) {
             stmt.bindString(5, title);
         }
-        stmt.bindLong(6, entity.getMixedColorOne());
-        stmt.bindLong(7, entity.getMixedColorTwo());
-        stmt.bindLong(8, entity.getMixedColorThree());
     }
 
     @Override
@@ -108,9 +99,6 @@ public class AppInfoDao extends AbstractDao<AppInfo, Long> {
         if (title != null) {
             stmt.bindString(5, title);
         }
-        stmt.bindLong(6, entity.getMixedColorOne());
-        stmt.bindLong(7, entity.getMixedColorTwo());
-        stmt.bindLong(8, entity.getMixedColorThree());
     }
 
     @Override
@@ -125,10 +113,7 @@ public class AppInfoDao extends AbstractDao<AppInfo, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // packageName
             cursor.getInt(offset + 2), // appType
             cursor.getInt(offset + 3), // enableState
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // title
-            cursor.getInt(offset + 5), // mixedColorOne
-            cursor.getInt(offset + 6), // mixedColorTwo
-            cursor.getInt(offset + 7) // mixedColorThree
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4) // title
         );
         return entity;
     }
@@ -140,9 +125,6 @@ public class AppInfoDao extends AbstractDao<AppInfo, Long> {
         entity.setAppType(cursor.getInt(offset + 2));
         entity.setEnableState(cursor.getInt(offset + 3));
         entity.setTitle(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setMixedColorOne(cursor.getInt(offset + 5));
-        entity.setMixedColorTwo(cursor.getInt(offset + 6));
-        entity.setMixedColorThree(cursor.getInt(offset + 7));
      }
     
     @Override

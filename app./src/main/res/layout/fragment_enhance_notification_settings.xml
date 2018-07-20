@@ -2,7 +2,6 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/window_bg_gray"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,7 +11,71 @@
 
         <include layout="@layout/layout_enhance_notification_general_settings"></include>
 
-        <include layout="@layout/layout_enhance_notification_custom_settings"></include>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dimen_8_dp"
+            android:background="@drawable/card_bg_light"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_8_dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dimen_8_dp"
+                android:paddingTop="@dimen/dimen_8_dp"
+                android:text="@string/select_notification_style"
+                android:textColor="@color/color_gray_light"
+                android:textSize="@dimen/font_size_normal_16dp" />
+
+            <RadioGroup
+                android:id="@+id/rg_notification_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_line_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dimen_8_dp"
+                    android:paddingRight="@dimen/dimen_8_dp"
+                    android:text="炫光"
+                    android:textColor="@color/color_gray_light" />
+
+                <RadioButton
+                    android:id="@+id/rb_danmaku_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dimen_8_dp"
+                    android:paddingRight="@dimen/dimen_8_dp"
+                    android:text="弹幕"
+                    android:textColor="@color/color_gray_light" />
+
+                <RadioButton
+                    android:visibility="visible"
+                    android:id="@+id/rb_icon_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dimen_8_dp"
+                    android:paddingRight="@dimen/dimen_8_dp"
+                    android:text="图标"
+                    android:textColor="@color/color_gray_light" />
+            </RadioGroup>
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include layout="@layout/layout_enhance_notification_line_settings"
+                ></include>
+            <include layout="@layout/layout_enhance_notification_danmaku_settings"
+                android:visibility="gone"></include>
+            <include layout="@layout/layout_enhance_notification_icon_settings"
+                android:visibility="gone"></include>
+        </FrameLayout>
     </LinearLayout>
 
 </ScrollView>

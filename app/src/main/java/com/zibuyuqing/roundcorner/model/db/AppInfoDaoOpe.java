@@ -25,7 +25,7 @@ public class AppInfoDaoOpe {
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().insert(info);
     }
     public static void insertAppInfos(Context context, List<AppInfo> infos){
-        DbManager.getInstance(context).getDaoSession().getAppInfoDao().insertInTx(infos,true);
+        DbManager.getInstance(context).getDaoSession().getAppInfoDao().insertInTx(infos,false);
     }
     public static void deleteAppInfo(Context context,AppInfo info){
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().delete(info);
@@ -37,11 +37,9 @@ public class AppInfoDaoOpe {
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().deleteAll();
     }
     public static void updateAppInfo(Context context,AppInfo info){
-        Log.e("hahaha","updateAppInfos ;; info = :" + info);
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().update(info);
     }
     public static void updateAppInfos(Context context,Set<AppInfo> infos){
-        Log.e("hahaha","updateAppInfos ;; info = :" + infos.size() +",info :" + infos.toArray()[0]);
         DbManager.getInstance(context).getDaoSession().getAppInfoDao().updateInTx(infos);
     }
     public static List<AppInfo> queryAll(Context context){
@@ -66,5 +64,21 @@ public class AppInfoDaoOpe {
     public static List<AppInfo> queryAppInfosByPage(Context context, int page){
         return DbManager.getInstance(context).getDaoSession().getAppInfoDao().
                 queryBuilder().offset(page * 24).limit(24).build().list();
+    }
+
+    public static boolean isExist(Context context,String who){
+        AppInfo info = DbManager.getInstance(context).getDaoSession().getAppInfoDao().
+                queryBuilder().where(AppInfoDao.Properties.PackageName.eq(who)).unique();
+        return info != null;
+    }
+    public static boolean appEnable(Context context,String who){
+        List<AppInfo> infoList = DbManager.getInstance(context).getDaoSession().getAppInfoDao().
+                queryBuilder().where(AppInfoDao.Properties.EnableState.eq(AppInfo.APP_ENABLE)).build().list();
+        for(AppInfo info : infoList){
+            if(info.getPackageName().equals(who)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <integer name="corner_opacity">255</integer>
+    <integer name="danmu_repeat_count">0</integer>
+    <integer name="danmu_move_speed">2</integer>
+    <integer name="danmu_bg_opacity">30</integer>
+    <integer name="min_notification_line_size">1</integer>
+    <integer name="notification_line_size">6</integer>
+    <integer name="max_notification_line_size">120</integer>
+    <integer name="min_notification_animation_duration">1</integer>
+    <integer name="notification_animation_duration">6</integer>
+    <integer name="max_notification_animation_duration">120</integer>
+
     <dimen name="corner_size">10dp</dimen>
     <dimen name="toolbar_height">54dp</dimen>
-    <integer name="corner_opacity">255</integer>
-    <integer name="danmu_repeat_count">1</integer>
-    <integer name="danmu_move_speed">0</integer>
-    <integer name="min_notification_line_size">0</integer>
-    <integer name="notification_line_size">6</integer>
-    <integer name="max_notification_line_size">12</integer>
-    <integer name="min_notification_animation_duration">0</integer>
-    <integer name="notification_animation_duration">6</integer>
-    <integer name="max_notification_animation_duration">12</integer>
 
     <!-- font size -->
     <dimen name="font_size_large_24dp">24dp</dimen>
@@ -21,7 +23,8 @@
     <dimen name="font_size_small_14dp">14dp</dimen>
     <dimen name="font_size_small_12dp">12dp</dimen>
 
-
+    <dimen name="dimen_300dp">300dp</dimen>
+    <dimen name="dimen_260dp">260dp</dimen>
     <dimen name="dimen_200_dp">200dp</dimen>
     <dimen name="dimen_150_dp">150dp</dimen>
     <dimen name="dimen_108_dp">108dp</dimen>
@@ -29,8 +32,10 @@
     <dimen name="dimen_84_dp">84dp</dimen>
     <dimen name="dimen_72_dp">72dp</dimen>
     <dimen name="dimen_64_dp">64dp</dimen>
+    <dimen name="dimen_56_dp">56dp</dimen>
     <dimen name="dimen_48_dp">48dp</dimen>
     <dimen name="dimen_36_dp">36dp</dimen>
+    <dimen name="dimen_30_dp">30dp</dimen>
     <dimen name="dimen_24_dp">24dp</dimen>
     <dimen name="dimen_18_dp">18dp</dimen>
     <dimen name="dimen_16_dp">16dp</dimen>
@@ -41,5 +46,9 @@
     <dimen name="dimen_4_dp">4dp</dimen>
     <dimen name="dimen_2_dp">2dp</dimen>
     <dimen name="dimen_1_dp">1dp</dimen>
-    <dimen name="icon_size">48dp</dimen>
+    <dimen name="icon_size">36dp</dimen>
+
+    <dimen name="icon_size_small">36dp</dimen>
+    <dimen name="icon_size_middle">48dp</dimen>
+    <dimen name="icon_size_large">54dp</dimen>
 </resources>

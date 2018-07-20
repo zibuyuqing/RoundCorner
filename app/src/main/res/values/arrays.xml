@@ -19,4 +19,28 @@
         <item>@string/animation_style_lattice</item>
         <item>@string/animation_style_bottom_to_top</item>
     </array>
+    <array name="danmaku_repeat_count">
+        <item>不重复</item>
+        <item>1次</item>
+        <item>2次</item>
+        <item>3次</item>
+        <item>4次</item>
+    </array>
+    <array name="danmaku_style">
+        <item>普通弹幕</item>
+        <item>漫画皮肤</item>
+        <item>火箭皮肤</item>
+    </array>
+    <array name="icon_show_duration">
+        <item>清除消息才消失</item>
+        <item>2s</item>
+        <item>4s</item>
+        <item>6s</item>
+        <item>8s</item>
+    </array>
+
+    <array name="donate_select">
+        <item>@string/weichat_pay</item>
+        <item>@string/alipay</item>
+    </array>
 </resources>

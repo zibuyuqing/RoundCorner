@@ -139,7 +139,6 @@ public class DynamicBgView extends View {
     }
     public void setBaseColor(int color){
         baseColor = color;
-        Log.e("hahahha","setBaseColor  color =:" + color);
         paint.setColor(baseColor);
         invalidate();
     }
@@ -225,7 +224,6 @@ public class DynamicBgView extends View {
     };
 
     public void start(){
-        Log.e("hahah"," isrunnig =:" + isRunning);
         if(isRunning){
             return;
         }

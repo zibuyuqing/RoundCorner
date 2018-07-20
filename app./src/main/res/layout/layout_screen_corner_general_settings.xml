@@ -2,98 +2,116 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="@dimen/dimen_8_dp"
-    android:paddingRight="@dimen/dimen_8_dp"
-    android:paddingTop="@dimen/dimen_8_dp">
-
-    <LinearLayout
+    android:background="@drawable/card_bg_light"
+    android:layout_margin="@dimen/dimen_8_dp"
+    android:padding="@dimen/dimen_8_dp"
+    android:orientation="vertical">
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/card_bg_light"
-        android:orientation="vertical"
-        android:padding="@dimen/dimen_12_dp">
+        android:textColor="@color/color_gray_light"
+        android:paddingBottom="@dimen/dimen_8_dp"
+        android:paddingTop="@dimen/dimen_8_dp"
+        android:textSize="@dimen/font_size_normal_16dp"
+        android:text="@string/base_feature_settings" />
+
+    <RelativeLayout
+        android:id="@+id/rl_corner_enable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48_dp"
+        android:layout_marginTop="@dimen/dimen_8_dp"
+        android:background="@drawable/settings_item_bg">
+
+        <ImageView
+            android:id="@+id/feature_enable_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_corner_enable"
+            android:tint="#ff6200" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:textColor="@color/color_gray_light"
+            android:layout_toRightOf="@id/feature_enable_img"
+            android:textSize="@dimen/font_size_normal_15dp"
+            android:gravity="center"
+            android:text="@string/show_corner" />
+
+        <Switch
+            android:id="@+id/sw_corner_enable"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dimen_8_dp"
-            android:paddingTop="@dimen/dimen_8_dp"
-            android:textSize="@dimen/font_size_normal_16dp"
-            android:text="@string/base_feature_settings" />
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/rl_corner_enable_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_48_dp"
-            android:layout_marginTop="@dimen/dimen_8_dp"
-            android:background="@drawable/settings_item_bg">
+    <RelativeLayout
+        android:id="@+id/rl_notify_enable_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_48_dp"
+        android:layout_marginTop="@dimen/dimen_8_dp"
+        android:background="@drawable/settings_item_bg">
 
-            <ImageView
-                android:id="@+id/feature_enable_img"
-                android:layout_width="@dimen/dimen_24_dp"
-                android:layout_height="@dimen/dimen_24_dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_corner_enable"
-                android:tint="#ff6200" />
+        <ImageView
+            android:id="@+id/feature_notify_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_notify_enable"
+            android:tint="#009dff" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dimen_10_dp"
-                android:layout_marginStart="@dimen/dimen_10_dp"
-                android:layout_toRightOf="@id/feature_enable_img"
-                android:textSize="@dimen/font_size_normal_15dp"
-                android:gravity="center"
-                android:text="@string/show_corner" />
+        <TextView
+            android:layout_toRightOf="@id/feature_notify_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:gravity="center"
+            android:textColor="@color/color_gray_light"
+            android:textSize="@dimen/font_size_normal_15dp"
+            android:text="@string/show_notification" />
 
-            <Switch
-                android:id="@+id/sw_corner_enable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_notify_enable_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_48_dp"
-            android:layout_marginTop="@dimen/dimen_8_dp"
-            android:background="@drawable/settings_item_bg">
-
-            <ImageView
-                android:id="@+id/feature_notify_img"
-                android:layout_width="@dimen/dimen_24_dp"
-                android:layout_height="@dimen/dimen_24_dp"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:src="@drawable/ic_notify_enable"
-                android:tint="#009dff" />
-
-            <LinearLayout
-                android:layout_centerVertical="true"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/feature_notify_img"
-                android:orientation="vertical">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dimen_10_dp"
-                    android:layout_marginStart="@dimen/dimen_10_dp"
-                    android:gravity="center"
-                    android:textSize="@dimen/font_size_normal_15dp"
-                    android:text="@string/show_notification" />
-            </LinearLayout>
-
-            <Switch
-                android:id="@+id/sw_notify_enable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true" />
-        </RelativeLayout>
-    </LinearLayout>
+        <Switch
+            android:id="@+id/sw_notify_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_full_screen_enable_layout"
+        android:layout_width="match_parent"
+        android:layout_weight="0"
+        android:layout_height="@dimen/dimen_48_dp">
+        <ImageView
+            android:id="@+id/full_screen_img"
+            android:layout_width="@dimen/dimen_24_dp"
+            android:layout_height="@dimen/dimen_24_dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:tint="#ffa200"
+            android:src="@drawable/ic_full_screen" />
+        <TextView
+            android:layout_toRightOf="@id/full_screen_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_10_dp"
+            android:layout_marginStart="@dimen/dimen_10_dp"
+            android:gravity="center"
+            android:text="如果圆角显示不全，请打开开关"
+            android:textColor="@color/color_gray_light"
+            android:textSize="@dimen/font_size_normal_15dp"/>
+        <Switch
+            android:id="@+id/sw_full_screen_enable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
 </LinearLayout>

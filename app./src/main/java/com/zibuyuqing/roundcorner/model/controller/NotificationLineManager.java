@@ -1,19 +1,24 @@
 package com.zibuyuqing.roundcorner.model.controller;
 
+import android.app.Notification;
 import android.content.Context;
 import android.graphics.PixelFormat;
-import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.zibuyuqing.roundcorner.model.bean.AppInfo;
 import com.zibuyuqing.roundcorner.model.bean.EdgeLineConfig;
+import com.zibuyuqing.roundcorner.model.db.AppInfoDaoOpe;
 import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.ui.widget.EdgeLineView;
 import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
 import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
-import java.util.IllegalFormatCodePointException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,15 +30,14 @@ import java.util.Map;
  *     version: 1.0
  * </pre>
  */
-public class NotificationLineManager implements EdgeLineView.OnScreenConfigurationChangeListener {
+public class NotificationLineManager implements EdgeLineView.OnScreenConfigurationChangeListener, EdgeLineView.AnimationStateListener {
+
     private static final String TAG = NotificationLineManager.class.getSimpleName();
     private static NotificationLineManager sInstance;
-    private Map<String, EdgeLineConfig> mNotificationsMap;
     private EdgeLineView mLineView;
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowParams;
     private Context mContext;
-
     private NotificationLineManager(Context context) {
         mContext = context;
         init();
@@ -43,6 +47,7 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
         if (mLineView == null) {
             mLineView = new EdgeLineView(mContext);
             mLineView.setOnScreenConfigurationChangeListener(this);
+            mLineView.setAnimationStateListener(this);
         }
         if (mWindowManager == null) {
             mWindowManager = (WindowManager)
@@ -64,7 +69,6 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             mWindowParams.height = ViewUtil.getScreenHeight(mContext);
         }
     }
-
     private int ensureWindowType() {
         mWindowParams.width = ViewUtil.getScreenWidth(mContext);
         mWindowParams.height = ViewUtil.getScreenHeight(mContext);
@@ -78,7 +82,13 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
                 mWindowParams.x = 0;
             }
         }
-        if (Utilities.isCanUseToastType()) {
+
+        if(hasNav){
+            if(isFullScreenEnable()) {
+                return WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
+            }
+        }
+        if (Utilities.isBeforeAndroidN()) {
             return WindowManager.LayoutParams.TYPE_TOAST;
         } else if (Utilities.isCanUseApplicationOverlayType()) {
             return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
@@ -88,6 +98,13 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             } else {
                 return WindowManager.LayoutParams.TYPE_SYSTEM_ERROR;
             }
+        }
+    }
+    public void updateWindowForFullScreen(){
+        mWindowParams.type = ensureWindowType();
+        if(mLineView != null && mLineView.isAttachedToWindow()){
+            mWindowManager.removeView(mLineView);
+            mWindowManager.addView(mLineView,mWindowParams);
         }
     }
 
@@ -104,13 +121,10 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
 
     public void showEdgeLineByConfigChanged() {
         try {
-            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow() +",isEnhanceNotificationEnable() =:" + isEnhanceNotificationEnable());
+            Log.d(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow() +",isEnhanceNotificationEnable() =:" + isEnhanceNotificationEnable());
             if (!isEnhanceNotificationEnable()) {
                 return;
             }
-            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAttachedToWindow());
-            confirmBrightness();
-            Log.e(TAG, "showEdgeLineByConfigChanged :: " + mLineView.isAnimatorRunning() +",mLineView.isAttachedToWindow() =:" + mLineView.isAttachedToWindow());
             if (!mLineView.isAttachedToWindow()) {
                 mWindowManager.addView(mLineView, mWindowParams);
             }
@@ -148,35 +162,28 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
             e.printStackTrace();
         }
     }
+    private boolean appEnable(String who){
+        return AppInfoDaoOpe.appEnable(mContext,who);
+    }
     public void showEdgeLine(String who) {
         try {
             if (!isEnhanceNotificationEnable()) {
                 return;
             }
-            Log.e(TAG, "who =:" + who);
-            if (!mLineView.isAttachedToWindow()) {
-                mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
-                mLineView.startAnimator();
-                confirmBrightness();
-                mWindowManager.addView(mLineView, mWindowParams);
+            Log.d(TAG, "who =:" + who);
+            if(appEnable(who)) {
+                if (!mLineView.isAttachedToWindow()) {
+                    mLineView.setConfig(Utilities.getEdgeLineConfig(mContext));
+                    mLineView.startAnimator();
+                    mWindowManager.addView(mLineView, mWindowParams);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    private void confirmBrightness(){
-        Log.e(TAG,"confirmBrightness  =;  " + isBrightenScreenEnable());
-        if (isBrightenScreenEnable()) {
-            mWindowParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-            mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_FULL;
-        } else {
-            mWindowParams.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-            mWindowParams.buttonBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-        }
-    }
-
     public void removeEdgeLine() {
-        Log.e(TAG,"removeEdgeLine isNotificationLineAdded =:" + mLineView.isAttachedToWindow());
+        Log.d(TAG,"removeEdgeLine isNotificationLineAdded =:" + mLineView.isAttachedToWindow());
         if (mLineView != null && mLineView.isAttachedToWindow()) {
             if (mLineView.isAnimatorRunning()) {
                 mLineView.cancelAnimator();
@@ -185,23 +192,16 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
         }
     }
 
-    private boolean isBrightenScreenEnable() {
-        return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.BRIGHTEN_SCREEN_WHEN_NOTIFY_ENABLE);
-    }
-
     private boolean isEnhanceNotificationEnable() {
         return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.ENHANCE_NOTIFICATION_ENABLE);
     }
-
-    public void registerAnimationStateListener(EdgeLineView.AnimationStateListener listener) {
-        if (mLineView != null) {
-            mLineView.setAnimationStateListener(listener);
-        }
+    private boolean isFullScreenEnable(){
+        return SettingsDataKeeper.getSettingsBoolean(mContext, SettingsDataKeeper.FULL_SCREEN_ENABLE);
     }
 
     public void showOrHideEdgeLine() {
         if (isEnhanceNotificationEnable()) {
-            showEdgeLine(LocalControllerService.ME);
+            // showEdgeLine(LocalControllerService.ME);
         } else {
             removeEdgeLine();
         }
@@ -210,5 +210,19 @@ public class NotificationLineManager implements EdgeLineView.OnScreenConfigurati
     @Override
     public void onScreenConfigurationChanged() {
         updateWindow();
+    }
+    @Override
+    public void onAnimationStart() {
+
+    }
+
+    @Override
+    public void onAnimationRunning(float progress) {
+
+    }
+
+    @Override
+    public void onAnimationEnd() {
+        removeEdgeLine();
     }
 }

@@ -2,19 +2,21 @@ package com.zibuyuqing.roundcorner.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zibuyuqing.roundcorner.R;
+import com.zibuyuqing.roundcorner.adapter.AllAppsGridAdapter;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
-import com.zibuyuqing.roundcorner.base.BaseAppListFragment;
-import com.zibuyuqing.roundcorner.ui.fragment.SystemAppListFragment;
-import com.zibuyuqing.roundcorner.ui.fragment.UserAppListFragment;
+import com.zibuyuqing.roundcorner.model.bean.AppInfoWithIcon;
+import com.zibuyuqing.roundcorner.model.db.AppInfoLoadTask;
+import com.zibuyuqing.roundcorner.ui.widget.XRecyclerView;
+import com.zibuyuqing.roundcorner.utils.Utilities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,16 +26,18 @@ import butterknife.OnClick;
  * Created by xijun.wang on 2017/6/22.
  */
 
-public class AppsManageActivity extends BaseActivity {
-    @BindView(R.id.vp_app_fragment_container)
-    ViewPager mVpAppFragmentContainer;
+public class AppsManageActivity extends BaseActivity implements XRecyclerView.LoadStateListener{
+    private static final String TAG = "AppsManageActivity";
+    private AllAppsGridAdapter mAdapter;
+    @BindView(R.id.pb_load_progress)
+    ProgressBar mPbLoadProgress;
+    @BindView(R.id.rv_app_list)
+    XRecyclerView mRvAppList;
+    private boolean isFirstLoad = true;
+    private boolean isRefresh = false;
     @BindView(R.id.toolbar)
     View mToolbar;
-    BaseAppListFragment mUserAppListFragment;
-    BaseAppListFragment mSystemAppListFragment;
-    List<BaseAppListFragment> mAppListFragments;
-    FragmentManager mFragmentManager;
-    PageAdapter mAdapter;
+    private int mCurrentPage = 0;
     @OnClick(R.id.iv_back) void back(){
         finish();
     }
@@ -49,31 +53,63 @@ public class AppsManageActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        mToolbar.setBackgroundColor(getColor(R.color.colorPrimary));
+        if(Utilities.isBeforeAndroidM()){
+            mToolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        } else {
+            mToolbar.setBackgroundColor(getColor(R.color.colorPrimary));
+        }
         ((TextView)mToolbar.findViewById(R.id.tv_title)).setText(getString(R.string.application_manager));
-        mUserAppListFragment = new UserAppListFragment();
-        mSystemAppListFragment = new SystemAppListFragment();
-        mAppListFragments = new ArrayList<>(2);
-        mAppListFragments.add(mUserAppListFragment);
-        mAppListFragments.add(mSystemAppListFragment);
-        mFragmentManager = getSupportFragmentManager();
-        mAdapter = new PageAdapter(mFragmentManager);
-        mVpAppFragmentContainer.setAdapter(mAdapter);
-        showTips(R.string.long_click_tip);
+        mAdapter = new AllAppsGridAdapter(this);
+        mRvAppList.setAdapter(mAdapter);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRvAppList.setLayoutManager(layoutManager);
+        mRvAppList.setLoadStateListener(this);
+        mRvAppList.loadData();
     }
-    private class PageAdapter extends FragmentStatePagerAdapter{
-        public PageAdapter(android.support.v4.app.FragmentManager fm) {
-            super(fm);
-        }
 
-        @Override
-        public android.support.v4.app.Fragment getItem(int position) {
-            return mAppListFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mAppListFragments.size();
-        }
+    @Override
+    protected void onDestroy() {
+        mAdapter.clear();
+        super.onDestroy();
     }
+
+    @Override
+    public void loadMore() {
+        AppInfoLoadTask.execute(this,AppInfoLoadTask.QUERAY_ALL, new AppInfoLoadTask.AppInfoLoadStateListener() {
+            @Override
+            public void startLoad(int totalCount) {
+                Log.e(TAG,"startLoad totalCount =:" + totalCount);
+                if(isFirstLoad) {
+                    mPbLoadProgress.setVisibility(View.VISIBLE);
+                    mPbLoadProgress.setMax(totalCount);
+                }
+                mRvAppList.setIsLoadingData(true);
+            }
+
+            @Override
+            public void onLoad(int process) {
+                if(isFirstLoad) {
+                    mPbLoadProgress.setProgress(process);
+                }
+            }
+
+            @Override
+            public void endLoad(List<AppInfoWithIcon> appInfoWithIconList) {
+                if(isFirstLoad){
+                    mRvAppList.setVisibility(View.VISIBLE);
+                    mPbLoadProgress.setVisibility(View.GONE);
+                    isFirstLoad = false;
+                }
+                mAdapter.updateData(appInfoWithIconList);
+                mRvAppList.setIsLoadingData(false);
+                mCurrentPage ++;
+            }
+
+            @Override
+            public void onError(String msg) {
+                Log.e(TAG,"onError msg =:" + msg);
+            }
+        });
+    }
+
 }

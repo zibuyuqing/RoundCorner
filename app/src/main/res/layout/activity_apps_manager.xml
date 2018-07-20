@@ -3,14 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:orientation="vertical"
     android:fitsSystemWindows="true"
+    android:background="@color/window_bg_light"
     android:layout_height="match_parent">
     <include
         android:id="@+id/toolbar"
         layout="@layout/layout_toolbar_app_manager">
     </include>
-    <android.support.v4.view.ViewPager
-        android:id="@+id/vp_app_fragment_container"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    </android.support.v4.view.ViewPager>
+        <com.zibuyuqing.roundcorner.ui.widget.XRecyclerView
+            android:visibility="invisible"
+            android:scrollbars="vertical"
+            android:id="@+id/rv_app_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <ProgressBar
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:id="@+id/pb_load_progress"
+            android:layout_gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_2_dp" />
+    </FrameLayout>
 </LinearLayout>

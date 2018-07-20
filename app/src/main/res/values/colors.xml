@@ -24,4 +24,5 @@
     <color name="card_bg_gray">#353535</color>
     <color name="black_22">#22000000</color>
     <color name="cardview_dark_background">#FF424242</color>
+    <color name="icon_notification_default_bg">#FF424242</color>
 </resources>

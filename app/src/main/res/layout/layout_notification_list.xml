@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@drawable/card_bg_light"
+    android:paddingLeft="@dimen/dimen_12_dp"
+    android:paddingTop="@dimen/dimen_12_dp"
+    android:paddingRight="@dimen/dimen_12_dp"
+    android:layout_width="@dimen/dimen_260dp"
+    android:layout_height="wrap_content">
+    <android.support.v7.widget.RecyclerView
+        android:layout_weight="1"
+        android:id="@+id/rv_notification_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </android.support.v7.widget.RecyclerView>
+    <Button
+        android:background="@color/transparent"
+        android:id="@+id/btn_clear"
+        android:text="清除全部"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>

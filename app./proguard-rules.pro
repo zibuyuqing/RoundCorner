@@ -56,3 +56,23 @@
  -dontwarn android.test.**
  -dontwarn android.support.test.**
  -dontwarn org.junit.**
+ -dontwarn android.support.v4.**
+ # greendao
+ -keep class org.greenrobot.greendao.**{*;}
+ -keep public interface org.greenrobot.greendao.**
+ -keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+ public static java.lang.String TABLENAME;
+ }
+ -keep class **$Properties
+ -keep class net.sqlcipher.database.**{*;}
+ -keep public interface net.sqlcipher.database.**
+ -dontwarn net.sqlcipher.database.**
+ -dontwarn org.greenrobot.greendao.**
+-keep class com.umeng.** {*;}
+-keepclassmembers class * {
+   public <init> (org.json.JSONObject);
+}
+-keepclassmembers enum * {
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}

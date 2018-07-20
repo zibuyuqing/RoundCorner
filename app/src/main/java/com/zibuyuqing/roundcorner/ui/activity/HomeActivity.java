@@ -5,29 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zibuyuqing.roundcorner.R;
 import com.zibuyuqing.roundcorner.base.BaseActivity;
 import com.zibuyuqing.roundcorner.base.BaseFragment;
-import com.zibuyuqing.roundcorner.model.db.AppLoadTask;
 import com.zibuyuqing.roundcorner.service.LocalControllerService;
 import com.zibuyuqing.roundcorner.service.RemoteService;
 import com.zibuyuqing.roundcorner.ui.fragment.EnhanceNotificationFragment;
 import com.zibuyuqing.roundcorner.ui.fragment.MeInfoFragment;
 import com.zibuyuqing.roundcorner.ui.fragment.ScreenCornerFragment;
 import com.zibuyuqing.roundcorner.ui.widget.DynamicBgView;
+import com.zibuyuqing.roundcorner.utils.SettingsDataKeeper;
 import com.zibuyuqing.roundcorner.utils.Utilities;
-import com.zibuyuqing.roundcorner.utils.ViewUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+
+import static android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS;
 
 /**
  * <pre>
@@ -58,48 +57,53 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void init() {
         Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         View view = window.getDecorView();
         view.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
-        Utilities.checkStoragePermission(this);
+        Utilities.checkPermissions(this);
         initViews();
     }
 
     private void initViews() {
-        mRootView = (RelativeLayout) findViewById(R.id.main_root);
-        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) mRootView.getLayoutParams();
-        int navigationBarHeight = ViewUtil.getNavigationBarHeight(this);
-        layoutParams.bottomMargin = navigationBarHeight;
-        mRootView.setLayoutParams(layoutParams);
-        mThemeColor = getResources().getColor(R.color.colorPrimary,null);
+        if(Utilities.isBeforeAndroidM()){
+            mThemeColor = getResources().getColor(R.color.colorPrimary);
+        } else {
+            mThemeColor = getResources().getColor(R.color.colorPrimary,null);
+        }
         mIvAction.setImageResource(R.drawable.ic_share);
-        mScreenCornerFragment = new ScreenCornerFragment();
-        mNotificationFragment = new EnhanceNotificationFragment();
-        mMeInfoFragment = new MeInfoFragment();
+        mScreenCornerFragment = ScreenCornerFragment.newInstance();
+        mNotificationFragment = EnhanceNotificationFragment.newInstance();
+        mMeInfoFragment = MeInfoFragment.newInstance();
         mCurrentFragment = mScreenCornerFragment;
         mCurrentTab = mTvScreenCorner;
         updateTab(mTvScreenCorner);
-        getFragmentManager().beginTransaction().add(R.id.content,mCurrentFragment).commit();
+        if(!mCurrentFragment.isAdded()) {
+            getFragmentManager().beginTransaction().add(R.id.content, mCurrentFragment).commit();
+        }
     }
     @Override
     protected void onResume() {
         super.onResume();
-        mDynamicBgView.start();
+      //  mDynamicBgView.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mDynamicBgView.stop();
+      //  mDynamicBgView.stop();
     }
 
     @Override
     protected void onDestroy() {
         RemoteService.start(this);
         LocalControllerService.tryToAddCorners(this);
+        if(SettingsDataKeeper.getSettingsBoolean(this,SettingsDataKeeper.HIDE_RECENT)) {
+            Intent intent = new Intent(HomeActivity.this, NoDisplayActivity.class);
+            intent.addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+            startActivity(intent);
+        }
         super.onDestroy();
     }
 
@@ -125,6 +129,12 @@ public class HomeActivity extends BaseActivity {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
+    @OnClick(R.id.iv_action) void share(){
+        Intent textIntent = new Intent(Intent.ACTION_SEND);
+        textIntent.setType("text/plain");
+        textIntent.putExtra(Intent.EXTRA_TEXT, "我发现了一个好玩的应用，点击下载：https://www.coolapk.com/apk/180019");
+        startActivity(Intent.createChooser(textIntent, "分享"));
+    }
 
     @OnClick(R.id.tv_screen_corner) void toScreenCorner(){
         mCurrentTab = mTvScreenCorner;
@@ -137,6 +147,12 @@ public class HomeActivity extends BaseActivity {
     @OnClick(R.id.tv_me_info) void toMeInfo(){
         mCurrentTab = mTvMeInfo;
         switchFragment(mMeInfoFragment);
+    }
+    private void hideFragment(BaseFragment fragment){
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if(fragment.isAdded()){
+            transaction.hide(fragment);
+        }
     }
     private void switchFragment(BaseFragment targetFragment) {
         updateTab(mCurrentTab);
@@ -156,6 +172,7 @@ public class HomeActivity extends BaseActivity {
     }
     public static void start(Context context) {
         Intent starter = new Intent(context, HomeActivity.class);
+        starter.addFlags(FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         context.startActivity(starter);
     }
     private void resetTab(){

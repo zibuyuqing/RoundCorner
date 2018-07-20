@@ -173,7 +173,6 @@ public class EdgeLineView extends View {
         mMixedPaint.setShader(mColorShader);
         mMixedPaint.setStyle(Paint.Style.STROKE);
         mMixedPaint.setStrokeWidth(mStrokeWidth);
-        Log.e(TAG,"mStyle =:" + mStyle +",mStrokeWidth =:" + mStrokeWidth);
         switch (mStyle) {
             case STYLE_FADE_IN_OUT:
                 needReverse = true;
@@ -323,12 +322,12 @@ public class EdgeLineView extends View {
             // 当总进度>=range时 即线段长度达到distance时 我们固定线长
 
             //左边移动线段的起始progress
-            float leftCursorStartPro = leftReferencePro - offsetProcess;
+            float leftCursorStartPro = leftReferencePro - mProgress;
 
             //右边移动的线段
             Path rightCursorPath = new Path();
-            float rightCursorStartPro = rightReferencePro - offsetProcess;
 
+            float rightCursorStartPro = rightReferencePro - mProgress;
             // 右边移动线段起始点
             float rightPosition = rightCursorStartPro * mPathLength;
 
@@ -393,8 +392,7 @@ public class EdgeLineView extends View {
         mDst.reset();
         float offset = 2 * mStrokeWidth / 5;
         mScreenRectF = new RectF(offset, offset, mScreenWidth - offset, mScreenHeight - offset);
-        Log.e(TAG, "config : " + isCornersShown() + "mCornerSize =:" + mCornerSize);
-        float edge = mStrokeWidth / 2;
+        float edge = mStrokeWidth * 0.35f;
         // 应为加了屏幕圆角功能，所以要判断圆角是否已经显示了
         // mCornerSize 为圆角的半径，依次确定矩形边框圆角大小
         if (isCornersShown()) {
@@ -439,6 +437,8 @@ public class EdgeLineView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        mScreenWidth = ViewUtil.getScreenWidth(mContext);
+        mScreenHeight = ViewUtil.getScreenHeight(mContext);
         setMeasuredDimension(mScreenWidth, mScreenHeight);
         if(mConfigurationChangeListener != null){
             mConfigurationChangeListener.onScreenConfigurationChanged();
@@ -456,7 +456,6 @@ public class EdgeLineView extends View {
     }
 
     public void startAnimator() {
-        Log.e(TAG,"startAnimator :: startAnimator =:");
         postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -499,7 +498,6 @@ public class EdgeLineView extends View {
         animator.start();
     }
     private void hide(boolean immediately){
-        Log.e(TAG,"hide immediately = :"  + immediately + ",isAnimatorRunning =:" + isAnimatorRunning);
         if(!isAnimatorRunning){
             return;
         }

@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#447fff</color>
     <color name="black">#000000</color>
+    <color name="transparent_white">#ddffffff</color>
     <color name="white">#ffffff</color>
     <color name="window_bg_light">#e9ffffff</color>
     <color name="window_bg_gray">#1d1d1d</color>
@@ -21,4 +22,7 @@
     <color name="color_cyan_light">#00f7ff</color>
     <color name="color_gray_light">#717171</color>
     <color name="card_bg_gray">#353535</color>
+    <color name="black_22">#22000000</color>
+    <color name="cardview_dark_background">#FF424242</color>
+    <color name="icon_notification_default_bg">#FF424242</color>
 </resources>

@@ -30,7 +30,7 @@ public class RemoteService extends Service {
     public void onCreate() {
         super.onCreate();
         mBinder = new RemoteBinder();
-        Log.e(TAG,"remote service onCreate");
+        Log.d(TAG,"remote service onCreate");
         if(mConnection == null){
             mConnection = new RemoteConn();
         }
@@ -39,7 +39,7 @@ public class RemoteService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG,"remote service onStartCommand");
+        Log.d(TAG,"remote service onStartCommand");
         bindService(new Intent(this,LocalControllerService.class),
                 mConnection,Context.BIND_IMPORTANT);
         return START_STICKY;
@@ -65,12 +65,12 @@ public class RemoteService extends Service {
 
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            Log.e(TAG,"Local service 连接成功");
+            Log.d(TAG,"Local service 连接成功");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.e(TAG,"Local service 断开连接");
+            Log.d(TAG,"Local service 断开连接");
             startService(new Intent(RemoteService.this,LocalControllerService.class));
             bindService(new Intent(RemoteService.this,LocalControllerService.class),
                     mConnection,
